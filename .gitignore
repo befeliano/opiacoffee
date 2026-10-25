@@ -10,3 +10,4 @@ site/data/menu.json.tmp
 Ekran*
 node_modules/
 .vercel/
+dist/

@@ -1,0 +1,6 @@
+{
+  "buildCommand": "rm -rf dist && mkdir dist && cp -r site/. dist/ && rm -rf dist/_src dist/_private dist/admin dist/api dist/masa dist/uploads dist/data dist/router.php dist/.htaccess dist/vercel.json dist/.vercelignore",
+  "outputDirectory": "dist",
+  "framework": null,
+  "trailingSlash": true
+}

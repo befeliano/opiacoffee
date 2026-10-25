@@ -1,0 +1,12 @@
+# gizli / yerel veri
+site/_private/
+site/uploads/*
+!site/uploads/.htaccess
+site/data/menu.json.tmp
+# ekran görüntüleri ve geçici dosyalar
+*.png
+!site/assets/img/*.png
+!site/assets/img/**/*.png
+Ekran*
+node_modules/
+.vercel/

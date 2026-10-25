@@ -1,0 +1,2097 @@
+{
+  "version": 2,
+  "updatedAt": "2026-10-23T17:47:05+03:00",
+  "settings": {
+    "season": {
+      "title": "Kışa Özel",
+      "label": "Kış 2026",
+      "subtitle": "Zencefil, tarçın, bal ve salep. Soğuk günlerin fincanları barda.",
+      "title_en": "Winter Specials",
+      "label_en": "Winter 2026",
+      "subtitle_en": "Ginger, cinnamon, honey and salep. Cups for cold days, at the bar now."
+    },
+    "announcement": "",
+    "hours": {
+      "open": "09:00",
+      "close": "00:00",
+      "days": "Her gün"
+    }
+  },
+  "categories": [
+    {
+      "id": "sicak-kahveler",
+      "name": "Sıcak Kahveler",
+      "note": "Espresso bazlı, filtre ve Türk kahvesi.",
+      "sort": 1,
+      "name_en": "Hot Coffee",
+      "note_en": "Espresso drinks, filter and Turkish coffee."
+    },
+    {
+      "id": "matcha-bar",
+      "name": "Matcha Bar",
+      "note": "",
+      "sort": 2,
+      "name_en": "Matcha Bar",
+      "note_en": ""
+    },
+    {
+      "id": "kisa-ozel",
+      "name": "Kışa Özel",
+      "note": "Soğuk günlerin fincanları.",
+      "sort": 3,
+      "name_en": "Winter Specials",
+      "note_en": "Cups for cold days."
+    },
+    {
+      "id": "sicak-cikolata",
+      "name": "Sıcak Çikolata",
+      "note": "",
+      "sort": 4,
+      "name_en": "Hot Chocolate",
+      "note_en": ""
+    },
+    {
+      "id": "tatlilar",
+      "name": "Tatlılar",
+      "note": "Günlük çeşitlerimizi sorunuz.",
+      "sort": 5,
+      "name_en": "Desserts",
+      "note_en": "Ask for today’s selection."
+    },
+    {
+      "id": "ekstralar",
+      "name": "Ekstralar",
+      "note": "İçeceğine ve tatlına ekle.",
+      "sort": 6,
+      "name_en": "Extras",
+      "note_en": "Add to your drink or dessert."
+    }
+  ],
+  "allergens": [
+    {
+      "id": "gluten",
+      "name": "Gluten",
+      "name_en": "Gluten"
+    },
+    {
+      "id": "sut",
+      "name": "Süt",
+      "name_en": "Milk"
+    },
+    {
+      "id": "yumurta",
+      "name": "Yumurta",
+      "name_en": "Egg"
+    },
+    {
+      "id": "soya",
+      "name": "Soya",
+      "name_en": "Soy"
+    },
+    {
+      "id": "sert-kabuklu",
+      "name": "Sert Kabuklu Yemişler",
+      "name_en": "Tree nuts"
+    },
+    {
+      "id": "yer-fistigi",
+      "name": "Yer Fıstığı",
+      "name_en": "Peanuts"
+    },
+    {
+      "id": "susam",
+      "name": "Susam",
+      "name_en": "Sesame"
+    },
+    {
+      "id": "sulfit",
+      "name": "Sülfit",
+      "name_en": "Sulphites"
+    },
+    {
+      "id": "kereviz",
+      "name": "Kereviz",
+      "name_en": "Celery"
+    },
+    {
+      "id": "hardal",
+      "name": "Hardal",
+      "name_en": "Mustard"
+    },
+    {
+      "id": "balik",
+      "name": "Balık",
+      "name_en": "Fish"
+    },
+    {
+      "id": "kabuklu-deniz",
+      "name": "Kabuklu Deniz Ürünleri",
+      "name_en": "Crustaceans"
+    },
+    {
+      "id": "yumusakcalar",
+      "name": "Yumuşakçalar",
+      "name_en": "Molluscs"
+    },
+    {
+      "id": "aci-bakla",
+      "name": "Acı Bakla",
+      "name_en": "Lupin"
+    }
+  ],
+  "products": [
+    {
+      "image": "",
+      "tags": [],
+      "allergens": [],
+      "available": true,
+      "featured": false,
+      "seasonal": false,
+      "priceNote": "",
+      "lang": "en",
+      "id": "espresso",
+      "category": "sicak-kahveler",
+      "name": "Espresso",
+      "price": 120,
+      "description": "Yoğun ve dengeli, tek shot.",
+      "nutrition": {
+        "basis": "ml",
+        "per100": {
+          "kcal": 9,
+          "fat": 0.2,
+          "satFat": 0,
+          "carb": 1.7,
+          "sugar": 0,
+          "protein": 0.1,
+          "salt": 0.01,
+          "caffeine": 212
+        },
+        "servings": [
+          {
+            "label": "Single (30 ml)",
+            "amount": 30,
+            "price": 120
+          }
+        ]
+      },
+      "sort": 1,
+      "options": {
+        "milk": false,
+        "shot": true,
+        "temp": false,
+        "dessert": false
+      },
+      "orderable": true,
+      "name_en": "Espresso",
+      "description_en": "Intense and balanced, a single shot.",
+      "tags_en": [],
+      "priceNote_en": ""
+    },
+    {
+      "image": "",
+      "tags": [],
+      "allergens": [],
+      "available": true,
+      "featured": false,
+      "seasonal": false,
+      "priceNote": "",
+      "lang": "en",
+      "id": "americano",
+      "category": "sicak-kahveler",
+      "name": "Americano",
+      "price": 140,
+      "description": "Espresso ve sıcak su. Temiz ve hafif.",
+      "nutrition": {
+        "basis": "ml",
+        "per100": {
+          "kcal": 2,
+          "fat": 0.1,
+          "satFat": 0,
+          "carb": 0.4,
+          "sugar": 0,
+          "protein": 0,
+          "salt": 0,
+          "caffeine": 53
+        },
+        "servings": [
+          {
+            "label": "Standart (240 ml)",
+            "amount": 240,
+            "price": 140
+          }
+        ]
+      },
+      "sort": 2,
+      "options": {
+        "milk": false,
+        "shot": true,
+        "temp": true,
+        "dessert": false
+      },
+      "orderable": true,
+      "name_en": "Americano",
+      "description_en": "Espresso and hot water. Clean and light.",
+      "tags_en": [],
+      "priceNote_en": ""
+    },
+    {
+      "image": "",
+      "tags": [],
+      "allergens": [
+        "sut"
+      ],
+      "available": true,
+      "featured": false,
+      "seasonal": false,
+      "priceNote": "",
+      "lang": "en",
+      "id": "latte",
+      "category": "sicak-kahveler",
+      "name": "Latte",
+      "price": 170,
+      "description": "Yumuşak, sütlü, uzun içimli.",
+      "nutrition": {
+        "basis": "ml",
+        "per100": {
+          "kcal": 51,
+          "fat": 2.7,
+          "satFat": 1.5,
+          "carb": 4.2,
+          "sugar": 3.8,
+          "protein": 2.5,
+          "salt": 0.09,
+          "caffeine": 42
+        },
+        "servings": [
+          {
+            "label": "Standart (300 ml)",
+            "amount": 300,
+            "price": 170
+          }
+        ]
+      },
+      "sort": 3,
+      "options": {
+        "milk": true,
+        "shot": true,
+        "temp": true,
+        "dessert": false
+      },
+      "orderable": true,
+      "name_en": "Latte",
+      "description_en": "Smooth, milky and long.",
+      "tags_en": [],
+      "priceNote_en": ""
+    },
+    {
+      "image": "",
+      "tags": [],
+      "allergens": [
+        "sut"
+      ],
+      "available": true,
+      "featured": false,
+      "seasonal": false,
+      "priceNote": "",
+      "lang": "en",
+      "id": "piccolo-latte",
+      "category": "sicak-kahveler",
+      "name": "Piccolo Latte",
+      "price": 160,
+      "description": "Küçük bardakta yoğun, sütlü bir içim.",
+      "nutrition": {
+        "basis": "ml",
+        "per100": {
+          "kcal": 45,
+          "fat": 2.4,
+          "satFat": 1.3,
+          "carb": 3.9,
+          "sugar": 3.4,
+          "protein": 2.2,
+          "salt": 0.08,
+          "caffeine": 64
+        },
+        "servings": [
+          {
+            "label": "Standart (100 ml)",
+            "amount": 100,
+            "price": 160
+          }
+        ]
+      },
+      "sort": 4,
+      "options": {
+        "milk": true,
+        "shot": true,
+        "temp": false,
+        "dessert": false
+      },
+      "orderable": true,
+      "name_en": "Piccolo Latte",
+      "description_en": "A small, strong and milky cup.",
+      "tags_en": [],
+      "priceNote_en": ""
+    },
+    {
+      "id": "flat-white",
+      "category": "sicak-kahveler",
+      "name": "Flat White",
+      "description": "Çift shot, ipek dokulu süt. Kahve karakteri önde.",
+      "price": 170,
+      "priceNote": "",
+      "image": "",
+      "tags": [],
+      "allergens": [
+        "sut"
+      ],
+      "lang": "en",
+      "available": true,
+      "orderable": true,
+      "options": {
+        "milk": true,
+        "shot": true,
+        "temp": true,
+        "dessert": false
+      },
+      "featured": true,
+      "seasonal": false,
+      "sort": 5,
+      "nutrition": {
+        "basis": "ml",
+        "per100": {
+          "kcal": 44,
+          "fat": 2.3,
+          "satFat": 1.3,
+          "carb": 3.8,
+          "sugar": 3.2,
+          "protein": 2.1,
+          "salt": 0.08,
+          "caffeine": 71
+        },
+        "servings": [
+          {
+            "label": "Standart (180 ml)",
+            "amount": 180,
+            "price": 170
+          }
+        ]
+      },
+      "name_en": "Flat White",
+      "description_en": "Double shot with silky milk. The coffee leads.",
+      "tags_en": [],
+      "priceNote_en": ""
+    },
+    {
+      "image": "",
+      "tags": [],
+      "allergens": [
+        "sut"
+      ],
+      "available": true,
+      "featured": false,
+      "seasonal": false,
+      "priceNote": "",
+      "lang": "en",
+      "id": "cappuccino",
+      "category": "sicak-kahveler",
+      "name": "Cappuccino",
+      "price": 170,
+      "description": "Espresso, süt ve yoğun süt köpüğü.",
+      "nutrition": {
+        "basis": "ml",
+        "per100": {
+          "kcal": 45,
+          "fat": 2.4,
+          "satFat": 1.3,
+          "carb": 3.9,
+          "sugar": 3.4,
+          "protein": 2.2,
+          "salt": 0.08,
+          "caffeine": 64
+        },
+        "servings": [
+          {
+            "label": "Standart (200 ml)",
+            "amount": 200,
+            "price": 170
+          }
+        ]
+      },
+      "sort": 6,
+      "options": {
+        "milk": true,
+        "shot": true,
+        "temp": false,
+        "dessert": false
+      },
+      "orderable": true,
+      "name_en": "Cappuccino",
+      "description_en": "Espresso, milk and a thick layer of foam.",
+      "tags_en": [],
+      "priceNote_en": ""
+    },
+    {
+      "image": "",
+      "tags": [],
+      "allergens": [
+        "sut"
+      ],
+      "available": true,
+      "featured": false,
+      "seasonal": false,
+      "priceNote": "",
+      "lang": "en",
+      "id": "cortado",
+      "category": "sicak-kahveler",
+      "name": "Cortado",
+      "price": 150,
+      "description": "Espresso ve az miktarda sıcak süt.",
+      "nutrition": {
+        "basis": "ml",
+        "per100": {
+          "kcal": 35,
+          "fat": 1.8,
+          "satFat": 0.9,
+          "carb": 3.3,
+          "sugar": 2.4,
+          "protein": 1.6,
+          "salt": 0.06,
+          "caffeine": 106
+        },
+        "servings": [
+          {
+            "label": "Standart (120 ml)",
+            "amount": 120,
+            "price": 150
+          }
+        ]
+      },
+      "sort": 7,
+      "options": {
+        "milk": true,
+        "shot": true,
+        "temp": false,
+        "dessert": false
+      },
+      "orderable": true,
+      "name_en": "Cortado",
+      "description_en": "Espresso cut with a little warm milk.",
+      "tags_en": [],
+      "priceNote_en": ""
+    },
+    {
+      "image": "",
+      "tags": [
+        "Kafeinsiz"
+      ],
+      "allergens": [
+        "sut"
+      ],
+      "available": true,
+      "featured": false,
+      "seasonal": false,
+      "priceNote": "",
+      "lang": "en",
+      "id": "rooibos-cortado",
+      "category": "sicak-kahveler",
+      "name": "Rooibos Cortado",
+      "price": 170,
+      "description": "Kafeinsiz alternatif: rooibos ve sıcak süt.",
+      "nutrition": {
+        "basis": "ml",
+        "per100": {
+          "kcal": 31,
+          "fat": 1.7,
+          "satFat": 0.9,
+          "carb": 2.5,
+          "sugar": 2.4,
+          "protein": 1.6,
+          "salt": 0.06,
+          "caffeine": 0
+        },
+        "servings": [
+          {
+            "label": "Standart (120 ml)",
+            "amount": 120,
+            "price": 170
+          }
+        ]
+      },
+      "sort": 8,
+      "options": {
+        "milk": true,
+        "shot": false,
+        "temp": false,
+        "dessert": false
+      },
+      "orderable": true,
+      "name_en": "Rooibos Cortado",
+      "description_en": "Caffeine-free alternative: rooibos and warm milk.",
+      "tags_en": [
+        "Caffeine-free"
+      ],
+      "priceNote_en": ""
+    },
+    {
+      "image": "",
+      "tags": [],
+      "allergens": [
+        "sut"
+      ],
+      "available": true,
+      "featured": false,
+      "seasonal": false,
+      "priceNote": "",
+      "lang": "tr",
+      "id": "sut-receli-latte",
+      "category": "sicak-kahveler",
+      "name": "Süt Reçelli Latte",
+      "price": 180,
+      "description": "Süt reçeli ile tatlandırılmış latte.",
+      "nutrition": {
+        "basis": "ml",
+        "per100": {
+          "kcal": 73,
+          "fat": 3,
+          "satFat": 1.8,
+          "carb": 8.4,
+          "sugar": 8.1,
+          "protein": 2.9,
+          "salt": 0.11,
+          "caffeine": 42
+        },
+        "servings": [
+          {
+            "label": "Standart (300 ml)",
+            "amount": 300,
+            "price": 180
+          }
+        ]
+      },
+      "sort": 9,
+      "options": {
+        "milk": true,
+        "shot": true,
+        "temp": true,
+        "dessert": false
+      },
+      "orderable": true,
+      "name_en": "Milk Jam Latte",
+      "description_en": "Latte sweetened with Turkish milk jam (dulce de leche).",
+      "tags_en": [],
+      "priceNote_en": ""
+    },
+    {
+      "image": "",
+      "tags": [],
+      "allergens": [
+        "sut",
+        "soya"
+      ],
+      "available": true,
+      "featured": false,
+      "seasonal": false,
+      "priceNote": "",
+      "lang": "en",
+      "id": "mocha",
+      "category": "sicak-kahveler",
+      "name": "Mocha",
+      "price": 180,
+      "description": "Espresso, çikolata ve süt. Chocolate, white chocolate ya da caramel seçenekleriyle.",
+      "nutrition": {
+        "basis": "ml",
+        "per100": {
+          "kcal": 79,
+          "fat": 2.6,
+          "satFat": 1.5,
+          "carb": 11.1,
+          "sugar": 10.6,
+          "protein": 2.5,
+          "salt": 0.09,
+          "caffeine": 42
+        },
+        "servings": [
+          {
+            "label": "Standart (300 ml)",
+            "amount": 300,
+            "price": 180
+          }
+        ]
+      },
+      "sort": 10,
+      "options": {
+        "milk": true,
+        "shot": true,
+        "temp": true,
+        "dessert": false
+      },
+      "orderable": true,
+      "name_en": "Mocha",
+      "description_en": "Espresso, chocolate and milk. Choose chocolate, white chocolate or caramel.",
+      "tags_en": [],
+      "priceNote_en": ""
+    },
+    {
+      "image": "",
+      "tags": [
+        "Nitelikli"
+      ],
+      "allergens": [],
+      "available": true,
+      "featured": true,
+      "seasonal": false,
+      "priceNote": "",
+      "lang": "tr",
+      "id": "filtre-kahve",
+      "category": "sicak-kahveler",
+      "name": "Filtre Kahve",
+      "price": 150,
+      "description": "Günün filtre çekirdeği, temiz ve aydınlık bir fincan.",
+      "nutrition": {
+        "basis": "ml",
+        "per100": {
+          "kcal": 1,
+          "fat": 0,
+          "satFat": 0,
+          "carb": 0,
+          "sugar": 0,
+          "protein": 0.1,
+          "salt": 0.01,
+          "caffeine": 40
+        },
+        "servings": [
+          {
+            "label": "Standart (250 ml)",
+            "amount": 250,
+            "price": 150
+          }
+        ]
+      },
+      "sort": 11,
+      "options": {
+        "milk": false,
+        "shot": true,
+        "temp": true,
+        "dessert": false
+      },
+      "orderable": true,
+      "name_en": "Filter Coffee",
+      "description_en": "Our filter coffee of the day, clean and bright.",
+      "tags_en": [
+        "Specialty"
+      ],
+      "priceNote_en": ""
+    },
+    {
+      "image": "",
+      "tags": [],
+      "allergens": [],
+      "available": true,
+      "featured": false,
+      "seasonal": false,
+      "priceNote": "",
+      "lang": "en",
+      "id": "red-eye",
+      "category": "sicak-kahveler",
+      "name": "Red Eye",
+      "price": 180,
+      "description": "Filtre kahveye bir shot espresso.",
+      "nutrition": {
+        "basis": "ml",
+        "per100": {
+          "kcal": 2,
+          "fat": 0,
+          "satFat": 0,
+          "carb": 0.2,
+          "sugar": 0,
+          "protein": 0.1,
+          "salt": 0.01,
+          "caffeine": 61
+        },
+        "servings": [
+          {
+            "label": "Standart (250 ml)",
+            "amount": 250,
+            "price": 180
+          }
+        ]
+      },
+      "sort": 12,
+      "options": {
+        "milk": false,
+        "shot": true,
+        "temp": false,
+        "dessert": false
+      },
+      "orderable": true,
+      "name_en": "Red Eye",
+      "description_en": "Filter coffee with a shot of espresso.",
+      "tags_en": [],
+      "priceNote_en": ""
+    },
+    {
+      "image": "",
+      "tags": [],
+      "allergens": [],
+      "available": true,
+      "featured": false,
+      "seasonal": false,
+      "priceNote": "",
+      "lang": "en",
+      "id": "black-eye",
+      "category": "sicak-kahveler",
+      "name": "Black Eye",
+      "price": 200,
+      "description": "Filtre kahveye çift shot espresso. En sert seçenek.",
+      "nutrition": {
+        "basis": "ml",
+        "per100": {
+          "kcal": 3,
+          "fat": 0,
+          "satFat": 0,
+          "carb": 0.4,
+          "sugar": 0,
+          "protein": 0.1,
+          "salt": 0.01,
+          "caffeine": 81
+        },
+        "servings": [
+          {
+            "label": "Standart (250 ml)",
+            "amount": 250,
+            "price": 200
+          }
+        ]
+      },
+      "sort": 13,
+      "options": {
+        "milk": false,
+        "shot": true,
+        "temp": false,
+        "dessert": false
+      },
+      "orderable": true,
+      "name_en": "Black Eye",
+      "description_en": "Filter coffee with a double shot. Our strongest cup.",
+      "tags_en": [],
+      "priceNote_en": ""
+    },
+    {
+      "image": "",
+      "tags": [
+        "Geleneksel"
+      ],
+      "allergens": [],
+      "available": true,
+      "featured": false,
+      "seasonal": false,
+      "priceNote": "",
+      "lang": "tr",
+      "id": "turk-kahvesi",
+      "category": "sicak-kahveler",
+      "name": "Türk Kahvesi",
+      "price": 120,
+      "description": "Cezvede, bol köpüklü.",
+      "nutrition": {
+        "basis": "ml",
+        "per100": {
+          "kcal": 3,
+          "fat": 0.2,
+          "satFat": 0,
+          "carb": 0.4,
+          "sugar": 0,
+          "protein": 0.3,
+          "salt": 0.01,
+          "caffeine": 65
+        },
+        "servings": [
+          {
+            "label": "Tek (70 ml)",
+            "amount": 70,
+            "price": 120
+          }
+        ]
+      },
+      "sort": 14,
+      "options": {
+        "milk": false,
+        "shot": false,
+        "temp": false,
+        "dessert": false
+      },
+      "orderable": true,
+      "name_en": "Turkish Coffee",
+      "description_en": "Brewed in a cezve, with plenty of foam.",
+      "tags_en": [
+        "Traditional"
+      ],
+      "priceNote_en": ""
+    },
+    {
+      "image": "",
+      "tags": [
+        "Geleneksel"
+      ],
+      "allergens": [],
+      "available": true,
+      "featured": false,
+      "seasonal": false,
+      "priceNote": "",
+      "lang": "tr",
+      "id": "duble-turk-kahvesi",
+      "category": "sicak-kahveler",
+      "name": "Duble Türk Kahvesi",
+      "price": 160,
+      "description": "Türk kahvesi, çift porsiyon.",
+      "nutrition": {
+        "basis": "ml",
+        "per100": {
+          "kcal": 3,
+          "fat": 0.2,
+          "satFat": 0,
+          "carb": 0.4,
+          "sugar": 0,
+          "protein": 0.3,
+          "salt": 0.01,
+          "caffeine": 65
+        },
+        "servings": [
+          {
+            "label": "Duble (140 ml)",
+            "amount": 140,
+            "price": 160
+          }
+        ]
+      },
+      "sort": 15,
+      "options": {
+        "milk": false,
+        "shot": false,
+        "temp": false,
+        "dessert": false
+      },
+      "orderable": true,
+      "name_en": "Double Turkish Coffee",
+      "description_en": "Turkish coffee, double portion.",
+      "tags_en": [
+        "Traditional"
+      ],
+      "priceNote_en": ""
+    },
+    {
+      "image": "",
+      "tags": [
+        "Vegan"
+      ],
+      "allergens": [],
+      "available": true,
+      "featured": false,
+      "seasonal": false,
+      "priceNote": "",
+      "lang": "tr",
+      "id": "matcha-cayi",
+      "category": "matcha-bar",
+      "name": "Matcha Çayı",
+      "price": 160,
+      "description": "Çırpılmış matcha, sıcak su ile.",
+      "nutrition": {
+        "basis": "ml",
+        "per100": {
+          "kcal": 5,
+          "fat": 0.1,
+          "satFat": 0,
+          "carb": 0.6,
+          "sugar": 0,
+          "protein": 0.5,
+          "salt": 0,
+          "caffeine": 53
+        },
+        "servings": [
+          {
+            "label": "Standart (200 ml)",
+            "amount": 200,
+            "price": 160
+          }
+        ]
+      },
+      "sort": 16,
+      "options": {
+        "milk": false,
+        "shot": false,
+        "temp": true,
+        "dessert": false
+      },
+      "orderable": true,
+      "name_en": "Matcha Tea",
+      "description_en": "Whisked matcha with hot water.",
+      "tags_en": [
+        "Vegan"
+      ],
+      "priceNote_en": ""
+    },
+    {
+      "image": "",
+      "tags": [],
+      "allergens": [
+        "sut"
+      ],
+      "available": true,
+      "featured": true,
+      "seasonal": false,
+      "priceNote": "",
+      "lang": "en",
+      "id": "matcha-latte",
+      "category": "matcha-bar",
+      "name": "Matcha Latte",
+      "price": 180,
+      "description": "Matcha ve süt. Bitkisel süt seçeneğiyle vegan olur.",
+      "nutrition": {
+        "basis": "ml",
+        "per100": {
+          "kcal": 52,
+          "fat": 2.7,
+          "satFat": 1.5,
+          "carb": 4.2,
+          "sugar": 3.9,
+          "protein": 2.8,
+          "salt": 0.09,
+          "caffeine": 35
+        },
+        "servings": [
+          {
+            "label": "Standart (300 ml)",
+            "amount": 300,
+            "price": 180
+          }
+        ]
+      },
+      "sort": 17,
+      "options": {
+        "milk": true,
+        "shot": true,
+        "temp": true,
+        "dessert": false
+      },
+      "orderable": true,
+      "name_en": "Matcha Latte",
+      "description_en": "Matcha and milk. Vegan with plant-based milk.",
+      "tags_en": [],
+      "priceNote_en": ""
+    },
+    {
+      "image": "",
+      "tags": [
+        "Vegan"
+      ],
+      "allergens": [
+        "gluten",
+        "sert-kabuklu"
+      ],
+      "available": true,
+      "featured": false,
+      "seasonal": false,
+      "priceNote": "",
+      "lang": "en",
+      "id": "oat-pistachio-matcha",
+      "category": "matcha-bar",
+      "name": "Oat Pistachio, Matcha",
+      "price": 250,
+      "description": "Yulaf sütü, Antep fıstığı ve matcha çayı.",
+      "nutrition": {
+        "basis": "ml",
+        "per100": {
+          "kcal": 85,
+          "fat": 5.1,
+          "satFat": 0.6,
+          "carb": 7.6,
+          "sugar": 3.1,
+          "protein": 2.4,
+          "salt": 0.08,
+          "caffeine": 35
+        },
+        "servings": [
+          {
+            "label": "Standart (300 ml)",
+            "amount": 300,
+            "price": 250
+          }
+        ]
+      },
+      "sort": 18,
+      "options": {
+        "milk": false,
+        "shot": false,
+        "temp": true,
+        "dessert": false
+      },
+      "orderable": true,
+      "name_en": "Oat Pistachio, Matcha",
+      "description_en": "Oat milk, Antep pistachio and matcha.",
+      "tags_en": [
+        "Vegan"
+      ],
+      "priceNote_en": ""
+    },
+    {
+      "image": "",
+      "tags": [
+        "Kafeinsiz"
+      ],
+      "allergens": [
+        "sut"
+      ],
+      "available": true,
+      "featured": false,
+      "seasonal": true,
+      "priceNote": "",
+      "lang": "en",
+      "id": "golden-latte",
+      "category": "kisa-ozel",
+      "name": "Golden Latte",
+      "price": 160,
+      "description": "Zencefil, tarçın, bal ve süt. Kahvesiz, sıcacık.",
+      "nutrition": {
+        "basis": "ml",
+        "per100": {
+          "kcal": 72,
+          "fat": 3,
+          "satFat": 1.7,
+          "carb": 8.8,
+          "sugar": 8.4,
+          "protein": 2.8,
+          "salt": 0.1,
+          "caffeine": 0
+        },
+        "servings": [
+          {
+            "label": "Standart (300 ml)",
+            "amount": 300,
+            "price": 160
+          }
+        ]
+      },
+      "sort": 19,
+      "options": {
+        "milk": true,
+        "shot": false,
+        "temp": false,
+        "dessert": false
+      },
+      "orderable": true,
+      "name_en": "Golden Latte",
+      "description_en": "Ginger, cinnamon, honey and milk. Coffee-free and warming.",
+      "tags_en": [
+        "Caffeine-free"
+      ],
+      "priceNote_en": ""
+    },
+    {
+      "image": "",
+      "tags": [],
+      "allergens": [
+        "sut"
+      ],
+      "available": true,
+      "featured": false,
+      "seasonal": true,
+      "priceNote": "",
+      "lang": "en",
+      "id": "cafe-miel",
+      "category": "kisa-ozel",
+      "name": "Cafe Miel",
+      "price": 180,
+      "description": "Tarçın, bal, espresso ve süt.",
+      "nutrition": {
+        "basis": "ml",
+        "per100": {
+          "kcal": 62,
+          "fat": 2.4,
+          "satFat": 1.4,
+          "carb": 8.1,
+          "sugar": 7.6,
+          "protein": 2.3,
+          "salt": 0.08,
+          "caffeine": 42
+        },
+        "servings": [
+          {
+            "label": "Standart (300 ml)",
+            "amount": 300,
+            "price": 180
+          }
+        ]
+      },
+      "sort": 20,
+      "options": {
+        "milk": true,
+        "shot": true,
+        "temp": true,
+        "dessert": false
+      },
+      "orderable": true,
+      "name_en": "Cafe Miel",
+      "description_en": "Cinnamon, honey, espresso and milk.",
+      "tags_en": [],
+      "priceNote_en": ""
+    },
+    {
+      "image": "",
+      "tags": [],
+      "allergens": [
+        "sut"
+      ],
+      "available": true,
+      "featured": false,
+      "seasonal": true,
+      "priceNote": "",
+      "lang": "en",
+      "id": "chai-tea-latte",
+      "category": "kisa-ozel",
+      "name": "Chai Tea Latte",
+      "price": 180,
+      "description": "Baharatlı çay ve süt.",
+      "nutrition": {
+        "basis": "ml",
+        "per100": {
+          "kcal": 58,
+          "fat": 1.9,
+          "satFat": 1.2,
+          "carb": 8.6,
+          "sugar": 7.1,
+          "protein": 1.7,
+          "salt": 0.07,
+          "caffeine": 20
+        },
+        "servings": [
+          {
+            "label": "Standart (300 ml)",
+            "amount": 300,
+            "price": 180
+          }
+        ]
+      },
+      "sort": 21,
+      "options": {
+        "milk": true,
+        "shot": true,
+        "temp": true,
+        "dessert": false
+      },
+      "orderable": true,
+      "name_en": "Chai Tea Latte",
+      "description_en": "Spiced tea and milk.",
+      "tags_en": [],
+      "priceNote_en": ""
+    },
+    {
+      "image": "",
+      "tags": [],
+      "allergens": [
+        "sut"
+      ],
+      "available": true,
+      "featured": false,
+      "seasonal": true,
+      "priceNote": "",
+      "lang": "tr",
+      "id": "salep",
+      "category": "kisa-ozel",
+      "name": "Salep",
+      "price": 180,
+      "description": "Sütle pişen, tarçınla servis edilen klasik kış içeceği.",
+      "nutrition": {
+        "basis": "ml",
+        "per100": {
+          "kcal": 94,
+          "fat": 2.6,
+          "satFat": 1.6,
+          "carb": 14.5,
+          "sugar": 12.5,
+          "protein": 2.8,
+          "salt": 0.1,
+          "caffeine": 0
+        },
+        "servings": [
+          {
+            "label": "Standart (250 ml)",
+            "amount": 250,
+            "price": 180
+          }
+        ]
+      },
+      "sort": 22,
+      "options": {
+        "milk": true,
+        "shot": false,
+        "temp": false,
+        "dessert": false
+      },
+      "orderable": true,
+      "name_en": "Salep",
+      "description_en": "A classic Turkish winter drink, cooked with milk and served with cinnamon.",
+      "tags_en": [],
+      "priceNote_en": ""
+    },
+    {
+      "image": "",
+      "tags": [],
+      "allergens": [
+        "sut",
+        "soya"
+      ],
+      "available": true,
+      "featured": false,
+      "seasonal": false,
+      "priceNote": "",
+      "lang": "tr",
+      "id": "klasik-sicak-cikolata",
+      "category": "sicak-cikolata",
+      "name": "Klasik Sıcak Çikolata",
+      "price": 180,
+      "description": "Çikolata ve süt. Yoğun ve koyu.",
+      "nutrition": {
+        "basis": "ml",
+        "per100": {
+          "kcal": 103,
+          "fat": 3.2,
+          "satFat": 1.9,
+          "carb": 15.1,
+          "sugar": 14.9,
+          "protein": 3.2,
+          "salt": 0.11,
+          "caffeine": 0
+        },
+        "servings": [
+          {
+            "label": "Standart (300 ml)",
+            "amount": 300,
+            "price": 180
+          }
+        ]
+      },
+      "sort": 23,
+      "options": {
+        "milk": true,
+        "shot": false,
+        "temp": true,
+        "dessert": false
+      },
+      "orderable": true,
+      "name_en": "Classic Hot Chocolate",
+      "description_en": "Chocolate and milk. Rich and dark.",
+      "tags_en": [],
+      "priceNote_en": ""
+    },
+    {
+      "image": "",
+      "tags": [],
+      "allergens": [
+        "sut",
+        "sert-kabuklu",
+        "soya"
+      ],
+      "available": true,
+      "featured": false,
+      "seasonal": false,
+      "priceNote": "badem sütü +50 ₺",
+      "lang": "tr",
+      "id": "matcha-beyaz-cikolata",
+      "category": "sicak-cikolata",
+      "name": "Matcha Beyaz Çikolata",
+      "price": 220,
+      "description": "Matcha ve beyaz çikolata. Badem sütü ile hazırlanır.",
+      "nutrition": {
+        "basis": "ml",
+        "per100": {
+          "kcal": 67,
+          "fat": 1.8,
+          "satFat": 0.4,
+          "carb": 11.8,
+          "sugar": 10.7,
+          "protein": 1.1,
+          "salt": 0.1,
+          "caffeine": 35
+        },
+        "servings": [
+          {
+            "label": "Standart (300 ml)",
+            "amount": 300,
+            "price": 220
+          }
+        ]
+      },
+      "sort": 24,
+      "options": {
+        "milk": false,
+        "shot": false,
+        "temp": false,
+        "dessert": false
+      },
+      "orderable": true,
+      "name_en": "Matcha White Chocolate",
+      "description_en": "Matcha and white chocolate, made with almond milk.",
+      "tags_en": [],
+      "priceNote_en": "almond milk +50 ₺"
+    },
+    {
+      "image": "",
+      "tags": [],
+      "allergens": [
+        "sut",
+        "soya"
+      ],
+      "available": true,
+      "featured": false,
+      "seasonal": false,
+      "priceNote": "",
+      "lang": "en",
+      "id": "gingerbread-cikolata",
+      "category": "sicak-cikolata",
+      "name": "Gingerbread Çikolata",
+      "price": 180,
+      "description": "Tarçın, zencefil, muskat ve vanilya ile sıcak çikolata.",
+      "nutrition": {
+        "basis": "ml",
+        "per100": {
+          "kcal": 105,
+          "fat": 2.9,
+          "satFat": 1.7,
+          "carb": 16.6,
+          "sugar": 16.3,
+          "protein": 2.8,
+          "salt": 0.1,
+          "caffeine": 0
+        },
+        "servings": [
+          {
+            "label": "Standart (300 ml)",
+            "amount": 300,
+            "price": 180
+          }
+        ]
+      },
+      "sort": 25,
+      "options": {
+        "milk": true,
+        "shot": false,
+        "temp": false,
+        "dessert": false
+      },
+      "orderable": true,
+      "name_en": "Gingerbread Hot Chocolate",
+      "description_en": "Hot chocolate with cinnamon, ginger, nutmeg and vanilla.",
+      "tags_en": [],
+      "priceNote_en": ""
+    },
+    {
+      "image": "",
+      "tags": [],
+      "allergens": [
+        "gluten",
+        "sut",
+        "yumurta"
+      ],
+      "available": true,
+      "featured": false,
+      "seasonal": false,
+      "priceNote": "",
+      "lang": "tr",
+      "id": "tart",
+      "category": "tatlilar",
+      "name": "Tart",
+      "price": 220,
+      "description": "Süt reçelli ya da çikolatalı. Günlük çeşidi sorunuz.",
+      "nutrition": {
+        "basis": "g",
+        "per100": {
+          "kcal": 410,
+          "fat": 20,
+          "satFat": 11,
+          "carb": 52,
+          "sugar": 33,
+          "protein": 5,
+          "salt": 0.3,
+          "caffeine": 0
+        },
+        "servings": [
+          {
+            "label": "Dilim (120 g)",
+            "amount": 120,
+            "price": 220
+          }
+        ]
+      },
+      "sort": 26,
+      "options": {
+        "milk": false,
+        "shot": false,
+        "temp": false,
+        "dessert": true
+      },
+      "orderable": true,
+      "name_en": "Tart",
+      "description_en": "Milk jam or chocolate. Ask for today’s choice.",
+      "tags_en": [],
+      "priceNote_en": ""
+    },
+    {
+      "image": "",
+      "tags": [],
+      "allergens": [
+        "gluten",
+        "sut",
+        "yumurta"
+      ],
+      "available": true,
+      "featured": false,
+      "seasonal": false,
+      "priceNote": "",
+      "lang": "en",
+      "id": "opia-cup",
+      "category": "tatlilar",
+      "name": "Opia Cup",
+      "price": 220,
+      "description": "Bardakta servis edilen imza tatlımız.",
+      "nutrition": {
+        "basis": "g",
+        "per100": {
+          "kcal": 260,
+          "fat": 14,
+          "satFat": 8.5,
+          "carb": 30,
+          "sugar": 20,
+          "protein": 4,
+          "salt": 0.2,
+          "caffeine": 0
+        },
+        "servings": [
+          {
+            "label": "Bardak (150 g)",
+            "amount": 150,
+            "price": 220
+          }
+        ]
+      },
+      "sort": 27,
+      "options": {
+        "milk": false,
+        "shot": false,
+        "temp": false,
+        "dessert": true
+      },
+      "orderable": true,
+      "name_en": "Opia Cup",
+      "description_en": "Our signature dessert served in a cup.",
+      "tags_en": [],
+      "priceNote_en": ""
+    },
+    {
+      "image": "",
+      "tags": [],
+      "allergens": [
+        "gluten",
+        "sut",
+        "yumurta"
+      ],
+      "available": true,
+      "featured": false,
+      "seasonal": false,
+      "priceNote": "",
+      "lang": "en",
+      "id": "tiramisu",
+      "category": "tatlilar",
+      "name": "Tiramisu",
+      "price": 200,
+      "description": "Espresso ile ıslanmış kedi dili, mascarpone, kakao.",
+      "nutrition": {
+        "basis": "g",
+        "per100": {
+          "kcal": 283,
+          "fat": 18.2,
+          "satFat": 10.5,
+          "carb": 24.4,
+          "sugar": 16,
+          "protein": 4.8,
+          "salt": 0.12,
+          "caffeine": 0
+        },
+        "servings": [
+          {
+            "label": "Kase (130 g)",
+            "amount": 130,
+            "price": 200
+          }
+        ]
+      },
+      "sort": 28,
+      "options": {
+        "milk": false,
+        "shot": false,
+        "temp": false,
+        "dessert": true
+      },
+      "orderable": true,
+      "name_en": "Tiramisu",
+      "description_en": "Ladyfingers soaked in espresso, mascarpone and cocoa.",
+      "tags_en": [],
+      "priceNote_en": "",
+      "soldout": false
+    },
+    {
+      "image": "",
+      "tags": [],
+      "allergens": [
+        "gluten",
+        "sut",
+        "yumurta"
+      ],
+      "available": true,
+      "featured": false,
+      "seasonal": false,
+      "priceNote": "",
+      "lang": "tr",
+      "id": "buyukanne-turtasi",
+      "category": "tatlilar",
+      "name": "Büyükanne Turtası",
+      "price": 230,
+      "description": "Ev usulü turta, sıcak servis edilebilir.",
+      "nutrition": {
+        "basis": "g",
+        "per100": {
+          "kcal": 300,
+          "fat": 14,
+          "satFat": 6.5,
+          "carb": 40,
+          "sugar": 22,
+          "protein": 4,
+          "salt": 0.3,
+          "caffeine": 0
+        },
+        "servings": [
+          {
+            "label": "Dilim (130 g)",
+            "amount": 130,
+            "price": 230
+          }
+        ]
+      },
+      "sort": 29,
+      "options": {
+        "milk": false,
+        "shot": false,
+        "temp": false,
+        "dessert": true
+      },
+      "orderable": true,
+      "name_en": "Grandma’s Pie",
+      "description_en": "Homestyle pie, can be served warm.",
+      "tags_en": [],
+      "priceNote_en": ""
+    },
+    {
+      "image": "",
+      "tags": [],
+      "allergens": [
+        "gluten",
+        "sut",
+        "yumurta"
+      ],
+      "available": true,
+      "featured": false,
+      "seasonal": false,
+      "priceNote": "",
+      "lang": "en",
+      "id": "torte",
+      "category": "tatlilar",
+      "name": "Torte",
+      "price": 240,
+      "description": "Katmanlı, kremalı pasta dilimi.",
+      "nutrition": {
+        "basis": "g",
+        "per100": {
+          "kcal": 350,
+          "fat": 19,
+          "satFat": 10,
+          "carb": 42,
+          "sugar": 30,
+          "protein": 5,
+          "salt": 0.3,
+          "caffeine": 0
+        },
+        "servings": [
+          {
+            "label": "Dilim (140 g)",
+            "amount": 140,
+            "price": 240
+          }
+        ]
+      },
+      "sort": 30,
+      "options": {
+        "milk": false,
+        "shot": false,
+        "temp": false,
+        "dessert": true
+      },
+      "orderable": true,
+      "name_en": "Torte",
+      "description_en": "A layered cream cake slice.",
+      "tags_en": [],
+      "priceNote_en": ""
+    },
+    {
+      "image": "",
+      "tags": [],
+      "allergens": [
+        "gluten",
+        "sut",
+        "yumurta"
+      ],
+      "available": true,
+      "featured": false,
+      "seasonal": false,
+      "priceNote": "",
+      "lang": "en",
+      "id": "cheesecake",
+      "category": "tatlilar",
+      "name": "Cheesecake",
+      "price": 240,
+      "description": "Klasik, kremsi, bisküvi tabanlı.",
+      "nutrition": {
+        "basis": "g",
+        "per100": {
+          "kcal": 321,
+          "fat": 22.5,
+          "satFat": 12.6,
+          "carb": 25.5,
+          "sugar": 21.9,
+          "protein": 5.5,
+          "salt": 1.1,
+          "caffeine": 0
+        },
+        "servings": [
+          {
+            "label": "Dilim (130 g)",
+            "amount": 130,
+            "price": 240
+          }
+        ]
+      },
+      "sort": 31,
+      "options": {
+        "milk": false,
+        "shot": false,
+        "temp": false,
+        "dessert": true
+      },
+      "orderable": true,
+      "name_en": "Cheesecake",
+      "description_en": "Classic and creamy on a biscuit base.",
+      "tags_en": [],
+      "priceNote_en": ""
+    },
+    {
+      "image": "",
+      "tags": [],
+      "allergens": [
+        "sut",
+        "yumurta",
+        "gluten"
+      ],
+      "available": true,
+      "featured": true,
+      "seasonal": false,
+      "priceNote": "",
+      "lang": "en",
+      "id": "san-sebastian-cheesecake",
+      "category": "tatlilar",
+      "name": "San Sebastian Cheesecake",
+      "price": 230,
+      "description": "Yanık yüzeyli, içi akışkan, baskın krem peynir.",
+      "nutrition": {
+        "basis": "g",
+        "per100": {
+          "kcal": 320,
+          "fat": 26.4,
+          "satFat": 15,
+          "carb": 16,
+          "sugar": 13,
+          "protein": 5.5,
+          "salt": 0.45,
+          "caffeine": 0
+        },
+        "servings": [
+          {
+            "label": "Dilim (120 g)",
+            "amount": 120,
+            "price": 230
+          }
+        ]
+      },
+      "sort": 32,
+      "options": {
+        "milk": false,
+        "shot": false,
+        "temp": false,
+        "dessert": true
+      },
+      "orderable": true,
+      "name_en": "San Sebastian Cheesecake",
+      "description_en": "Burnt top, soft centre, rich cream cheese.",
+      "tags_en": [],
+      "priceNote_en": "",
+      "soldout": false
+    },
+    {
+      "image": "",
+      "tags": [],
+      "allergens": [
+        "gluten",
+        "sut",
+        "yumurta",
+        "soya"
+      ],
+      "available": true,
+      "featured": false,
+      "seasonal": false,
+      "priceNote": "",
+      "lang": "en",
+      "id": "brownie",
+      "category": "tatlilar",
+      "name": "Brownie",
+      "price": 240,
+      "description": "Beyaz çikolatalı ve vişneli.",
+      "nutrition": {
+        "basis": "g",
+        "per100": {
+          "kcal": 466,
+          "fat": 29.1,
+          "satFat": 7.5,
+          "carb": 50.2,
+          "sugar": 36,
+          "protein": 6.2,
+          "salt": 0.45,
+          "caffeine": 0
+        },
+        "servings": [
+          {
+            "label": "Kare (90 g)",
+            "amount": 90,
+            "price": 240
+          }
+        ]
+      },
+      "sort": 33,
+      "options": {
+        "milk": false,
+        "shot": false,
+        "temp": false,
+        "dessert": true
+      },
+      "orderable": true,
+      "name_en": "Brownie",
+      "description_en": "With white chocolate and sour cherry.",
+      "tags_en": [],
+      "priceNote_en": ""
+    },
+    {
+      "image": "",
+      "tags": [],
+      "allergens": [
+        "sut"
+      ],
+      "available": true,
+      "featured": false,
+      "seasonal": false,
+      "priceNote": "ekstra",
+      "lang": "tr",
+      "id": "ekstra-sut",
+      "category": "ekstralar",
+      "name": "Süt",
+      "price": 10,
+      "description": "İçeceğine ekstra süt.",
+      "nutrition": {
+        "basis": "ml",
+        "per100": {
+          "kcal": 61,
+          "fat": 3.3,
+          "satFat": 1.9,
+          "carb": 4.8,
+          "sugar": 4.8,
+          "protein": 3.1,
+          "salt": 0.11,
+          "caffeine": 0
+        },
+        "servings": [
+          {
+            "label": "Porsiyon (50 ml)",
+            "amount": 50,
+            "price": 10
+          }
+        ]
+      },
+      "sort": 34,
+      "options": {
+        "milk": false,
+        "shot": false,
+        "temp": false,
+        "dessert": false
+      },
+      "orderable": false,
+      "name_en": "Milk",
+      "description_en": "Extra milk for your drink.",
+      "tags_en": [],
+      "priceNote_en": "extra"
+    },
+    {
+      "image": "",
+      "tags": [],
+      "allergens": [
+        "sut"
+      ],
+      "available": true,
+      "featured": false,
+      "seasonal": false,
+      "priceNote": "ekstra",
+      "lang": "tr",
+      "id": "ekstra-laktozsuz-sut",
+      "category": "ekstralar",
+      "name": "Laktozsuz Süt",
+      "price": 20,
+      "description": "Süt yerine laktozsuz süt.",
+      "nutrition": {
+        "basis": "ml",
+        "per100": {
+          "kcal": 61,
+          "fat": 3.3,
+          "satFat": 1.9,
+          "carb": 4.8,
+          "sugar": 4.8,
+          "protein": 3.1,
+          "salt": 0.11,
+          "caffeine": 0
+        },
+        "servings": [
+          {
+            "label": "Porsiyon (200 ml)",
+            "amount": 200,
+            "price": 20
+          }
+        ]
+      },
+      "sort": 35,
+      "options": {
+        "milk": false,
+        "shot": false,
+        "temp": false,
+        "dessert": false
+      },
+      "orderable": false,
+      "name_en": "Lactose-free Milk",
+      "description_en": "Lactose-free milk instead of regular.",
+      "tags_en": [],
+      "priceNote_en": "extra"
+    },
+    {
+      "image": "",
+      "tags": [
+        "Vegan"
+      ],
+      "allergens": [
+        "gluten",
+        "sert-kabuklu"
+      ],
+      "available": true,
+      "featured": false,
+      "seasonal": false,
+      "priceNote": "ekstra",
+      "lang": "tr",
+      "id": "ekstra-bitkisel-sut",
+      "category": "ekstralar",
+      "name": "Bitkisel Süt",
+      "price": 50,
+      "description": "Yulaf ya da badem sütü.",
+      "nutrition": {
+        "basis": "ml",
+        "per100": {
+          "kcal": 61,
+          "fat": 3,
+          "satFat": 0.3,
+          "carb": 7.1,
+          "sugar": 3.4,
+          "protein": 1.1,
+          "salt": 0.1,
+          "caffeine": 0
+        },
+        "servings": [
+          {
+            "label": "Porsiyon (200 ml)",
+            "amount": 200,
+            "price": 50
+          }
+        ]
+      },
+      "sort": 36,
+      "options": {
+        "milk": false,
+        "shot": false,
+        "temp": false,
+        "dessert": false
+      },
+      "orderable": false,
+      "name_en": "Plant-based Milk",
+      "description_en": "Oat or almond milk.",
+      "tags_en": [
+        "Vegan"
+      ],
+      "priceNote_en": "extra"
+    },
+    {
+      "image": "",
+      "tags": [],
+      "allergens": [],
+      "available": true,
+      "featured": false,
+      "seasonal": false,
+      "priceNote": "ekstra",
+      "lang": "tr",
+      "id": "ekstra-single-espresso",
+      "category": "ekstralar",
+      "name": "Single Espresso İlave",
+      "price": 50,
+      "description": "İçeceğine bir shot espresso daha.",
+      "nutrition": {
+        "basis": "ml",
+        "per100": {
+          "kcal": 9,
+          "fat": 0.2,
+          "satFat": 0,
+          "carb": 1.7,
+          "sugar": 0,
+          "protein": 0.1,
+          "salt": 0.01,
+          "caffeine": 212
+        },
+        "servings": [
+          {
+            "label": "Shot (30 ml)",
+            "amount": 30,
+            "price": 50
+          }
+        ]
+      },
+      "sort": 37,
+      "options": {
+        "milk": false,
+        "shot": false,
+        "temp": false,
+        "dessert": false
+      },
+      "orderable": false,
+      "name_en": "Extra Espresso Shot",
+      "description_en": "One more shot in your drink.",
+      "tags_en": [],
+      "priceNote_en": "extra"
+    },
+    {
+      "image": "",
+      "tags": [],
+      "allergens": [
+        "sut",
+        "soya"
+      ],
+      "available": true,
+      "featured": false,
+      "seasonal": false,
+      "priceNote": "tatlıya",
+      "lang": "tr",
+      "id": "ekstra-cikolata",
+      "category": "ekstralar",
+      "name": "Çikolata",
+      "price": 70,
+      "description": "Tatlının yanına çikolata sosu.",
+      "nutrition": {
+        "basis": "g",
+        "per100": {
+          "kcal": 343,
+          "fat": 2.6,
+          "satFat": 1.6,
+          "carb": 73.6,
+          "sugar": 72.1,
+          "protein": 3.5,
+          "salt": 0.13,
+          "caffeine": 0
+        },
+        "servings": [
+          {
+            "label": "Porsiyon (30 g)",
+            "amount": 30,
+            "price": 70
+          }
+        ]
+      },
+      "sort": 38,
+      "options": {
+        "milk": false,
+        "shot": false,
+        "temp": false,
+        "dessert": false
+      },
+      "orderable": false,
+      "name_en": "Chocolate",
+      "description_en": "Chocolate sauce with your dessert.",
+      "tags_en": [],
+      "priceNote_en": "with dessert"
+    },
+    {
+      "image": "",
+      "tags": [],
+      "allergens": [
+        "sut",
+        "yumurta"
+      ],
+      "available": true,
+      "featured": false,
+      "seasonal": false,
+      "priceNote": "tatlıya",
+      "lang": "tr",
+      "id": "ekstra-dondurma",
+      "category": "ekstralar",
+      "name": "Dondurma",
+      "price": 50,
+      "description": "Tatlının yanına vanilyalı dondurma.",
+      "nutrition": {
+        "basis": "g",
+        "per100": {
+          "kcal": 207,
+          "fat": 11,
+          "satFat": 6.8,
+          "carb": 23.6,
+          "sugar": 21.2,
+          "protein": 3.5,
+          "salt": 0.2,
+          "caffeine": 0
+        },
+        "servings": [
+          {
+            "label": "Top (50 g)",
+            "amount": 50,
+            "price": 50
+          }
+        ]
+      },
+      "sort": 39,
+      "options": {
+        "milk": false,
+        "shot": false,
+        "temp": false,
+        "dessert": false
+      },
+      "orderable": false,
+      "name_en": "Ice Cream",
+      "description_en": "Vanilla ice cream with your dessert.",
+      "tags_en": [],
+      "priceNote_en": "with dessert"
+    }
+  ]
+}

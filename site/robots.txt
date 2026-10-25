@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /_src/
+Disallow: /_private/
+Disallow: /masa/
+Disallow: /m/
+
+Sitemap: https://opiacoffeeco.com/sitemap.xml

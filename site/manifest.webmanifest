@@ -1,0 +1,19 @@
+{
+    "name": "Opia Coffee Co.",
+    "short_name": "Opia",
+    "description": "Yenibağlar, Eskişehir’de nitelikli kahve",
+    "start_url": "/",
+    "scope": "/",
+    "display": "standalone",
+    "lang": "tr",
+    "background_color": "#ffffff",
+    "theme_color": "#0a0a0a",
+    "icons": [
+        {
+            "src": "/assets/img/logo-opia.png",
+            "sizes": "225x225",
+            "type": "image/png",
+            "purpose": "any"
+        }
+    ]
+}

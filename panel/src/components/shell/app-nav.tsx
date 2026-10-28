@@ -82,7 +82,7 @@ export function AppNav({
     <>
       {/* Tablet / masaüstü: ikonlu yan ray */}
       <nav className="fixed inset-y-0 left-0 z-30 hidden w-[84px] flex-col items-center border-r border-stone-200/80 bg-white py-3 md:flex">
-        <Link href={`/${cafe.slug}/masalar`} className="relative mb-2" aria-label="Masalar">
+        <Link prefetch={false} href={`/${cafe.slug}/masalar`} className="relative mb-2" aria-label="Masalar">
           <LogoMark size={44} logo={cafe.logo} name={cafe.name} />
           {(localMode || DEMO_MODE) && (
             <span
@@ -159,7 +159,7 @@ export function AppNav({
         {secondary.length > 0 && (
           <div className="mb-4 grid grid-cols-2 gap-2 md:hidden">
             {secondary.map((item) => (
-              <Link
+              <Link prefetch={false}
                 key={item.segment}
                 href={`/${cafe.slug}/${item.segment}`}
                 onClick={() => setMoreOpen(false)}
@@ -181,7 +181,7 @@ export function AppNav({
             <ul className="flex flex-col gap-2">
               {cafes.map((c) => (
                 <li key={c.id}>
-                  <Link
+                  <Link prefetch={false}
                     href={`/${c.slug}/masalar`}
                     onClick={() => setMoreOpen(false)}
                     className={cn(
@@ -220,7 +220,7 @@ export function AppNav({
 
 function RailLink({ item, href, active }: { item: NavItem; href: string; active: boolean }) {
   return (
-    <Link
+    <Link prefetch={false}
       href={href}
       title={item.label}
       className={cn(
@@ -236,7 +236,7 @@ function RailLink({ item, href, active }: { item: NavItem; href: string; active:
 
 function BottomLink({ item, href, active }: { item: NavItem; href: string; active: boolean }) {
   return (
-    <Link
+    <Link prefetch={false}
       href={href}
       className={cn(
         "relative flex flex-1 flex-col items-center gap-0.5 pb-2 pt-2.5 text-[11px] font-semibold",

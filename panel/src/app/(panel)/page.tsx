@@ -36,7 +36,7 @@ export default async function Home() {
           <ul className="flex flex-col gap-3">
             {cafes.map((cafe) => (
               <li key={cafe.id} data-cafe-theme={cafe.theme}>
-                <Link
+                <Link prefetch={false}
                   href={`/${cafe.slug}/masalar`}
                   className={cn(
                     "group flex items-center gap-4 rounded-2xl border-2 bg-white p-4 shadow-card transition hover:shadow-float",

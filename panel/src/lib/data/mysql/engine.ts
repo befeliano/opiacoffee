@@ -12,6 +12,7 @@ import { type Ctx, type Role, type Row, withTx } from "./db";
 import * as admin from "./admin";
 import * as day from "./day";
 import * as guest from "./guest";
+import * as rain from "./rain";
 import * as menu from "./menu";
 import * as pos from "./pos";
 import * as reports from "./reports";
@@ -105,6 +106,12 @@ const FUNCTIONS: Record<string, Fn> = {
   tables_qr: guest.tables_qr,
   tables_qr_reset: guest.tables_qr_reset,
   cafe_set_qr_ordering: guest.cafe_set_qr_ordering,
+
+  // Yağmur uyarısı
+  rain_targets: rain.rain_targets,
+  rain_report: rain.rain_report,
+  rain_get: rain.rain_get,
+  rain_ack: rain.rain_ack,
 };
 
 export const MYSQL_FUNCTIONS = Object.keys(FUNCTIONS);

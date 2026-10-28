@@ -786,3 +786,35 @@ describe("kişiye özel yetkiler (veritabanında uygulanır)", () => {
     expect(team.find((m) => m.email === STAFF_F)).toMatchObject({ custom_permissions: {}, permissions: { reports: false, figures: "two_days" } });
   });
 });
+
+describe("yağmur uyarısı", () => {
+  type Row = { alert_since: string | null; ack_at: string | null; ack_by: string; eta_min: number | null };
+  const report = (alert: boolean, eta: number | null) =>
+    localRpc<Row>(db, null, "rain_report", { p_cafe: cafeB, p_status: { alert, etaMin: eta, frameTime: 1_800_000_000, stale: false } }, { role: "service_role" });
+
+  it("ölçümü yalnızca servis yazar; uyarı açılır, onaylanınca kapanır, tekrar ölçümde açık kalmaz", async () => {
+    await db.query("update public.cafes set lat = 39.785454, lon = 30.502377");
+    await expect(localRpc(db, as(STAFF_B), "rain_report", { p_cafe: cafeB, p_status: { alert: true } })).rejects.toThrow(/permission denied|E_FORBIDDEN/);
+    await expect(localRpc(db, as(STAFF_B), "rain_targets")).rejects.toThrow(/permission denied|E_FORBIDDEN/);
+
+    const targets = await localRpc<{ cafe_id: string; lat: number }[]>(db, null, "rain_targets", {}, { role: "service_role" });
+    expect(targets.map((t) => t.cafe_id).sort()).toEqual([cafeA, cafeB].sort());
+
+    let row = await report(true, 12);
+    expect(row.alert_since).not.toBeNull();
+    expect(row.eta_min).toBe(12);
+
+    // Başka kafenin üyesi okuyamaz ve onaylayamaz; kendi baristası onaylar
+    await expectError(localRpc(db, as(STAFF_F), "rain_ack", { p_cafe: cafeB }), "E_FORBIDDEN");
+    await expectError(localRpc(db, as(STAFF_F), "rain_get", { p_cafe: cafeB }), "E_FORBIDDEN");
+    await localRpc(db, as(STAFF_B), "rain_ack", { p_cafe: cafeB });
+    row = await report(true, 8);
+    expect(row.ack_at).not.toBeNull(); // aynı yağış: onay korunur, uyarı tekrar çıkmaz
+    expect(row.ack_by).toBe("Barista B");
+    expect((await localRpc<Row>(db, as(STAFF_B), "rain_get", { p_cafe: cafeB })).eta_min).toBe(8);
+
+    // Yağış geçti ama 30 dk dolmadı: uyarı kaydı durur
+    row = await report(false, null);
+    expect(row.alert_since).not.toBeNull();
+  });
+});

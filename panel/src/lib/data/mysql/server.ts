@@ -35,5 +35,5 @@ async function seedDev(pool: Pool, engine: Engine) {
   const created = await engine.seedMysqlDatabase(pool, { cafes: [OPIA_CAFE], team: OPIA_DEV_TEAM });
   if (!created) return;
   const logo = await readFile(path.join(process.cwd(), "public", "opia", "logo.png"));
-  await pool.query("UPDATE cafes SET logo = ? WHERE slug = ?", [`data:image/png;base64,${logo.toString("base64")}`, OPIA_CAFE.slug]);
+  await pool.query("UPDATE cafes SET logo = ?, lat = 39.785454, lon = 30.502377 WHERE slug = ?", [`data:image/png;base64,${logo.toString("base64")}`, OPIA_CAFE.slug]);
 }

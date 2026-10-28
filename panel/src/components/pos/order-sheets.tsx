@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { ArrowRightLeft, Merge } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button, Spinner } from "@/components/ui/button";
 import { Field, NumberInput } from "@/components/ui/field";
 import { Sheet } from "@/components/ui/sheet";
 import type { FloorData, FloorTable, Order } from "@/lib/api/types";
@@ -17,14 +17,15 @@ export function MoveSheet({
   onClose,
   onSelect,
 }: {
-  floor: FloorData;
+  /** Pencere açılınca yüklenir (yüklenirken boş) */
+  floor: FloorData | null;
   currentTableId: string;
   busy: boolean;
   onClose: () => void;
   onSelect: (table: FloorTable) => void;
 }) {
   const [target, setTarget] = useState<FloorTable | null>(null);
-  const tables = floor.tables.filter((t) => t.id !== currentTableId);
+  const tables = floor ? floor.tables.filter((t) => t.id !== currentTableId) : [];
 
   return (
     <Sheet
@@ -39,6 +40,11 @@ export function MoveSheet({
         </Button>
       }
     >
+      {!floor && (
+        <div className="grid h-32 place-items-center text-stone-400">
+          <Spinner />
+        </div>
+      )}
       <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
         {tables.map((t) => (
           <button

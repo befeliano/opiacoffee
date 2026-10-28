@@ -9,8 +9,10 @@ import { ChartCard, LegendItem, VIZ } from "@/components/charts/chart-kit";
 import { ColumnChart } from "@/components/charts/column-chart";
 import { Card, CardHeader, EmptyState, Segmented } from "@/components/ui/surface";
 import type { ReportData } from "@/lib/api/types";
+import { cn } from "@/lib/cn";
 import {
   addDays,
+  diffDays,
   formatDateShortTr,
   formatDateTr,
   formatMinutes,
@@ -34,10 +36,14 @@ import {
   type Tier,
 } from "@/lib/domain/report";
 import { num, pct, tl } from "@/lib/format";
+import { DateRangePicker } from "@/components/ui/date-range";
 import { StatTile } from "./stat-tile";
 import { usePerms } from "@/components/shell/perms";
 
 const TIER_LABEL: Record<Tier, string> = { busy: "Yoğun", medium: "Orta", calm: "Sakin" };
+
+type ReportPeriod = "day" | "week" | "month" | "all" | "range";
+const PERIOD_PARAM: Record<ReportPeriod, string> = { day: "gun", week: "hafta", month: "ay", all: "tum", range: "aralik" };
 
 export function ReportView({
   slug,
@@ -56,7 +62,7 @@ export function ReportView({
   currentHour,
 }: {
   slug: string;
-  view: "day" | "week" | "month";
+  view: ReportPeriod;
   date: string;
   from: string;
   to: string;
@@ -64,7 +70,8 @@ export function ReportView({
   prevTo: string;
   today: string;
   current: ReportData;
-  previous: ReportData;
+  /** Tüm zamanlar görünümünde boş (karşılaştırılacak önceki dönem yok) */
+  previous: ReportData | null;
   openHour: number;
   closeHour: number;
   timezone: string;
@@ -74,18 +81,22 @@ export function ReportView({
   // Kâr/maliyet yetkisi yoksa veritabanı maliyet alanlarını göndermez
   const showProfit = usePerms().profit;
   const multi = view !== "day";
+  const allTime = view === "all";
+  const isRange = view === "range";
+  const rangeDays = diffDays(from, to) + 1;
   const days = fillDays(current.daily, from, to);
   const elapsedDays = multi ? Math.max(1, days.filter((d) => d.date <= today).length) : 1;
   const t = totalsOf(days, elapsedDays);
 
   // Karşılaştırmalar
-  const prevDays = fillDays(previous.daily, prevFrom, prevTo);
+  const prevDays = previous ? fillDays(previous.daily, prevFrom, prevTo) : [];
   const prevDay = view === "day" ? totalsOf(prevDays.filter((d) => d.date === addDays(from, -1))) : null;
   const lastWeekSameDay = view === "day" ? totalsOf(prevDays.filter((d) => d.date === addDays(from, -7))) : null;
   // Hafta/ay devam ediyorsa öncekinin aynı gün sayısıyla karşılaştır
   const prevRange = multi ? totalsOf(prevDays.slice(0, elapsedDays)) : null;
-  const prevLabel =
-    view === "week"
+  const prevLabel = isRange
+    ? `önceki ${rangeDays} güne göre`
+    : view === "week"
       ? elapsedDays < 7
         ? `geçen haftanın ilk ${elapsedDays} günü`
         : "geçen haftaya göre"
@@ -94,7 +105,9 @@ export function ReportView({
         : "geçen aya göre";
 
   const deltas = (pick: (x: ReturnType<typeof totalsOf>) => number | null, upGood = true) =>
-    view === "day"
+    view === "all"
+      ? []
+      : view === "day"
       ? [
           { value: change(pick(t), pick(prevDay!)), label: "düne göre", upGood },
           { value: change(pick(t), pick(lastWeekSameDay!)), label: `geçen ${WEEKDAYS_SHORT_TR[weekdayOf(from)]}`, upGood },
@@ -114,18 +127,25 @@ export function ReportView({
   const tables = tableStats(current.tables);
   const hasData = t.orders > 0;
 
-  const go = (next: { view?: "day" | "week" | "month"; date?: string }) => {
+  const go = (next: { view?: ReportPeriod; date?: string; range?: [string, string] }) => {
     const v = next.view ?? view;
     const d = next.date ?? date;
-    router.push(`/${slug}/rapor?gorunum=${v === "week" ? "hafta" : v === "month" ? "ay" : "gun"}&tarih=${d}`, { scroll: false });
+    // Aralığa geçerken şu an görülen dönemle başla
+    const [a, b] = next.range ?? [from, to > today ? today : to];
+    const query = v === "all" ? "" : v === "range" ? `&bas=${a}&bit=${b}` : `&tarih=${d}`;
+    router.push(`/${slug}/rapor?gorunum=${PERIOD_PARAM[v]}${query}`, { scroll: false });
   };
   const prevDate = view === "month" ? prevFrom : addDays(from, view === "week" ? -7 : -1);
   const nextDate = addDays(to, 1);
   const canNext = nextDate <= today;
-  const periodLabel = view === "week" ? "Geçen hafta" : "Geçen ay";
+  const periodLabel = isRange ? "Önceki dönem" : view === "week" ? "Geçen hafta" : "Geçen ay";
 
   const rangeTitle =
-    view === "day"
+    view === "all"
+      ? `${formatDateTr(from)} – bugün · ${elapsedDays} gün`
+      : isRange
+        ? `${formatDateTr(from)} – ${formatDateTr(to)} · ${rangeDays} gün`
+      : view === "day"
       ? `${formatDateTr(from)}, ${WEEKDAYS_TR[weekdayOf(from)]}`
       : view === "month"
         ? `${MONTHS_TR[Number(from.slice(5, 7)) - 1]} ${from.slice(0, 4)}`
@@ -143,9 +163,12 @@ export function ReportView({
             { value: "day", label: "Günlük" },
             { value: "week", label: "Haftalık" },
             { value: "month", label: "Aylık" },
+            { value: "range", label: "Aralık" },
+            { value: "all", label: "Tüm zamanlar" },
           ]}
         />
-        <div className="flex items-center gap-1">
+        {isRange && <DateRangePicker key={`${from}_${to}`} from={from} to={to} max={today} onApply={(a, b) => go({ range: [a, b] })} />}
+        <div className={cn("flex items-center gap-1", (view === "all" || isRange) && "hidden")}>
           <button type="button" onClick={() => go({ date: prevDate })} className="grid size-10 place-items-center rounded-xl border border-stone-200 bg-white hover:bg-stone-50" aria-label="Önceki">
             <ChevronLeft className="size-5" />
           </button>
@@ -172,7 +195,7 @@ export function ReportView({
         {view === "week" && " · hafta pazartesi 00:00'da başlar, pazar 24:00'te biter"}
         {(isLiveDay || (multi && to >= today)) && (
           <span className="ml-2 inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[12px] font-semibold text-emerald-700">
-            <span className="size-1.5 animate-pulse rounded-full bg-emerald-500" /> {view === "day" ? "Gün devam ediyor" : view === "week" ? "Hafta devam ediyor" : "Ay devam ediyor"}
+            <span className="size-1.5 animate-pulse rounded-full bg-emerald-500" /> {view === "day" ? "Gün devam ediyor" : view === "week" ? "Hafta devam ediyor" : view === "month" ? "Ay devam ediyor" : "Bugün dahil"}
           </span>
         )}
       </p>
@@ -343,13 +366,15 @@ export function ReportView({
             <ChartCard
               className="mt-3"
               title="Günlere göre ciro"
-              description={view === "week" ? "Koyu çizgi: geçen haftanın aynı günü" : "Koyu çizgi: geçen ayın aynı günü"}
+              description={
+                allTime ? "İlk satış gününden bugüne" : isRange ? "Koyu çizgi: önceki dönemin aynı sıradaki günü" : view === "week" ? "Koyu çizgi: geçen haftanın aynı günü" : "Koyu çizgi: geçen ayın aynı günü"
+              }
               table={{
-                columns: ["Gün", "Ciro", periodLabel, "Sipariş", "Ort. sepet"],
+                columns: allTime ? ["Gün", "Ciro", "Sipariş", "Ort. sepet"] : ["Gün", "Ciro", periodLabel, "Sipariş", "Ort. sepet"],
                 rows: days.map((d, i) => [
                   `${WEEKDAYS_SHORT_TR[weekdayOf(d.date)]} ${formatDateShortTr(d.date)}`,
                   tl(d.revenue, { decimals: "never" }),
-                  tl(prevDays[i]?.revenue ?? 0, { decimals: "never" }),
+                  ...(allTime ? [] : [tl(prevDays[i]?.revenue ?? 0, { decimals: "never" })]),
                   d.orders,
                   d.orders ? tl(d.revenue / d.orders, { decimals: "never" }) : "—",
                 ]),
@@ -359,26 +384,35 @@ export function ReportView({
                 height={240}
                 data={days.map((d, i) => ({
                   key: d.date,
-                  label: view === "week" ? WEEKDAYS_SHORT_TR[i] : String(Number(d.date.slice(8))),
+                  label:
+                    view === "week"
+                      ? WEEKDAYS_SHORT_TR[i]
+                      : allTime || isRange
+                        ? `${Number(d.date.slice(8))}.${Number(d.date.slice(5, 7))}`
+                        : String(Number(d.date.slice(8))),
                   value: d.revenue,
-                  compare: prevDays[i]?.revenue ?? null,
+                  compare: allTime ? null : (prevDays[i]?.revenue ?? null),
                   tooltip: (
                     <>
                       <p className="text-[14px] font-bold">{tl(d.revenue, { decimals: "never" })}</p>
                       <p className="text-stone-300">
                         {formatDateShortTr(d.date)} {WEEKDAYS_TR[weekdayOf(d.date)]} · {d.orders} sipariş
                       </p>
-                      <p className="text-stone-400">
-                        {periodLabel} {tl(prevDays[i]?.revenue ?? 0, { decimals: "never" })}
-                      </p>
+                      {!allTime && (
+                        <p className="text-stone-400">
+                          {periodLabel} {tl(prevDays[i]?.revenue ?? 0, { decimals: "never" })}
+                        </p>
+                      )}
                     </>
                   ),
                 }))}
               />
-              <div className="mt-2 flex flex-wrap gap-3">
-                <LegendItem color={VIZ.primary} label={view === "week" ? "Bu hafta" : "Bu ay"} />
-                <LegendItem color={VIZ.ink} label={periodLabel} line />
-              </div>
+              {!allTime && (
+                <div className="mt-2 flex flex-wrap gap-3">
+                  <LegendItem color={VIZ.primary} label={isRange ? "Seçilen dönem" : view === "week" ? "Bu hafta" : "Bu ay"} />
+                  <LegendItem color={VIZ.ink} label={periodLabel} line />
+                </div>
+              )}
             </ChartCard>
           )}
 
@@ -490,7 +524,7 @@ export function ReportView({
 
           <p className="mt-6 text-center text-[12px] text-stone-400">
             Maliyetler satış anındaki reçete ve alış fiyatlarıyla hesaplanır. Fiyatları sonradan girdiysen{" "}
-            <Link href={`/${slug}/menu`} className="font-semibold text-brand-700 underline-offset-2 hover:underline">
+            <Link prefetch={false} href={`/${slug}/menu`} className="font-semibold text-brand-700 underline-offset-2 hover:underline">
               Menü › Geçmiş maliyetleri güncelle
             </Link>{" "}
             ile düzeltebilirsin.

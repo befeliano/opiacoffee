@@ -80,7 +80,8 @@ async function main() {
     ids = built.ids;
 
     const logo = await readFile(path.join(process.cwd(), "public", "opia", "logo.png"));
-    await pool.query("UPDATE cafes SET logo = ?, vat_rate = 0.10 WHERE id = ?", [
+    // Konum: yağmur uyarısı ve hava durumu için (src/site/config.ts ile aynı)
+    await pool.query("UPDATE cafes SET logo = ?, vat_rate = 0.10, lat = 39.785454, lon = 30.502377 WHERE id = ?", [
       `data:image/png;base64,${logo.toString("base64")}`,
       cafeId,
     ]);

@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import { Trophy } from "lucide-react";
 import { ChartCard, VIZ } from "@/components/charts/chart-kit";
+import { DateRangePicker } from "@/components/ui/date-range";
 import { Badge, Card, CardHeader, EmptyState, Segmented } from "@/components/ui/surface";
 import type { ProductsReport } from "@/lib/api/types";
 import { cn } from "@/lib/cn";
@@ -11,7 +12,7 @@ import { formatDateTr } from "@/lib/domain/time";
 import { num, pct, tl } from "@/lib/format";
 import { usePerms } from "@/components/shell/perms";
 
-type Period = "bugun" | "hafta" | "ay" | "90gun" | "tum";
+type Period = "bugun" | "hafta" | "ay" | "90gun" | "aralik" | "tum";
 type Sort = "qty" | "revenue" | "profit";
 
 const PERIOD_LABEL: Record<Period, string> = {
@@ -19,6 +20,7 @@ const PERIOD_LABEL: Record<Period, string> = {
   hafta: "Bu hafta",
   ay: "Bu ay",
   "90gun": "Son 90 gün",
+  aralik: "Aralık",
   tum: "Tüm zamanlar",
 };
 
@@ -73,7 +75,12 @@ export function ProductsView({
           <button
             key={p}
             type="button"
-            onClick={() => router.push(`/${slug}/urunler?donem=${p}`, { scroll: false })}
+            onClick={() =>
+              router.push(
+                p === "aralik" ? `/${slug}/urunler?donem=aralik&bas=${report.range.from}&bit=${report.range.to}` : `/${slug}/urunler?donem=${p}`,
+                { scroll: false },
+              )
+            }
             className={cn(
               "h-10 shrink-0 rounded-full px-4 text-[14px] font-semibold transition",
               p === period ? "bg-brand-600 text-white shadow-card" : "border border-stone-200 bg-white text-stone-600 hover:border-stone-300",
@@ -83,6 +90,17 @@ export function ProductsView({
           </button>
         ))}
       </div>
+      {period === "aralik" && (
+        <div className="mt-3">
+          <DateRangePicker
+            key={`${report.range.from}_${report.range.to}`}
+            from={report.range.from}
+            to={report.range.to}
+            max={today}
+            onApply={(a, b) => router.push(`/${slug}/urunler?donem=aralik&bas=${a}&bit=${b}`, { scroll: false })}
+          />
+        </div>
+      )}
 
       <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
         <Summary label="Satılan ürün" value={num(report.totals.items, 0)} />

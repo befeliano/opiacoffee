@@ -232,3 +232,62 @@ function mean(xs: number[]) {
 function sum(xs: number[]) {
   return xs.reduce((a, b) => a + b, 0);
 }
+
+// ---------------------------------------------------------------------
+// Geriye dönük test: "o gün için ne tahmin edilmişti, ne oldu?"
+// ---------------------------------------------------------------------
+export interface BacktestPoint {
+  date: string;
+  actual: number;
+  /** O günden h gün önce, yalnızca o ana kadarki veriyle yapılan tahmin */
+  predicted: number;
+  low: number;
+  high: number;
+}
+
+export interface BacktestResult {
+  /** 1 gün önceden yapılan tahminler (grafikte ve tabloda) */
+  points: BacktestPoint[];
+  /** Ortalama mutlak yüzde sapma (1 gün önceden) */
+  mape: number | null;
+  /** 7 gün önceden yapılan tahminlerin ortalama sapması */
+  mapeWeek: number | null;
+  /** Gerçekleşenin %80 aralığında kalma oranı */
+  coverage: number | null;
+  /** Ortalama işaretli sapma: + tahmin yüksek kalmış, − düşük kalmış */
+  bias: number | null;
+}
+
+function predictAt(series: { date: string; value: number }[], targetIndex: number, horizon: number): ForecastPoint | null {
+  const originIndex = targetIndex - horizon;
+  if (originIndex < 6) return null;
+  const model = fitSeries(series.slice(0, originIndex + 1));
+  if (!model) return null;
+  return forecastSeries(model, series[originIndex].date, horizon)[horizon - 1] ?? null;
+}
+
+/**
+ * Son `days` gün için geçmişe dönük tahmin: her gün, yalnızca o günden önceki
+ * veriyle model kurulur (geleceği bilmeden), tahmin gerçekleşenle karşılaştırılır.
+ * Satış olmayan (kapalı) günler hesaba katılmaz.
+ */
+export function backtest(series: { date: string; value: number }[], days = 14): BacktestResult {
+  const points: BacktestPoint[] = [];
+  const weekErrors: number[] = [];
+  for (let i = Math.max(0, series.length - days); i < series.length; i++) {
+    const actual = series[i].value;
+    if (actual <= 0) continue;
+    const p1 = predictAt(series, i, 1);
+    if (p1) points.push({ date: series[i].date, actual, predicted: p1.value, low: p1.low, high: p1.high });
+    const p7 = predictAt(series, i, 7);
+    if (p7) weekErrors.push(Math.abs(actual - p7.value) / actual);
+  }
+  const n = points.length;
+  return {
+    points,
+    mape: n ? mean(points.map((p) => Math.abs(p.actual - p.predicted) / p.actual)) : null,
+    mapeWeek: weekErrors.length ? mean(weekErrors) : null,
+    coverage: n ? points.filter((p) => p.actual >= p.low && p.actual <= p.high).length / n : null,
+    bias: n ? mean(points.map((p) => (p.predicted - p.actual) / p.actual)) : null,
+  };
+}

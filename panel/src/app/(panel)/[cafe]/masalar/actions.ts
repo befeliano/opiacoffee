@@ -1,7 +1,7 @@
 "use server";
 
 import { z } from "zod";
-import type { DayCloseResult, DayStatus, Order, PaymentMethod, PayResult, TableOrderData } from "@/lib/api/types";
+import type { DayCloseResult, DayStatus, FloorData, Order, PaymentMethod, PayResult, TableOrderData } from "@/lib/api/types";
 import { rpc } from "@/lib/data/server";
 import { fail, type ActionResult } from "@/lib/errors";
 
@@ -20,6 +20,11 @@ async function run<T>(fn: () => Promise<T>): Promise<ActionResult<T>> {
   } catch (error) {
     return fail(error);
   }
+}
+
+/** Salon verisi (canlı güncellemede sayfanın tamamını yeniden çizmek yerine) */
+export async function loadFloorAction(cafeId: string): Promise<ActionResult<FloorData>> {
+  return run(async () => rpc<FloorData>("pos_floor", { p_cafe: id.parse(cafeId) }));
 }
 
 export async function loadTableAction(cafeId: string, tableId: string): Promise<ActionResult<TableOrderData>> {

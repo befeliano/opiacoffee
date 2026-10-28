@@ -59,7 +59,7 @@ export function MenuManager({
 
       <nav className="-mx-4 mt-5 flex gap-1 overflow-x-auto border-b border-stone-200 px-4 scrollbar-none sm:mx-0 sm:px-0">
         {(Object.keys(TAB_LABELS) as Tab[]).map((t) => (
-          <Link
+          <Link prefetch={false}
             key={t}
             href={`/${slug}/menu?sekme=${t}`}
             scroll={false}

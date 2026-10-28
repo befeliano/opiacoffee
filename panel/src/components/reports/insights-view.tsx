@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import { ChefHat, Info, Sparkles, Target, TrendingUp } from "lucide-react";
 import { ChartCard, compactNumber, LegendItem, VIZ } from "@/components/charts/chart-kit";
@@ -13,6 +14,7 @@ import type { DailyRow, Expense, HourlyRow, ProductDailyRow, ReportData } from "
 import { cn } from "@/lib/cn";
 import { expensesForMonth } from "@/lib/domain/expenses";
 import {
+  backtest,
   confidenceOf,
   fitSeries,
   forecastSeries,
@@ -22,6 +24,8 @@ import {
   type Confidence,
 } from "@/lib/domain/forecast";
 import { engineerMenu, MENU_CLASS, type MenuClass } from "@/lib/domain/menu-engineering";
+import { classifyDay, rainyDayFavorites, WEATHER_CLASS, weatherImpact, type WeatherClass } from "@/lib/domain/weather";
+import { useWeather } from "@/lib/weather/use-weather";
 import { change, fillDays, totalsOf, weekdayAverages } from "@/lib/domain/report";
 import {
   addDays,
@@ -54,9 +58,12 @@ export function InsightsView({
   expenses,
   openHour,
   closeHour,
+  allFrom,
 }: {
   slug: string;
   today: string;
+  /** "Tüm zamanlar": ilk satış günü — menü mühendisliği, gün deseni ve yoğunluk haritası buradan başlar */
+  allFrom: string | null;
   historyFrom: string;
   history: { daily: DailyRow[]; hourly: HourlyRow[] };
   last30: ReportData;
@@ -65,19 +72,41 @@ export function InsightsView({
   openHour: number;
   closeHour: number;
 }) {
+  const router = useRouter();
   const [metric, setMetric] = useState<"revenue" | "orders">("revenue");
   const showProfit = usePerms().profit;
 
   // Bugün yarım gün olduğu için model dünü son gün kabul eder
   const yesterday = addDays(today, -1);
   const days = useMemo(() => fillDays(history.daily, historyFrom, today), [history.daily, historyFrom, today]);
-  const complete = days.filter((d) => d.date <= yesterday);
+  const complete = useMemo(() => days.filter((d) => d.date <= yesterday), [days, yesterday]);
 
   const revenueModel = useMemo(() => fitSeries(complete.map((d) => ({ date: d.date, value: d.revenue }))), [complete]);
   const ordersModel = useMemo(() => fitSeries(complete.map((d) => ({ date: d.date, value: d.orders }))), [complete]);
   const model = metric === "revenue" ? revenueModel : ordersModel;
   const confidence = confidenceOf(revenueModel);
-  const forecast = model ? forecastSeries(model, yesterday, 8) : [];
+  const baseForecast = model ? forecastSeries(model, yesterday, 8) : [];
+
+  // Hava: geçmiş günlerin havası ciroyla eşleştirilir; gelecek günlerin hava
+  // tahminine göre tahmin düzeltilir (az veride etki 1'e doğru küçültülür).
+  const weather = useWeather();
+  const weatherByDate = useMemo(() => new Map((weather?.daily ?? []).map((d) => [d.date, d])), [weather]);
+  const impact = useMemo(() => weatherImpact(complete, weatherByDate), [complete, weatherByDate]);
+  const impactByClass = new Map(impact.map((r) => [r.cls, r]));
+  const forecast = baseForecast.map((f) => {
+    const w = weatherByDate.get(f.date);
+    const cls: WeatherClass | null = w ? classifyDay(w) : null;
+    const row = cls ? impactByClass.get(cls) : undefined;
+    const k = row ? (metric === "revenue" ? row.factor : row.ordersFactor) : 1;
+    return { ...f, value: f.value * k, low: f.low * k, high: f.high * k, cls, factor: k, precipProb: w?.precipProb ?? null };
+  });
+
+  // Geçmişe dönük test: her gün, yalnızca önceki günlerin verisiyle tahmin edilir
+  const bt = useMemo(
+    () => backtest(complete.map((d) => ({ date: d.date, value: metric === "revenue" ? d.revenue : d.orders })), 28),
+    [complete, metric],
+  );
+  const btByDate = new Map(bt.points.map((p) => [p.date, p]));
   const fmt = metric === "revenue" ? (v: number) => tl(v, { decimals: "never" }) : (v: number) => num(v, 0);
 
   // Son 28 gün gerçekleşen + 7 gün tahmin
@@ -86,6 +115,7 @@ export function InsightsView({
   const actualValues = [...recent.map((d) => (metric === "revenue" ? d.revenue : d.orders)), ...forecast.map(() => null)];
   const forecastValues = [...recent.map((_, i) => (i === recent.length - 1 ? actualValues[i] : null)), ...forecast.map((f) => f.value)];
   const bandValues = [...recent.map(() => null), ...forecast.map((f) => ({ low: f.low, high: f.high }))];
+  const pastPredicted = [...recent.map((d) => btByDate.get(d.date)?.predicted ?? null), ...forecast.map(() => null)];
 
   // Ay sonu projeksiyonu
   const last30Totals = totalsOf(last30.daily);
@@ -123,9 +153,12 @@ export function InsightsView({
   // 7 günlük hareketli ortalama
   const movingAvg = complete.map((_, i) => (i < 6 ? null : complete.slice(i - 6, i + 1).reduce((s, d) => s + d.revenue, 0) / 7));
 
-  const weekdays = weekdayAverages(complete.filter((d) => d.date >= addDays(yesterday, -55)));
+  // Gün deseni ve yoğunluk haritası penceresi: son 8 hafta ya da ilk satıştan beri
+  const windowFrom = allFrom ?? addDays(yesterday, -55);
+  const windowLabel = allFrom ? `Tüm zamanlar (${formatDateShortTr(allFrom)}'den beri)` : "Son 30 gün";
+  const weekdays = weekdayAverages(complete.filter((d) => d.date >= windowFrom));
   const hours = Array.from({ length: Math.max(1, closeHour - openHour) }, (_, i) => openHour + i);
-  const matrix = weekdayHourMatrix(history.hourly.filter((h) => h.date >= addDays(yesterday, -55) && h.date <= yesterday), addDays(yesterday, -55), yesterday);
+  const matrix = weekdayHourMatrix(history.hourly.filter((h) => h.date >= windowFrom && h.date <= yesterday), windowFrom, yesterday);
 
   const engineering = engineerMenu(last30);
   const tomorrow = addDays(today, 1);
@@ -154,14 +187,26 @@ export function InsightsView({
       <PageHeader
         title="Analiz ve tahmin"
         description={`Son ${complete.length} günün verisiyle · ${formatDateShortTr(historyFrom)} – ${formatDateTr(yesterday)}`}
-        actions={<Badge tone={CONFIDENCE[confidence].tone}>{CONFIDENCE[confidence].label}</Badge>}
+        actions={
+          <div className="flex flex-wrap items-center gap-2">
+            <Segmented
+              value={allFrom ? "all" : "recent"}
+              onChange={(v) => router.push(`/${slug}/analiz${v === "all" ? "?donem=tum" : ""}`, { scroll: false })}
+              options={[
+                { value: "recent", label: "Son 30 gün" },
+                { value: "all", label: "Tüm zamanlar" },
+              ]}
+            />
+            <Badge tone={CONFIDENCE[confidence].tone}>{CONFIDENCE[confidence].label}</Badge>
+          </div>
+        }
       />
 
       {/* Tahmin */}
       <ChartCard
         className="mt-5"
         title="Önümüzdeki 7 gün"
-        description="Haftanın günü deseni ve son eğilimle tahmin · gölgeli alan %80 olasılık aralığı"
+        description="Haftanın günü deseni, son eğilim ve hava tahminiyle · gölgeli alan %80 olasılık aralığı"
         action={
           <Segmented
             size="sm"
@@ -186,6 +231,7 @@ export function InsightsView({
               series={[
                 { id: "actual", label: "Gerçekleşen", color: VIZ.primary, values: actualValues, area: true },
                 { id: "forecast", label: "Tahmin", color: VIZ.primary, values: forecastValues, dashed: true, band: bandValues },
+                { id: "past", label: "1 gün önceki tahmin", color: VIZ.ink, values: pastPredicted, dashed: true },
               ]}
               format={metric === "revenue" ? compactNumber : (v) => num(v, 0)}
               tooltipTitle={(i) => `${WEEKDAYS_TR[weekdayOf(labels[i])]}, ${formatDateTr(labels[i], { year: false })}`}
@@ -193,6 +239,7 @@ export function InsightsView({
             <div className="mt-2 flex flex-wrap gap-3">
               <LegendItem color={VIZ.primary} label="Gerçekleşen" line />
               <LegendItem color={VIZ.primary} label="Tahmin" line dashed />
+              <LegendItem color={VIZ.ink} label="Geçmiş günler: 1 gün önce yapılan tahmin" line dashed />
             </div>
             <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4 lg:grid-cols-7">
               {forecast.slice(1).map((f) => (
@@ -204,6 +251,18 @@ export function InsightsView({
                   <p className="text-[11px] text-stone-500">
                     {fmt(f.low)} – {fmt(f.high)}
                   </p>
+                  {f.cls && (
+                    <p className="mt-1 text-[11px] font-semibold text-stone-600" title="Hava tahmini ve geçmişte bu havadaki ciro farkı">
+                      {WEATHER_CLASS[f.cls].emoji} {WEATHER_CLASS[f.cls].label}
+                      {f.precipProb !== null && f.precipProb >= 30 ? ` %${f.precipProb}` : ""}
+                      {Math.abs(f.factor - 1) >= 0.03 && (
+                        <span className={f.factor > 1 ? "text-emerald-700" : "text-red-700"}>
+                          {" "}
+                          {f.factor > 1 ? "+" : "−"}%{Math.round(Math.abs(f.factor - 1) * 100)}
+                        </span>
+                      )}
+                    </p>
+                  )}
                 </div>
               ))}
             </div>
@@ -212,6 +271,11 @@ export function InsightsView({
           <p className="py-8 text-center text-[14px] text-stone-500">Tahmin için en az 7 günlük satış gerekli.</p>
         )}
       </ChartCard>
+
+      <div className="mt-3 grid gap-3 lg:grid-cols-2">
+        <AccuracyCard result={bt} fmt={fmt} />
+        <WeatherCard impact={impact} favorites={rainyDayFavorites(productDaily, weatherByDate, productNames)} loaded={!!weather} />
+      </div>
 
       {/* Ay sonu ve büyüme */}
       <div className="mt-3 grid gap-3 lg:grid-cols-3">
@@ -259,7 +323,7 @@ export function InsightsView({
                   <Info className="mt-0.5 size-4 shrink-0" />
                   <span>
                     Net kâr ve başabaş için{" "}
-                    <Link href={`/${slug}/finans`} className="font-semibold text-brand-700 hover:underline">
+                    <Link prefetch={false} href={`/${slug}/finans`} className="font-semibold text-brand-700 hover:underline">
                       Finans
                     </Link>{" "}
                     sayfasına kira, fatura, maaş gibi sabit giderleri gir.
@@ -348,7 +412,7 @@ export function InsightsView({
         <ChartCard
           className="lg:col-span-2"
           title="Haftanın günlerine göre ortalama ciro"
-          description="Son 8 hafta"
+          description={allFrom ? `${formatDateShortTr(allFrom)}'den beri` : "Son 8 hafta"}
           table={{ columns: ["Gün", "Ort. ciro", "Ort. sipariş"], rows: weekdays.map((w) => [WEEKDAYS_TR[w.weekday], tl(w.revenue, { decimals: "never" }), num(w.orders, 1)]) }}
         >
           <ColumnChart
@@ -368,7 +432,7 @@ export function InsightsView({
             }))}
           />
         </ChartCard>
-        <ChartCard className="lg:col-span-3" title="Yoğunluk haritası" description="Haftanın günü × saat · ortalama sipariş turu (son 8 hafta)">
+        <ChartCard className="lg:col-span-3" title="Yoğunluk haritası" description={`Haftanın günü × saat · ortalama sipariş turu (${allFrom ? `${formatDateShortTr(allFrom)}'den beri` : "son 8 hafta"})`}>
           <Heatmap matrix={matrix} hours={hours} />
         </ChartCard>
       </div>
@@ -400,7 +464,7 @@ export function InsightsView({
       </Card>
 
       {/* Menü mühendisliği (birim katkı payı maliyet ister) */}
-      {showProfit && <MenuEngineering data={engineering} />}
+      {showProfit && <MenuEngineering data={engineering} windowLabel={windowLabel} />}
     </main>
   );
 }
@@ -414,12 +478,12 @@ function Metric({ label, value, tone }: { label: string; value: string; tone?: "
   );
 }
 
-function MenuEngineering({ data }: { data: ReturnType<typeof engineerMenu> }) {
+function MenuEngineering({ data, windowLabel }: { data: ReturnType<typeof engineerMenu>; windowLabel: string }) {
   const [cls, setCls] = useState<MenuClass | "all">("all");
   if (data.items.length === 0) {
     return (
       <Card className="mt-3">
-        <CardHeader title="Menü mühendisliği" description="Son 30 gün · popülerlik × birim katkı payı" />
+        <CardHeader title="Menü mühendisliği" description={`${windowLabel} · popülerlik × birim katkı payı`} />
         <EmptyState title="Analiz için maliyetli ürün satışı gerekli" description="Ürün maliyetleri girildikçe ve satış oldukça hangi ürünlerin yıldız, hangilerinin zayıf olduğu burada görünür." />
       </Card>
     );
@@ -432,7 +496,7 @@ function MenuEngineering({ data }: { data: ReturnType<typeof engineerMenu> }) {
     <ChartCard
       className="mt-3"
       title="Menü mühendisliği"
-      description="Son 30 gün · yatay: satış payı, dikey: ürün başına katkı payı (fiyat − maliyet)"
+      description={`${windowLabel} · yatay: satış payı, dikey: ürün başına katkı payı (fiyat − maliyet)`}
       table={{
         columns: ["Ürün", "Sınıf", "Adet", "Pay", "Birim katkı", "Toplam katkı"],
         rows: data.items.map((i) => [i.name, MENU_CLASS[i.cls].label, i.qty, pct(i.share), tl(i.unitMargin, { decimals: "never" }), tl(i.totalMargin, { decimals: "never" })]),
@@ -498,5 +562,124 @@ function MenuEngineering({ data }: { data: ReturnType<typeof engineerMenu> }) {
         <p className="mt-3 text-[12px] text-stone-500">Maliyeti girilmemiş {data.unknownCost.length} ürün analize dahil edilmedi: {data.unknownCost.map((u) => u.name).join(", ")}</p>
       )}
     </ChartCard>
+  );
+}
+
+function AccuracyCard({ result, fmt }: { result: ReturnType<typeof backtest>; fmt: (v: number) => string }) {
+  const last = [...result.points].reverse().slice(0, 7);
+  return (
+    <Card className="p-4 sm:p-5">
+      <p className="flex items-center gap-1.5 text-[13px] font-semibold text-stone-500">
+        <Target className="size-4" /> Tahmin ne kadar tuttu?
+      </p>
+      {result.points.length === 0 ? (
+        <p className="mt-3 text-[14px] text-stone-500">Ölçmek için en az 2 haftalık satış gerekli.</p>
+      ) : (
+        <>
+          <p className="mt-1 text-[13px] text-stone-500">
+            Son {result.points.length} günde her gün, yalnızca o güne kadarki veriyle (sonucu bilmeden) yapılan tahmin gerçekleşenle karşılaştırıldı.
+          </p>
+          <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 sm:grid-cols-4">
+            <Metric label="Ortalama sapma (1 gün önce)" value={result.mape === null ? "—" : `%${Math.round(result.mape * 100)}`} />
+            <Metric label="1 hafta önceden" value={result.mapeWeek === null ? "—" : `%${Math.round(result.mapeWeek * 100)}`} />
+            <Metric label="%80 aralığında kalan" value={result.coverage === null ? "—" : `%${Math.round(result.coverage * 100)}`} />
+            <Metric
+              label="Eğilim"
+              value={
+                result.bias === null
+                  ? "—"
+                  : Math.abs(result.bias) < 0.03
+                    ? "Dengeli"
+                    : `%${Math.round(Math.abs(result.bias) * 100)} ${result.bias > 0 ? "yüksek" : "düşük"}`
+              }
+            />
+          </dl>
+          <table className="mt-4 w-full text-[13px] tabular-nums">
+            <thead>
+              <tr className="text-left text-[11px] font-semibold uppercase tracking-wide text-stone-400">
+                <th className="py-1">Gün</th>
+                <th className="py-1 text-right">Tahmin</th>
+                <th className="py-1 text-right">Gerçek</th>
+                <th className="py-1 text-right">Fark</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-stone-100">
+              {last.map((p) => {
+                const diff = (p.actual - p.predicted) / p.predicted;
+                const inBand = p.actual >= p.low && p.actual <= p.high;
+                return (
+                  <tr key={p.date}>
+                    <td className="py-1.5">
+                      {WEEKDAYS_SHORT_TR[weekdayOf(p.date)]} {formatDateShortTr(p.date)}
+                    </td>
+                    <td className="py-1.5 text-right text-stone-500">{fmt(p.predicted)}</td>
+                    <td className="py-1.5 text-right font-semibold">{fmt(p.actual)}</td>
+                    <td className={cn("py-1.5 text-right font-semibold", inBand ? "text-stone-600" : diff > 0 ? "text-emerald-700" : "text-red-700")}>
+                      {diff >= 0 ? "+" : "−"}%{Math.round(Math.abs(diff) * 100)}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+          <p className="mt-2 text-[11px] text-stone-400">Renkli fark: gerçekleşen %80 aralığının dışında kaldı.</p>
+        </>
+      )}
+    </Card>
+  );
+}
+
+function WeatherCard({
+  impact,
+  favorites,
+  loaded,
+}: {
+  impact: ReturnType<typeof weatherImpact>;
+  favorites: ReturnType<typeof rainyDayFavorites>;
+  loaded: boolean;
+}) {
+  return (
+    <Card className="p-4 sm:p-5">
+      <p className="text-[13px] font-semibold text-stone-500">Hava durumu ve ciro</p>
+      {!loaded ? (
+        <p className="mt-3 text-[14px] text-stone-500">Hava verisi yükleniyor…</p>
+      ) : impact.length === 0 ? (
+        <p className="mt-3 text-[14px] text-stone-500">Karşılaştırma için en az 1 haftalık satış gerekli.</p>
+      ) : (
+        <>
+          <p className="mt-1 text-[13px] text-stone-500">
+            Her gün, haftanın aynı gününün ortalamasıyla karşılaştırıldı (hafta sonu etkisi ayıklandı). Gün sayısı arttıkça sonuç güçlenir.
+          </p>
+          <ul className="mt-3 flex flex-col gap-1.5">
+            {impact.map((r) => {
+              const pctRev = Math.round((r.revenueRatio - 1) * 100);
+              const pctOrd = Math.round((r.ordersRatio - 1) * 100);
+              return (
+                <li key={r.cls} className="flex items-center gap-3 rounded-xl bg-stone-50 px-3 py-2 text-[13px]">
+                  <span className="w-32 shrink-0 font-semibold">
+                    {WEATHER_CLASS[r.cls].emoji} {WEATHER_CLASS[r.cls].label}
+                  </span>
+                  <span className="w-14 shrink-0 text-stone-500">{r.days} gün</span>
+                  <span className={cn("flex-1 font-bold tabular-nums", pctRev > 2 ? "text-emerald-700" : pctRev < -2 ? "text-red-700" : "text-stone-600")}>
+                    Ciro {pctRev >= 0 ? "+" : "−"}%{Math.abs(pctRev)}
+                  </span>
+                  <span className="shrink-0 tabular-nums text-stone-500">
+                    sipariş {pctOrd >= 0 ? "+" : "−"}%{Math.abs(pctOrd)}
+                  </span>
+                </li>
+              );
+            })}
+          </ul>
+          {favorites.items.length > 0 && (
+            <div className="mt-4">
+              <p className="text-[13px] font-semibold text-stone-700">Yağışlı günlerde öne çıkanlar ({favorites.wetDays} gün)</p>
+              <p className="mt-1 text-[13px] text-stone-600">
+                {favorites.items.map((i) => `${i.name}${i.lift ? ` ×${i.lift.toFixed(1).replace(".", ",")}` : ""}`).join(" · ")}
+              </p>
+            </div>
+          )}
+        </>
+      )}
+    </Card>
   );
 }

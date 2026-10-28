@@ -40,7 +40,7 @@ function idGenerator() {
   };
 }
 
-const TIE_KEYS = ["options", "products", "tables", "longest", "unsold", "payment_list", "categories"];
+const TIE_KEYS = ["options", "products", "tables", "longest", "unsold", "payment_list", "categories", "orders"];
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const TS_RE = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[+-]\d{2}:\d{2})$/;
 
@@ -92,7 +92,7 @@ async function both(user: string | null, fn: string, args: (side: "pg" | "my") =
 
 async function same(user: string | null, fn: string, args: (side: "pg" | "my") => Record<string, unknown> = () => ({}), service = false) {
   const r = await both(user, fn, args, service);
-  const unordered = fn.startsWith("report_");
+  const unordered = fn.startsWith("report_") || fn === "pos_history";
   expect(normalize(r.my, new Map(), unordered), `${fn} ${JSON.stringify(args("pg"))}`).toEqual(normalize(r.pg, new Map(), unordered));
   return r;
 }

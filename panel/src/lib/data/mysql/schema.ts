@@ -36,6 +36,9 @@ CREATE TABLE IF NOT EXISTS cafes (
   language CHAR(2) NOT NULL DEFAULT 'tr',
   cash_count TINYINT(1) NOT NULL DEFAULT 0,
   qr_ordering TINYINT(1) NOT NULL DEFAULT 1,
+  lat DECIMAL(9,6) NULL,
+  lon DECIMAL(9,6) NULL,
+  rain_warn_min INT NOT NULL DEFAULT 15,
   CONSTRAINT cafes_card_commission_rate_check CHECK (card_commission_rate >= 0 AND card_commission_rate <= 0.2),
   CONSTRAINT cafes_close_hour_check CHECK (close_hour >= 1 AND close_hour <= 24),
   CONSTRAINT cafes_hours_check CHECK (close_hour > open_hour),
@@ -377,10 +380,30 @@ CREATE TABLE IF NOT EXISTS guest_requests (
   CONSTRAINT guest_requests_cafe_fk FOREIGN KEY (cafe_id) REFERENCES cafes(id) ON DELETE CASCADE,
   CONSTRAINT guest_requests_table_fk FOREIGN KEY (table_id) REFERENCES dining_tables(id) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+
+-- Yağmur uyarısı (radar): panel sunucusu en fazla 5 dakikada bir RainViewer radarından ölçer (src/lib/rain/check.ts).
+-- Uyarı açılınca tabletlerde şerit çıkar; "Topladık" o kafedeki bütün cihazlarda kapatır.
+CREATE TABLE IF NOT EXISTS rain_status (
+  cafe_id VARCHAR(36) NOT NULL PRIMARY KEY,
+  checked_at DATETIME(6) NOT NULL,
+  frame_at DATETIME(6) NULL,
+  frame_age_min DECIMAL(6,1) NULL,
+  stale TINYINT(1) NOT NULL DEFAULT 0,
+  eta_min INT NULL,
+  nearest_km DECIMAL(7,1) NULL,
+  speed_kmh INT NULL,
+  from_deg INT NULL,
+  alert_since DATETIME(6) NULL,
+  last_alert_seen DATETIME(6) NULL,
+  ack_at DATETIME(6) NULL,
+  ack_by VARCHAR(60) NOT NULL DEFAULT '',
+  CONSTRAINT rain_status_cafe_fk FOREIGN KEY (cafe_id) REFERENCES cafes(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 `;
 
 /** Var olan veritabanına sonradan eklenen sütunlar (tablo, sütun, tanım) */
 export const SCHEMA_COLUMNS: [table: string, column: string, ddl: string][] = [
   ["cafes", "qr_ordering", "ADD COLUMN qr_ordering TINYINT(1) NOT NULL DEFAULT 1"],
+  ["cafes", "lat", "ADD COLUMN lat DECIMAL(9,6) NULL, ADD COLUMN lon DECIMAL(9,6) NULL, ADD COLUMN rain_warn_min INT NOT NULL DEFAULT 15"],
   ["dining_tables", "qr_token", "ADD COLUMN qr_token VARCHAR(32) NULL, ADD UNIQUE KEY dining_tables_qr_token (qr_token)"],
 ];

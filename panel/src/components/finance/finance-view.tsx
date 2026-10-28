@@ -8,6 +8,7 @@ import { BarList } from "@/components/charts/bar-list";
 import { ChartCard, LegendItem, VIZ } from "@/components/charts/chart-kit";
 import { ColumnChart } from "@/components/charts/column-chart";
 import { StatTile } from "@/components/reports/stat-tile";
+import { DateRangePicker } from "@/components/ui/date-range";
 import { Button } from "@/components/ui/button";
 import { Field, Input, NumberInput, Select } from "@/components/ui/field";
 import { ConfirmSheet, Sheet } from "@/components/ui/sheet";
@@ -15,7 +16,7 @@ import { Badge, Card, CardHeader, EmptyState, Segmented } from "@/components/ui/
 import { useToast } from "@/components/ui/toast";
 import type { Expense, ExpenseCategory, ReportData } from "@/lib/api/types";
 import { cn } from "@/lib/cn";
-import { EXPENSE_CATEGORIES, expensesForMonth } from "@/lib/domain/expenses";
+import { EXPENSE_CATEGORIES, expensesForMonth, expensesForRange } from "@/lib/domain/expenses";
 import { change, fillDays, totalsOf } from "@/lib/domain/report";
 import { addDays, daysInMonth, diffDays, formatDateShortTr, formatDateTr, monthEnd, monthStart, MONTHS_TR } from "@/lib/domain/time";
 import { pct, tl, currencySymbol } from "@/lib/format";
@@ -24,6 +25,7 @@ export function FinanceView({
   cafeId,
   slug,
   month,
+  span,
   today,
   expenses,
   report,
@@ -32,26 +34,35 @@ export function FinanceView({
   cafeId: string;
   slug: string;
   month: string;
+  /** Aylık değil de bir tarih aralığı: "Tüm zamanlar" (ilk satıştan bugüne) ya da özel aralık */
+  span: { from: string; to: string; kind: "all" | "range" } | null;
   today: string;
   expenses: Expense[];
   report: ReportData;
-  previous: ReportData;
+  /** Önceki ay (tüm zamanlarda boş) */
+  previous: ReportData | null;
 }) {
   const router = useRouter();
   const [editing, setEditing] = useState<Expense | "new" | null>(null);
 
-  const end = monthEnd(month) < today ? monthEnd(month) : today;
-  const days = fillDays(report.daily, month, end);
+  const allTime = span !== null; // aylık olmayan (tüm zamanlar ya da aralık)
+  const start = span?.from ?? month;
+  const end = span ? span.to : monthEnd(month) >= today ? today : monthEnd(month);
+  const days = fillDays(report.daily, start, end);
   const t = totalsOf(days);
-  const p = totalsOf(previous.daily);
-  const exp = expensesForMonth(expenses, month);
+  const p = previous ? totalsOf(previous.daily) : null;
+  // Tüm zamanlar: aylık gider kapsanan her ay için bir kez; özel aralık: gün payı kadar
+  const range = span ? expensesForRange(expenses, start, end, { prorate: span.kind === "range" }) : null;
+  const exp: ReturnType<typeof expensesForMonth> & { monthly: (Expense & { months?: number })[] } = range ?? expensesForMonth(expenses, month);
   const prevExp = expensesForMonth(expenses, addDays(month, -1));
-  const isCurrent = month === monthStart(today);
-  const elapsed = diffDays(month, end) + 1;
-  const total = daysInMonth(month);
+  const isCurrent = span ? end >= today : month === monthStart(today);
+  const elapsed = diffDays(start, end) + 1;
+  // Başabaş için gider döneminin gün sayısı (aylık: ayın günleri, tüm zamanlar: kapsanan ayların günleri)
+  const total = range ? range.days : daysInMonth(month);
+  const counted = new Set([...exp.monthly, ...exp.oneTime].map((e) => e.id));
 
   const net = t.grossProfit - exp.total;
-  const prevNet = p.grossProfit - prevExp.total;
+  const prevNet = p ? p.grossProfit - prevExp.total : 0;
   const contribution = t.revenue > 0 ? t.grossProfit / t.revenue : null;
   const breakEven = contribution && contribution > 0.02 ? exp.total / contribution : null;
   const breakEvenDaily = breakEven !== null ? breakEven / total : null;
@@ -64,8 +75,11 @@ export function FinanceView({
   ).sort((a, b) => b[1] - a[1]);
 
   const go = (d: string) => router.push(`/${slug}/finans?ay=${d.slice(0, 7)}`, { scroll: false });
+  const goRange = (a: string, b: string) => router.push(`/${slug}/finans?bas=${a}&bit=${b}`, { scroll: false });
   const [y, m] = month.split("-").map(Number);
   const monthLabel = `${MONTHS_TR[m - 1]} ${y}`;
+  const periodLabel = span?.kind === "all" ? "Tüm zamanlar" : span ? `${formatDateShortTr(start)} – ${formatDateShortTr(end)}` : monthLabel;
+  const mode = span?.kind ?? "month";
 
   return (
     <main className="mx-auto max-w-7xl px-4 pb-28 pt-4 sm:px-6 md:pb-10 md:pt-6">
@@ -73,11 +87,30 @@ export function FinanceView({
         <div className="mr-auto">
           <h1 className="text-2xl font-extrabold tracking-tight sm:text-[28px]">Finans</h1>
           <p className="text-[14px] text-stone-500">
-            {monthLabel}
-            {isCurrent ? ` · ${elapsed}/${total} gün` : ""}
+            {span?.kind === "all"
+              ? `${formatDateTr(start)} – bugün · ${elapsed} gün`
+              : span
+                ? `${formatDateTr(start)} – ${formatDateTr(end)} · ${elapsed} gün`
+                : `${monthLabel}${isCurrent ? ` · ${elapsed}/${total} gün` : ""}`}
           </p>
         </div>
-        <div className="flex items-center gap-1">
+        <Segmented
+          value={mode}
+          onChange={(v) =>
+            v === "all"
+              ? router.push(`/${slug}/finans?ay=tum`, { scroll: false })
+              : v === "range"
+                ? goRange(start, end > today ? today : end)
+                : go(today)
+          }
+          options={[
+            { value: "month", label: "Aylık" },
+            { value: "range", label: "Aralık" },
+            { value: "all", label: "Tüm zamanlar" },
+          ]}
+        />
+        {mode === "range" && <DateRangePicker key={`${start}_${end}`} from={start} to={end} max={today} onApply={goRange} />}
+        <div className={cn("flex items-center gap-1", allTime && "hidden")}>
           <button type="button" onClick={() => go(addDays(month, -1))} className="grid size-10 place-items-center rounded-xl border border-stone-200 bg-white hover:bg-stone-50" aria-label="Önceki ay">
             <ChevronLeft className="size-5" />
           </button>
@@ -98,13 +131,17 @@ export function FinanceView({
       </div>
 
       <div className="mt-5 grid grid-cols-2 gap-3 lg:grid-cols-4">
-        <StatTile label="Ciro" value={tl(t.revenue, { decimals: "never" })} emphasis deltas={isCurrent ? [] : [{ value: change(t.revenue, p.revenue), label: "önceki aya göre" }]} sub={isCurrent ? `Günlük ort. ${tl(t.revenue / elapsed, { decimals: "never" })}` : undefined} />
+        <StatTile label="Ciro" value={tl(t.revenue, { decimals: "never" })} emphasis deltas={isCurrent || !p ? [] : [{ value: change(t.revenue, p.revenue), label: "önceki aya göre" }]} sub={isCurrent ? `Günlük ort. ${tl(t.revenue / elapsed, { decimals: "never" })}` : undefined} />
         <StatTile label="Brüt kâr" value={tl(t.grossProfit, { decimals: "never" })} sub={`Ciro − maliyet (${pct(t.costRatio)}) − komisyon`} />
-        <StatTile label="Giderler" value={tl(exp.total, { decimals: "never" })} sub={`${exp.monthly.length} sabit · ${exp.oneTime.length} tek seferlik`} />
+        <StatTile
+          label="Giderler"
+          value={tl(exp.total, { decimals: "never" })}
+          sub={`${exp.monthly.length} sabit · ${exp.oneTime.length} tek seferlik${range ? ` · ${range.months} ay` : ""}`}
+        />
         <StatTile
           label={isCurrent ? "Net kâr (şu ana kadar)" : "Net kâr"}
           value={<span className={net >= 0 ? "text-emerald-700" : "text-red-700"}>{tl(net, { decimals: "never" })}</span>}
-          deltas={isCurrent ? [] : [{ value: change(net, prevNet), label: "önceki aya göre" }]}
+          deltas={isCurrent || !p ? [] : [{ value: change(net, prevNet), label: "önceki aya göre" }]}
           sub={t.revenue > 0 ? `Net marj ${pct(net / t.revenue)}` : undefined}
         />
       </div>
@@ -127,12 +164,14 @@ export function FinanceView({
         <Card className="p-4 sm:p-5">
           <p className="text-[13px] font-semibold text-stone-500">Başabaş</p>
           {breakEven === null ? (
-            <p className="mt-3 text-[14px] text-stone-500">{exp.total === 0 ? "Giderleri girince başabaş cirosu hesaplanır." : "Hesap için bu ay satış verisi gerekli."}</p>
+            <p className="mt-3 text-[14px] text-stone-500">
+              {exp.total === 0 ? "Giderleri girince başabaş cirosu hesaplanır." : allTime ? "Hesap için satış verisi gerekli." : "Hesap için bu ay satış verisi gerekli."}
+            </p>
           ) : (
             <>
               <p className="mt-1 text-[26px] font-extrabold">{tl(breakEven, { decimals: "never" })}</p>
               <p className="text-[13px] text-stone-500">
-                aylık ciro gerekli · günde {tl(breakEvenDaily ?? 0, { decimals: "never" })}
+                {span?.kind === "range" ? "bu dönemin giderleri için ciro gerekli" : allTime ? `${range?.months ?? 1} ayın giderleri için ciro gerekli` : "aylık ciro gerekli"} · günde {tl(breakEvenDaily ?? 0, { decimals: "never" })}
               </p>
               <div className="mt-4 h-3 rounded-full bg-brand-100">
                 <div className="h-3 rounded-full bg-brand-600" style={{ width: `${Math.min(100, (t.revenue / breakEven) * 100)}%` }} />
@@ -149,7 +188,7 @@ export function FinanceView({
           <div className="mt-3">
             <BarList
               color={VIZ.primary}
-              emptyText="Bu ay gider yok"
+              emptyText={allTime ? "Gider yok" : "Bu ay gider yok"}
               items={byCategory.map(([cat, amount]) => ({
                 key: cat,
                 label: EXPENSE_CATEGORIES[cat as ExpenseCategory],
@@ -172,7 +211,7 @@ export function FinanceView({
           height={220}
           data={days.map((d) => ({
             key: d.date,
-            label: String(Number(d.date.slice(8, 10))),
+            label: allTime ? `${Number(d.date.slice(8, 10))}.${Number(d.date.slice(5, 7))}` : String(Number(d.date.slice(8, 10))),
             value: d.revenue,
             compare: breakEvenDaily,
             tooltip: (
@@ -193,16 +232,22 @@ export function FinanceView({
       </ChartCard>
 
       <div className="mt-3 grid gap-3 lg:grid-cols-2">
-        <ExpenseList title="Aylık sabit giderler" description="Her ay tekrar eder (kira, faturalar, maaşlar, kredi)" items={exp.monthly} onEdit={setEditing} />
-        <ExpenseList title={`Tek seferlik giderler · ${monthLabel}`} description="Yalnızca girildiği aya yazılır" items={exp.oneTime} onEdit={setEditing} />
+        <ExpenseList
+          title={allTime ? "Sabit giderler (ay sayısıyla)" : "Aylık sabit giderler"}
+          description="Her ay tekrar eder (kira, faturalar, maaşlar, kredi)"
+          items={exp.monthly}
+          // Tüm zamanlarda listelenen tutar ay sayısıyla çarpılmıştır; düzenlemede asıl kayıt açılır
+          onEdit={(e) => setEditing(expenses.find((x) => x.id === e.id) ?? e)}
+        />
+        <ExpenseList title={`Tek seferlik giderler · ${periodLabel}`} description="Yalnızca girildiği aya yazılır" items={exp.oneTime} onEdit={setEditing} />
       </div>
 
-      {expenses.some((e) => !exp.monthly.includes(e) && !exp.oneTime.includes(e)) && (
+      {expenses.some((e) => !counted.has(e.id)) && (
         <details className="mt-3 rounded-2xl border border-stone-200 bg-white px-4 py-3 text-[14px]">
-          <summary className="cursor-pointer font-semibold text-stone-700">Bu aya dahil olmayan diğer giderler</summary>
+          <summary className="cursor-pointer font-semibold text-stone-700">{allTime ? "Bu döneme dahil olmayan diğer giderler" : "Bu aya dahil olmayan diğer giderler"}</summary>
           <ul className="mt-2 divide-y divide-stone-100">
             {expenses
-              .filter((e) => !exp.monthly.includes(e) && !exp.oneTime.includes(e))
+              .filter((e) => !counted.has(e.id))
               .map((e) => (
                 <li key={e.id} className="flex items-center justify-between py-2">
                   <button type="button" onClick={() => setEditing(e)} className="text-left">
@@ -232,7 +277,18 @@ function Line({ label, value, strong, border, tone }: { label: string; value: nu
   );
 }
 
-function ExpenseList({ title, description, items, onEdit }: { title: string; description: string; items: Expense[]; onEdit: (e: Expense) => void }) {
+function ExpenseList({
+  title,
+  description,
+  items,
+  onEdit,
+}: {
+  title: string;
+  description: string;
+  /** months: tüm zamanlar görünümünde bu aylık giderin kaç ay sayıldığı */
+  items: (Expense & { months?: number })[];
+  onEdit: (e: Expense) => void;
+}) {
   const total = items.reduce((s, e) => s + e.amount, 0);
   return (
     <Card>
@@ -253,6 +309,7 @@ function ExpenseList({ title, description, items, onEdit }: { title: string; des
                     {e.kind === "monthly"
                       ? `${formatMonth(e.starts_on)} itibarıyla${e.ends_on ? ` · ${formatMonth(e.ends_on)} sonuna kadar` : ""}`
                       : formatDateTr(e.starts_on)}
+                    {e.months ? ` · ${Number.isInteger(e.months) ? e.months : e.months.toFixed(2).replace(".", ",")} ay × ${tl(e.amount / e.months, { decimals: "never" })}` : ""}
                     {e.note ? ` · ${e.note}` : ""}
                   </span>
                 </span>

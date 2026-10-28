@@ -1,10 +1,12 @@
 import type { Metadata, Viewport } from "next";
+import { RainAlert } from "@/components/pos/rain-alert";
 import { AppNav } from "@/components/shell/app-nav";
 import { FormatConfig } from "@/components/shell/format-config";
 import { PermsProvider } from "@/components/shell/perms";
 import { THEME_COLOR } from "@/components/brand/themes";
 import { getCafeContext } from "@/lib/data/cafe";
 import { isLocalMode } from "@/lib/data/server";
+import { liveConfig } from "@/lib/live-config";
 
 export async function generateMetadata({ params }: LayoutProps<"/[cafe]">): Promise<Metadata> {
   const { cafe } = await params;
@@ -34,6 +36,8 @@ export default async function CafeLayout({ children, params }: LayoutProps<"/[ca
           localMode={local}
         />
         {children}
+        {/* Yağmur uyarısı: radar yağışın yaklaştığını görünce her sayfada üstte şerit */}
+        <RainAlert cafeId={ctx.cafe.id} live={liveConfig()} />
       </PermsProvider>
     </div>
   );

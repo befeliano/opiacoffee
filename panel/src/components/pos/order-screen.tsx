@@ -8,6 +8,7 @@ import {
   addItemAction,
   changeQuantityAction,
   deletePaymentAction,
+  loadFloorAction,
   loadTableAction,
   moveOrderAction,
   payAction,
@@ -41,7 +42,7 @@ import {
   useTableEntry,
   whenIdle,
 } from "@/lib/pos/table-store";
-import { minutesSince, useLiveUpdates, useServerNow, type LiveConfig } from "./live";
+import { minutesSince, useLiveUpdates, useServerNow, type LiveChange, type LiveConfig } from "./live";
 import { JokerSheet, OptionSheet } from "./option-sheet";
 import { OrderMetaSheet, MoveSheet } from "./order-sheets";
 import { PaymentSheet, type PayRequest } from "./payment-sheet";
@@ -64,13 +65,11 @@ export function OrderScreen({
   cafe,
   menu,
   initial,
-  floor,
   live,
 }: {
   cafe: { id: string; slug: string; commissionRate: number; ticketCommissionRate: number; timezone: string };
   menu: PosMenu;
   initial: TableOrderData;
-  floor: FloorData;
   live: LiveConfig;
 }) {
   const router = useRouter();
@@ -91,6 +90,15 @@ export function OrderScreen({
   const pending = useMemo(() => entry?.pending ?? [], [entry]);
 
   const [sheet, setSheet] = useState<SheetState>(null);
+  // "Masa değiştir" için salon verisi yalnızca pencere açılınca yüklenir
+  const [moveFloor, setMoveFloor] = useState<FloorData | null>(null);
+  const openMove = () => {
+    setMoveFloor(null);
+    setSheet({ kind: "move" });
+    loadFloorAction(cafe.id)
+      .then((r) => (r.ok ? setMoveFloor(r.data) : toast.show(r.error, "error")))
+      .catch(() => toast.show("Bağlantı sorunu.", "error"));
+  };
   const [ticketOpen, setTicketOpen] = useState(false);
   const [busy, setBusy] = useState(false);
   const now = useServerNow(server.now);
@@ -114,7 +122,14 @@ export function OrderScreen({
     if (result.ok && isIdle()) setTableServer(result.data);
   }, [cafe.id, tableId]);
 
-  useLiveUpdates(cafe.id, live, reload);
+  // Yalnızca bu masanın adisyonundaki değişiklikler (başka masalar yeniden yükletmesin)
+  const orderId = server.order?.id ?? null;
+  const isThisTable = useCallback(
+    (change: LiveChange) =>
+      change.next?.table_id === tableId || (!!orderId && (change.next?.id === orderId || change.prev?.id === orderId)),
+    [tableId, orderId],
+  );
+  useLiveUpdates(cafe.id, live, reload, { relevant: isThisTable });
 
   // Önceki ziyaretten kalan kayıtlar bitince sunucudaki son hâli çek
   useEffect(() => {
@@ -247,7 +262,7 @@ export function OrderScreen({
       <section className="flex min-h-0 min-w-0 flex-1 flex-col">
         <header className="flex items-center gap-2 border-b border-stone-200/80 bg-white px-2 pt-safe sm:px-4">
           <div className="flex h-16 w-full items-center gap-2">
-            <Link
+            <Link prefetch={false}
               href={`/${cafe.slug}/masalar`}
               className="grid size-11 shrink-0 place-items-center rounded-xl text-stone-700 hover:bg-stone-100"
               aria-label="Masalara dön"
@@ -407,7 +422,7 @@ export function OrderScreen({
 
       <Sheet open={sheet?.kind === "actions"} onClose={() => setSheet(null)} title={`${table.name} · İşlemler`} size="sm">
         <div className="flex flex-col gap-2">
-          <ActionRow label="Masa değiştir / birleştir" onClick={() => setSheet({ kind: "move" })} />
+          <ActionRow label="Masa değiştir / birleştir" onClick={openMove} />
           <ActionRow label={perms.discounts ? "Not ve indirim" : "Adisyon notu"} onClick={() => setSheet({ kind: "meta" })} />
           {perms.void && <ActionRow label="Adisyonu iptal et" danger onClick={() => setSheet({ kind: "cancel" })} />}
         </div>
@@ -415,7 +430,7 @@ export function OrderScreen({
 
       {sheet?.kind === "move" && server.order && (
         <MoveSheet
-          floor={floor}
+          floor={moveFloor}
           currentTableId={table.id}
           busy={busy}
           onClose={() => setSheet(null)}

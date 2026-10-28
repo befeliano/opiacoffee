@@ -26,7 +26,8 @@ function buildCsp(nonce: string) {
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' blob: data:",
     "font-src 'self'",
-    `connect-src 'self'${supabaseOrigin ? ` ${supabaseOrigin} ${supabaseWs}` : ""}`,
+    // Hava durumu doğrudan tarayıcıdan (Open-Meteo, anahtarsız) — Vercel'e yük binmez
+    `connect-src 'self' https://api.open-meteo.com${supabaseOrigin ? ` ${supabaseOrigin} ${supabaseWs}` : ""}`,
     "object-src 'none'",
     "base-uri 'self'",
     "form-action 'self'",

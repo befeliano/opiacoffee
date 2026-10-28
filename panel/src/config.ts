@@ -20,3 +20,9 @@ export const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME?.trim() || "Adisyon";
  *      yeniden yayınla. Demo hesaplarını Ayarlar › Ekip'ten sil.
  */
 export const DEMO_MODE = process.env.NEXT_PUBLIC_DEMO_MODE === "1";
+
+/**
+ * Kafe konumu (hava durumu şeridi ve hava–ciro analizi için): Opia, Yenibağlar / Eskişehir.
+ * Yağmur radarı uyarısı aynı koordinatı veritabanından (cafes.lat/lon) kullanır.
+ */
+export const CAFE_LOCATION = { lat: 39.785454, lon: 30.502377, timezone: "Europe/Istanbul" };

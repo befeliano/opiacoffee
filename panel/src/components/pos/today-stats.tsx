@@ -61,7 +61,7 @@ export function TodayStats({
   const money = (value: number) => (hidden ? "••••" : tl(value, { decimals: "never" }));
 
   return (
-    <div className="grid grid-cols-3 gap-2 sm:flex sm:flex-wrap sm:items-stretch">
+    <div className="grid grid-cols-3 gap-2 sm:flex sm:flex-wrap sm:items-stretch lg:shrink-0 lg:flex-nowrap">
       <Stat label="Dolu masa" value={`${occupied}/${total}`} />
       {today && <Stat label="Toplam ciro" value={money(today.revenue + open.total)} strong />}
       {today && <Stat label="Ödenen" value={money(today.revenue + open.paid)} />}

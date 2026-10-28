@@ -95,7 +95,7 @@ export function HistoryView({
         actions={
           <div className="flex items-center gap-1">
             {canGoBack && (
-              <Link href={`/${cafe.slug}/gecmis?tarih=${addDays(data.date, -1)}`} className="grid size-10 place-items-center rounded-xl border border-stone-200 bg-white hover:bg-stone-50" aria-label="Önceki gün">
+              <Link prefetch={false} href={`/${cafe.slug}/gecmis?tarih=${addDays(data.date, -1)}`} className="grid size-10 place-items-center rounded-xl border border-stone-200 bg-white hover:bg-stone-50" aria-label="Önceki gün">
                 <ChevronLeft className="size-5" />
               </Link>
             )}
@@ -112,7 +112,7 @@ export function HistoryView({
               aria-label="Tarih seç"
             />
             {!isToday && (
-              <Link href={`/${cafe.slug}/gecmis?tarih=${addDays(data.date, 1)}`} className="grid size-10 place-items-center rounded-xl border border-stone-200 bg-white hover:bg-stone-50" aria-label="Sonraki gün">
+              <Link prefetch={false} href={`/${cafe.slug}/gecmis?tarih=${addDays(data.date, 1)}`} className="grid size-10 place-items-center rounded-xl border border-stone-200 bg-white hover:bg-stone-50" aria-label="Sonraki gün">
                 <ChevronRight className="size-5" />
               </Link>
             )}

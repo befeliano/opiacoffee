@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
-import { Clock3, ShoppingBag } from "lucide-react";
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
+import { Clock3, ShoppingBag, UserPlus } from "lucide-react";
+import { loadFloorAction } from "@/app/(panel)/[cafe]/masalar/actions";
 import type { FloorData, FloorTable } from "@/lib/api/types";
 import { cn } from "@/lib/cn";
 import { nameLang, tl } from "@/lib/format";
@@ -13,6 +14,7 @@ import { DayBar } from "./day-controls";
 import { GuestRequests, type GuestRequest } from "./guest-requests";
 import { minutesSince, useLiveUpdates, useServerNow, type LiveConfig } from "./live";
 import { TodayStats } from "./today-stats";
+import { WeatherStrip } from "./weather-strip";
 
 const LONG_STAY_MINUTES = 90;
 
@@ -22,7 +24,7 @@ export function Floor({
   cafeName,
   timezone,
   cashCount,
-  data,
+  data: serverData,
   live,
   guest,
 }: {
@@ -38,9 +40,23 @@ export function Floor({
   guest?: GuestRequest[] | null;
 }) {
   const router = useRouter();
+  // Canlı güncellemede yalnızca salon verisi çekilir (sayfanın tamamı yeniden
+  // çizilmez); sayfa yeniden yüklenince sunucudan gelen hâl esas alınır.
+  const [fresh, setFresh] = useState<{ base: FloorData; data: FloorData }>({ base: serverData, data: serverData });
+  const data = fresh.base === serverData ? fresh.data : serverData;
+  const latestServerData = useRef(serverData);
+  useEffect(() => {
+    latestServerData.current = serverData;
+  });
+  const reload = useCallback(async () => {
+    const result = await loadFloorAction(cafeId).catch(() => null);
+    if (result?.ok) setFresh({ base: latestServerData.current, data: result.data });
+    else router.refresh();
+  }, [cafeId, router]);
+
   const now = useServerNow(data.now);
   const [area, setArea] = useState<string>("all");
-  useLiveUpdates(cafeId, live, () => router.refresh());
+  useLiveUpdates(cafeId, live, reload, { debounceMs: 1_000 });
 
   // Masa ekranında yapılan ve salon verisine henüz yansımamış değişiklikler
   const storeVersion = useStoreVersion();
@@ -62,15 +78,21 @@ export function Floor({
 
   return (
     <main className="mx-auto max-w-7xl px-4 pb-28 pt-4 sm:px-6 md:pb-10 md:pt-6">
-      <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
-        <div>
-          <p lang={nameLang(cafeName)} className="hidden text-[12px] font-bold uppercase tracking-[0.14em] text-brand-700 md:block">{cafeName}</p>
-          <h1 className="text-2xl font-extrabold tracking-tight sm:text-[28px]">Masalar</h1>
+      <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+        {/* Sol: başlık + altında hava şeridi; sağ: günün rakamları (tek satır kalsın) */}
+        <div className="flex min-w-0 flex-col gap-2">
+          <div>
+            <p lang={nameLang(cafeName)} className="hidden text-[12px] font-bold uppercase tracking-[0.14em] text-brand-700 md:block">{cafeName}</p>
+            <h1 className="text-2xl font-extrabold tracking-tight sm:text-[28px]">Masalar</h1>
+          </div>
+          <WeatherStrip cafeId={cafeId} live={live} />
         </div>
         <TodayStats today={data.today} open={open} occupied={occupied.length} total={dineTables.length} />
       </div>
 
-      {guest && <GuestRequests cafeId={cafeId} slug={slug} initial={guest} onChange={() => router.refresh()} />}
+      <BusyAlert tables={dineTables} now={now} />
+
+      {guest && <GuestRequests cafeId={cafeId} slug={slug} initial={guest} onChange={reload} />}
 
       {cashCount && (
         <DayBar
@@ -170,7 +192,7 @@ function TableTile({ table, href, now }: { table: FloorTable; href: string; now:
   const long = minutes >= LONG_STAY_MINUTES;
 
   return (
-    <Link
+    <Link prefetch={false}
       href={href}
       className={cn(
         "group relative flex aspect-square flex-col justify-between rounded-2xl p-3 transition active:scale-[0.96] sm:p-3.5",
@@ -207,7 +229,7 @@ function TableTile({ table, href, now }: { table: FloorTable; href: string; now:
 function TakeawayTile({ table, href, now }: { table: FloorTable; href: string; now: number }) {
   const order = table.order;
   return (
-    <Link
+    <Link prefetch={false}
       href={href}
       className={cn(
         "flex items-center gap-3 rounded-2xl p-3.5 transition active:scale-[0.98]",
@@ -227,3 +249,64 @@ function TakeawayTile({ table, href, now }: { table: FloorTable; href: string; n
     </Link>
   );
 }
+
+/** Kısa sürede bu kadar masa açılırsa yoğunluk uyarısı */
+const BURST_TABLES = 4;
+const BURST_MINUTES = 15;
+/** Aynı anda bu kadar dolu masa varsa da uyar */
+const BUSY_TABLES = 8;
+const SNOOZE_MS = 30 * 60_000;
+const SNOOZE_KEY = "ad_busy_snooze";
+
+/**
+ * Yoğunluk uyarısı: son 15 dakikada 4+ masa açıldıysa ya da 8+ masa doluysa
+ * "yardım çağırmak isteyebilirsin" der. "Tamam" o cihazda 30 dk susturur.
+ */
+function readSnooze() {
+  try {
+    return Number(localStorage.getItem(SNOOZE_KEY) ?? 0);
+  } catch {
+    return 0;
+  }
+}
+
+function BusyAlert({ tables, now }: { tables: FloorTable[]; now: number }) {
+  // Sunucuda 0 (susturma yok), tarayıcıda cihazdaki değer — ilk çizimde uyumsuzluk olmasın
+  const stored = useSyncExternalStore(noopSubscribe, readSnooze, () => 0);
+  const [snoozedLocal, setSnoozedUntil] = useState(0);
+  const snoozedUntil = Math.max(stored, snoozedLocal);
+  const busy = tables.filter((t) => t.order);
+  const burst = busy.filter((t) => minutesSince(t.order!.opened_at, now) < BURST_MINUTES).length;
+  const show = (burst >= BURST_TABLES || busy.length >= BUSY_TABLES) && now > snoozedUntil;
+  if (!show) return null;
+
+  const snooze = () => {
+    const until = Date.now() + SNOOZE_MS;
+    setSnoozedUntil(until);
+    try {
+      localStorage.setItem(SNOOZE_KEY, String(until));
+    } catch {
+      // depolama kapalı olabilir
+    }
+  };
+
+  return (
+    <div role="status" className="mt-4 flex animate-fade-in items-center gap-3 rounded-2xl border border-violet-200 bg-violet-50 px-4 py-3 text-violet-950">
+      <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-violet-600 text-white">
+        <UserPlus className="size-5" />
+      </span>
+      <span className="min-w-0 flex-1">
+        <span className="block text-[15px] font-extrabold leading-tight">Yoğunluk artıyor — yardım çağırmak isteyebilirsin</span>
+        <span className="block text-[13px] text-violet-800">
+          {burst >= BURST_TABLES ? `Son ${BURST_MINUTES} dakikada ${burst} masa açıldı` : `${busy.length} masa dolu`}
+          {burst >= BURST_TABLES && busy.length >= BUSY_TABLES ? ` · ${busy.length} masa dolu` : ""}
+        </span>
+      </span>
+      <button type="button" onClick={snooze} className="h-10 shrink-0 rounded-xl bg-violet-600 px-3.5 text-[14px] font-bold text-white hover:bg-violet-700">
+        Tamam
+      </button>
+    </div>
+  );
+}
+
+const noopSubscribe = () => () => {};

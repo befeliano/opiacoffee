@@ -26,6 +26,8 @@ export const SITE = {
   cafeSlug: process.env.SITE_CAFE_SLUG ?? "opia",
   /** Google Analytics ölçüm kimliği (G-XXXX). Boşsa hiç yüklenmez. */
   gaId: process.env.NEXT_PUBLIC_GA_ID ?? "",
+  /** Geçici adreste (ör. vercel.app) arama motorlarına kapalı: SITE_NOINDEX=1 */
+  noindex: process.env.SITE_NOINDEX === "1",
   /** Search Console doğrulama kodu (isteğe bağlı) */
   gscVerify: process.env.GSC_VERIFY ?? "",
   /** Büyük harfe çevrilen alanlarda Türkçe i/İ kuralı bozulmasın diye lang="en" ile sarılan sözcükler */

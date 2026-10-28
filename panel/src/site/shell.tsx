@@ -53,7 +53,7 @@ function Head({ meta, graph, nonce }: { meta: PageMeta; graph: unknown[]; nonce?
       <title>{meta.title}</title>
       <meta name="description" content={meta.description} />
       <link rel="canonical" href={canonical} />
-      <meta name="robots" content={meta.robots ?? "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"} />
+      <meta name="robots" content={SITE.noindex ? "noindex, nofollow" : (meta.robots ?? "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1")} />
       <meta name="theme-color" content={SITE.themeColor} />
       <meta name="color-scheme" content="light" />
       <meta name="format-detection" content="telephone=no" />

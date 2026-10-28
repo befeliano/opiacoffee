@@ -14,6 +14,10 @@ const HEADERS = { "X-Robots-Tag": "noindex", "Cache-Control": "no-store" };
 const out = (status: number, body: Record<string, unknown>) => Response.json(body, { status, headers: HEADERS });
 
 async function handle(lang: "tr" | "en", fn: () => Promise<Record<string, unknown>>) {
+  // Veritabanı yoksa (ör. yalnızca tanıtım sitesi yayında) QR sipariş kapalıdır; menü düz açılır
+  if (!process.env.DATABASE_URL) {
+    return out(403, { ok: false, ordering: false, error: lang === "en" ? "QR ordering is not available right now." : "QR sipariş şu an kullanılamıyor." });
+  }
   try {
     return out(200, { ok: true, ...(await fn()) });
   } catch (error) {

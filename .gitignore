@@ -11,3 +11,4 @@ Ekran*
 node_modules/
 .vercel/
 dist/
+.devtools/

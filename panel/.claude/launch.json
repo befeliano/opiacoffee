@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "adisyon-demo",
+      "runtimeExecutable": "D:/tools/node/node.exe",
+      "runtimeArgs": ["node_modules/next/dist/bin/next", "dev", "-p", "3005"],
+      "env": { "DATA_BACKEND": "local", "NEXT_PUBLIC_DEMO_MODE": "1" },
+      "port": 3005
+    }
+  ]
+}

@@ -1,0 +1,402 @@
+@import "tailwindcss";
+
+@theme {
+  /* Marka rengi: kafenin seçtiği paletten gelir (dosyanın sonundaki
+     --p-* ölçekleri). Tailwind bu adlarla bg-brand-600 vb. üretir. */
+  --color-brand-50: var(--p-50);
+  --color-brand-100: var(--p-100);
+  --color-brand-200: var(--p-200);
+  --color-brand-300: var(--p-300);
+  --color-brand-400: var(--p-400);
+  --color-brand-500: var(--p-500);
+  --color-brand-600: var(--p-600);
+  --color-brand-700: var(--p-700);
+  --color-brand-800: var(--p-800);
+  --color-brand-900: var(--p-900);
+
+  /* Sıcak nötrler (kahve tonu) */
+  --color-paper: #fdfbf8;
+  --color-cream: #f7f2ec;
+
+  --font-sans: var(--font-poppins), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --shadow-card: 0 1px 2px rgb(28 25 23 / 0.05), 0 1px 1px rgb(28 25 23 / 0.03);
+  --shadow-float: 0 12px 32px -8px rgb(28 25 23 / 0.22), 0 2px 6px rgb(28 25 23 / 0.08);
+
+  --animate-pop: pop 180ms ease-out;
+  --animate-fade-in: fade-in 160ms ease-out;
+  --animate-slide-up: slide-up 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  @keyframes pop {
+    0% { transform: scale(1); }
+    40% { transform: scale(0.94); }
+    100% { transform: scale(1); }
+  }
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  --animate-sheet-in: sheet-in 240ms cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  @keyframes sheet-in {
+    from { transform: translateY(24px); }
+    to { transform: translateY(0); }
+  }
+  @keyframes slide-up {
+    from { transform: translateY(16px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+}
+
+
+/* ---------------------------------------------------------------
+   Grafik renkleri (dataviz doğrulayıcısından geçmiş değerler).
+   Marka rengine bağlı olanlar (primary, tier, heat) dosyanın sonunda
+   paletten türetilir.
+   --------------------------------------------------------------- */
+:root {
+  --chart-second: #2a78d6;
+  --chart-context: #a8a29e;
+  --chart-grid: #ebe9e6;
+  --chart-axis: #d6d3d1;
+  --chart-muted: #78716c;
+  --chart-ink: #1c1917;
+  --chart-surface: #ffffff;
+  --chart-heat-0: #f5f5f4;
+}
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    background: var(--color-paper);
+    color: var(--color-stone-900);
+    font-feature-settings: "ss01";
+  }
+
+  button,
+  [role="button"] {
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-brand-500);
+    outline-offset: 2px;
+  }
+
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 1ms !important;
+      transition-duration: 1ms !important;
+    }
+  }
+}
+
+@utility scrollbar-none {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@utility pb-safe {
+  padding-bottom: max(env(safe-area-inset-bottom), 0px);
+}
+
+@utility pb-safe-3 {
+  padding-bottom: max(env(safe-area-inset-bottom), 0.75rem);
+}
+
+@utility pb-safe-4 {
+  padding-bottom: max(env(safe-area-inset-bottom), 1rem);
+}
+
+/* Panel yüksekliği: dvh desteklemeyen tarayıcılarda vh */
+@utility sheet-max-h {
+  max-height: 92vh;
+  max-height: 92dvh;
+  @media (width >= 40rem) {
+    max-height: 88vh;
+    max-height: 88dvh;
+  }
+}
+
+/* Panel açıkken arka sayfa kaymasın */
+.sheet-open,
+.sheet-open body {
+  overflow: hidden;
+}
+
+@utility pt-safe {
+  padding-top: max(env(safe-area-inset-top), 0px);
+}
+
+/* ===== Paletler ve karanlık tema (scripts/gen-theme.mjs ile üretildi) ===== */
+
+/* Kafe paletleri: Ayarlar'dan seçilir (cafes.theme). İlki varsayılan. */
+:root,
+[data-cafe-theme="coffee"] {
+  --p-50: #fbf6f2;
+  --p-100: #f4e7da;
+  --p-200: #e8cdb3;
+  --p-300: #d7ab86;
+  --p-400: #c2885c;
+  --p-500: #a96b3e;
+  --p-600: #8c5531;
+  --p-700: #6f4228;
+  --p-800: #573422;
+  --p-900: #462b1e;
+}
+[data-cafe-theme="forest"] {
+  --p-50: #f1f8f4;
+  --p-100: #dcefe3;
+  --p-200: #b9dfc8;
+  --p-300: #8cc8a6;
+  --p-400: #5aab80;
+  --p-500: #3a8f63;
+  --p-600: #2c744f;
+  --p-700: #245d41;
+  --p-800: #1f4a35;
+  --p-900: #1a3d2c;
+}
+[data-cafe-theme="ocean"] {
+  --p-50: #eff6fc;
+  --p-100: #dbeaf8;
+  --p-200: #b9d6f1;
+  --p-300: #8bbbe6;
+  --p-400: #5799d7;
+  --p-500: #367bc4;
+  --p-600: #2862a6;
+  --p-700: #234f86;
+  --p-800: #20436e;
+  --p-900: #1e395b;
+}
+[data-cafe-theme="berry"] {
+  --p-50: #fcf2f4;
+  --p-100: #f8e0e5;
+  --p-200: #f0c1cb;
+  --p-300: #e396a7;
+  --p-400: #d0687f;
+  --p-500: #b8465f;
+  --p-600: #98344b;
+  --p-700: #7b2a3e;
+  --p-800: #652536;
+  --p-900: #552130;
+}
+[data-cafe-theme="slate"] {
+  --p-50: #f3f4f8;
+  --p-100: #e4e7f0;
+  --p-200: #c9cfe0;
+  --p-300: #a3adc9;
+  --p-400: #7985ab;
+  --p-500: #5a6690;
+  --p-600: #475176;
+  --p-700: #3a4260;
+  --p-800: #313850;
+  --p-900: #2b3043;
+}
+[data-cafe-theme="sunset"] {
+  --p-50: #fff5ed;
+  --p-100: #ffe7d4;
+  --p-200: #fecaa6;
+  --p-300: #fca56e;
+  --p-400: #f97c3a;
+  --p-500: #ef5f19;
+  --p-600: #d14a0f;
+  --p-700: #ad3b10;
+  --p-800: #8b3214;
+  --p-900: #722b14;
+}
+
+/* Marka ve grafik renkleri paletten türetilir. Kafe sayfaları
+   [data-cafe-theme] içinde çizildiği için orada yeniden hesaplanır. */
+:root,
+[data-cafe-theme] {
+  --color-brand-50: var(--p-50);
+  --color-brand-100: var(--p-100);
+  --color-brand-200: var(--p-200);
+  --color-brand-300: var(--p-300);
+  --color-brand-400: var(--p-400);
+  --color-brand-500: var(--p-500);
+  --color-brand-600: var(--p-600);
+  --color-brand-700: var(--p-700);
+  --color-brand-800: var(--p-800);
+  --color-brand-900: var(--p-900);
+  --chart-primary: var(--color-brand-600);
+  --chart-tier-busy: var(--color-brand-800);
+  --chart-tier-medium: var(--color-brand-600);
+  --chart-tier-calm: var(--color-brand-300);
+  --chart-heat-1: var(--color-brand-100);
+  --chart-heat-2: var(--color-brand-200);
+  --chart-heat-3: var(--color-brand-300);
+  --chart-heat-4: var(--color-brand-500);
+  --chart-heat-5: var(--color-brand-700);
+  --chart-heat-6: var(--color-brand-800);
+}
+
+/* Karanlık tema: data-theme="dark" (elle seçildi) ya da
+   data-theme="system" + cihaz karanlık modda. */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --color-white: #1c1917;
+  --color-paper: #110f0e;
+  --color-cream: #221c18;
+  --color-stone-50: #24201d;
+  --color-stone-100: #2c2825;
+  --color-stone-200: #3a3531;
+  --color-stone-300: #55504b;
+  --color-stone-400: #8b857f;
+  --color-stone-500: #a8a29e;
+  --color-stone-600: #c4beb9;
+  --color-stone-700: #d9d5d2;
+  --color-stone-800: #e9e6e3;
+  --color-stone-900: #f5f4f2;
+  --color-stone-950: #fbfaf9;
+  --color-red-50: color-mix(in oklab, oklch(63.7% 0.237 25.331) 14%, #1c1917);
+  --color-red-100: color-mix(in oklab, oklch(63.7% 0.237 25.331) 22%, #1c1917);
+  --color-red-200: color-mix(in oklab, oklch(63.7% 0.237 25.331) 34%, #1c1917);
+  --color-red-300: color-mix(in oklab, oklch(63.7% 0.237 25.331) 60%, #1c1917);
+  --color-red-400: oklch(70.4% 0.191 22.216);
+  --color-red-500: oklch(63.7% 0.237 25.331);
+  --color-red-600: oklch(70.4% 0.191 22.216);
+  --color-red-700: oklch(80.8% 0.114 19.571);
+  --color-red-800: oklch(88.5% 0.062 18.334);
+  --color-red-900: oklch(93.6% 0.032 17.717);
+  --color-amber-50: color-mix(in oklab, oklch(76.9% 0.188 70.08) 14%, #1c1917);
+  --color-amber-100: color-mix(in oklab, oklch(76.9% 0.188 70.08) 22%, #1c1917);
+  --color-amber-200: color-mix(in oklab, oklch(76.9% 0.188 70.08) 34%, #1c1917);
+  --color-amber-300: color-mix(in oklab, oklch(76.9% 0.188 70.08) 60%, #1c1917);
+  --color-amber-400: oklch(82.8% 0.189 84.429);
+  --color-amber-500: oklch(76.9% 0.188 70.08);
+  --color-amber-600: oklch(82.8% 0.189 84.429);
+  --color-amber-700: oklch(87.9% 0.169 91.605);
+  --color-amber-800: oklch(92.4% 0.12 95.746);
+  --color-amber-900: oklch(96.2% 0.059 95.617);
+  --color-emerald-50: color-mix(in oklab, oklch(69.6% 0.17 162.48) 14%, #1c1917);
+  --color-emerald-100: color-mix(in oklab, oklch(69.6% 0.17 162.48) 22%, #1c1917);
+  --color-emerald-200: color-mix(in oklab, oklch(69.6% 0.17 162.48) 34%, #1c1917);
+  --color-emerald-300: color-mix(in oklab, oklch(69.6% 0.17 162.48) 60%, #1c1917);
+  --color-emerald-400: oklch(76.5% 0.177 163.223);
+  --color-emerald-500: oklch(69.6% 0.17 162.48);
+  --color-emerald-600: oklch(76.5% 0.177 163.223);
+  --color-emerald-700: oklch(84.5% 0.143 164.978);
+  --color-emerald-800: oklch(90.5% 0.093 164.15);
+  --color-emerald-900: oklch(95% 0.052 163.051);
+  --color-sky-50: color-mix(in oklab, oklch(68.5% 0.169 237.323) 14%, #1c1917);
+  --color-sky-100: color-mix(in oklab, oklch(68.5% 0.169 237.323) 22%, #1c1917);
+  --color-sky-200: color-mix(in oklab, oklch(68.5% 0.169 237.323) 34%, #1c1917);
+  --color-sky-300: color-mix(in oklab, oklch(68.5% 0.169 237.323) 60%, #1c1917);
+  --color-sky-400: oklch(74.6% 0.16 232.661);
+  --color-sky-500: oklch(68.5% 0.169 237.323);
+  --color-sky-600: oklch(74.6% 0.16 232.661);
+  --color-sky-700: oklch(82.8% 0.111 230.318);
+  --color-sky-800: oklch(90.1% 0.058 230.902);
+  --color-sky-900: oklch(95.1% 0.026 236.824);
+  --chart-heat-0: #2a2522;
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.4);
+  --shadow-float: 0 12px 32px -8px rgb(0 0 0 / 0.7), 0 2px 6px rgb(0 0 0 / 0.4);
+}
+:root[data-theme="dark"],
+:root[data-theme="dark"] [data-cafe-theme] {
+  --color-brand-50: color-mix(in oklab, var(--p-500) 14%, #1c1917);
+  --color-brand-100: color-mix(in oklab, var(--p-500) 22%, #1c1917);
+  --color-brand-200: color-mix(in oklab, var(--p-500) 34%, #1c1917);
+  --color-brand-300: color-mix(in oklab, var(--p-500) 60%, #1c1917);
+  --color-brand-400: var(--p-400);
+  --color-brand-500: var(--p-500);
+  --color-brand-600: var(--p-400);
+  --color-brand-700: var(--p-300);
+  --color-brand-800: var(--p-200);
+  --color-brand-900: var(--p-100);
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="system"] {
+    color-scheme: dark;
+    --color-white: #1c1917;
+    --color-paper: #110f0e;
+    --color-cream: #221c18;
+    --color-stone-50: #24201d;
+    --color-stone-100: #2c2825;
+    --color-stone-200: #3a3531;
+    --color-stone-300: #55504b;
+    --color-stone-400: #8b857f;
+    --color-stone-500: #a8a29e;
+    --color-stone-600: #c4beb9;
+    --color-stone-700: #d9d5d2;
+    --color-stone-800: #e9e6e3;
+    --color-stone-900: #f5f4f2;
+    --color-stone-950: #fbfaf9;
+    --color-red-50: color-mix(in oklab, oklch(63.7% 0.237 25.331) 14%, #1c1917);
+    --color-red-100: color-mix(in oklab, oklch(63.7% 0.237 25.331) 22%, #1c1917);
+    --color-red-200: color-mix(in oklab, oklch(63.7% 0.237 25.331) 34%, #1c1917);
+    --color-red-300: color-mix(in oklab, oklch(63.7% 0.237 25.331) 60%, #1c1917);
+    --color-red-400: oklch(70.4% 0.191 22.216);
+    --color-red-500: oklch(63.7% 0.237 25.331);
+    --color-red-600: oklch(70.4% 0.191 22.216);
+    --color-red-700: oklch(80.8% 0.114 19.571);
+    --color-red-800: oklch(88.5% 0.062 18.334);
+    --color-red-900: oklch(93.6% 0.032 17.717);
+    --color-amber-50: color-mix(in oklab, oklch(76.9% 0.188 70.08) 14%, #1c1917);
+    --color-amber-100: color-mix(in oklab, oklch(76.9% 0.188 70.08) 22%, #1c1917);
+    --color-amber-200: color-mix(in oklab, oklch(76.9% 0.188 70.08) 34%, #1c1917);
+    --color-amber-300: color-mix(in oklab, oklch(76.9% 0.188 70.08) 60%, #1c1917);
+    --color-amber-400: oklch(82.8% 0.189 84.429);
+    --color-amber-500: oklch(76.9% 0.188 70.08);
+    --color-amber-600: oklch(82.8% 0.189 84.429);
+    --color-amber-700: oklch(87.9% 0.169 91.605);
+    --color-amber-800: oklch(92.4% 0.12 95.746);
+    --color-amber-900: oklch(96.2% 0.059 95.617);
+    --color-emerald-50: color-mix(in oklab, oklch(69.6% 0.17 162.48) 14%, #1c1917);
+    --color-emerald-100: color-mix(in oklab, oklch(69.6% 0.17 162.48) 22%, #1c1917);
+    --color-emerald-200: color-mix(in oklab, oklch(69.6% 0.17 162.48) 34%, #1c1917);
+    --color-emerald-300: color-mix(in oklab, oklch(69.6% 0.17 162.48) 60%, #1c1917);
+    --color-emerald-400: oklch(76.5% 0.177 163.223);
+    --color-emerald-500: oklch(69.6% 0.17 162.48);
+    --color-emerald-600: oklch(76.5% 0.177 163.223);
+    --color-emerald-700: oklch(84.5% 0.143 164.978);
+    --color-emerald-800: oklch(90.5% 0.093 164.15);
+    --color-emerald-900: oklch(95% 0.052 163.051);
+    --color-sky-50: color-mix(in oklab, oklch(68.5% 0.169 237.323) 14%, #1c1917);
+    --color-sky-100: color-mix(in oklab, oklch(68.5% 0.169 237.323) 22%, #1c1917);
+    --color-sky-200: color-mix(in oklab, oklch(68.5% 0.169 237.323) 34%, #1c1917);
+    --color-sky-300: color-mix(in oklab, oklch(68.5% 0.169 237.323) 60%, #1c1917);
+    --color-sky-400: oklch(74.6% 0.16 232.661);
+    --color-sky-500: oklch(68.5% 0.169 237.323);
+    --color-sky-600: oklch(74.6% 0.16 232.661);
+    --color-sky-700: oklch(82.8% 0.111 230.318);
+    --color-sky-800: oklch(90.1% 0.058 230.902);
+    --color-sky-900: oklch(95.1% 0.026 236.824);
+    --chart-heat-0: #2a2522;
+    --shadow-card: 0 1px 2px rgb(0 0 0 / 0.4);
+    --shadow-float: 0 12px 32px -8px rgb(0 0 0 / 0.7), 0 2px 6px rgb(0 0 0 / 0.4);
+  }
+  :root[data-theme="system"],
+  :root[data-theme="system"] [data-cafe-theme] {
+    --color-brand-50: color-mix(in oklab, var(--p-500) 14%, #1c1917);
+    --color-brand-100: color-mix(in oklab, var(--p-500) 22%, #1c1917);
+    --color-brand-200: color-mix(in oklab, var(--p-500) 34%, #1c1917);
+    --color-brand-300: color-mix(in oklab, var(--p-500) 60%, #1c1917);
+    --color-brand-400: var(--p-400);
+    --color-brand-500: var(--p-500);
+    --color-brand-600: var(--p-400);
+    --color-brand-700: var(--p-300);
+    --color-brand-800: var(--p-200);
+    --color-brand-900: var(--p-100);
+  }
+}

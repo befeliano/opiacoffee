@@ -104,6 +104,7 @@ export function MenuEmbed({ products, menu, lang }: { products: SiteProduct[]; m
         seasonal: p.seasonal,
         soldout: p.soldout,
         allergens: p.allergens.map((a) => al[a] ?? a),
+        allergenUnknown: p.allergenUnknown && !p.allergens.length,
         nutrition: { ...p.nutrition, servings: p.nutrition.servings.map((s) => ({ ...s, label: servingLabel(s.label, lang) })) },
         options: p.options,
         orderable: p.orderable,

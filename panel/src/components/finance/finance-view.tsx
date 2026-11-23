@@ -2,8 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { ChevronLeft, ChevronRight, Pencil, Plus, Repeat, Trash2 } from "lucide-react";
-import { deleteExpenseAction, saveExpenseAction } from "@/app/(panel)/[cafe]/finans/actions";
+import { Banknote, CheckCircle2, ChevronLeft, ChevronRight, CreditCard, FileText, Paperclip, Pencil, Plus, Repeat, Trash2 } from "lucide-react";
+import { deleteExpenseAction, deleteExpenseFileAction, payExpenseAction, saveExpenseAction } from "@/app/(panel)/[cafe]/finans/actions";
 import { BarList } from "@/components/charts/bar-list";
 import { ChartCard, LegendItem, VIZ } from "@/components/charts/chart-kit";
 import { ColumnChart } from "@/components/charts/column-chart";
@@ -44,6 +44,7 @@ export function FinanceView({
 }) {
   const router = useRouter();
   const [editing, setEditing] = useState<Expense | "new" | null>(null);
+  const [paying, setPaying] = useState<Expense | null>(null);
 
   const allTime = span !== null; // aylık olmayan (tüm zamanlar ya da aralık)
   const start = span?.from ?? month;
@@ -62,6 +63,8 @@ export function FinanceView({
   const counted = new Set([...exp.monthly, ...exp.oneTime].map((e) => e.id));
 
   const net = t.grossProfit - exp.total;
+  // Ödenmemiş tek seferlik giderler (fatura geldi, ödeme yapılmadı)
+  const unpaid = exp.oneTime.filter((e) => !e.paid_at).reduce((s, e) => s + e.amount, 0);
   const prevNet = p ? p.grossProfit - prevExp.total : 0;
   const contribution = t.revenue > 0 ? t.grossProfit / t.revenue : null;
   const breakEven = contribution && contribution > 0.02 ? exp.total / contribution : null;
@@ -136,7 +139,7 @@ export function FinanceView({
         <StatTile
           label="Giderler"
           value={tl(exp.total, { decimals: "never" })}
-          sub={`${exp.monthly.length} sabit · ${exp.oneTime.length} tek seferlik${range ? ` · ${range.months} ay` : ""}`}
+          sub={`${exp.monthly.length} sabit · ${exp.oneTime.length} tek seferlik${range ? ` · ${range.months} ay` : ""}${unpaid > 0 ? ` · ${tl(unpaid, { decimals: "never" })} ödenmedi` : ""}`}
         />
         <StatTile
           label={isCurrent ? "Net kâr (şu ana kadar)" : "Net kâr"}
@@ -238,8 +241,16 @@ export function FinanceView({
           items={exp.monthly}
           // Tüm zamanlarda listelenen tutar ay sayısıyla çarpılmıştır; düzenlemede asıl kayıt açılır
           onEdit={(e) => setEditing(expenses.find((x) => x.id === e.id) ?? e)}
+          slug={slug}
         />
-        <ExpenseList title={`Tek seferlik giderler · ${periodLabel}`} description="Yalnızca girildiği aya yazılır" items={exp.oneTime} onEdit={setEditing} />
+        <ExpenseList
+          title={`Tek seferlik giderler · ${periodLabel}`}
+          description="Faturalar ve alışverişler; ödenmeyenler işaretli"
+          items={exp.oneTime}
+          onEdit={setEditing}
+          onPay={setPaying}
+          slug={slug}
+        />
       </div>
 
       {expenses.some((e) => !counted.has(e.id)) && (
@@ -260,7 +271,8 @@ export function FinanceView({
         </details>
       )}
 
-      {editing && <ExpenseEditor cafeId={cafeId} expense={editing === "new" ? null : editing} month={month} onClose={() => setEditing(null)} />}
+      {editing && <ExpenseEditor cafeId={cafeId} slug={slug} expense={editing === "new" ? null : editing} month={month} onClose={() => setEditing(null)} />}
+      {paying && <PaySheet cafeId={cafeId} expense={paying} onClose={() => setPaying(null)} />}
     </main>
   );
 }
@@ -282,12 +294,17 @@ function ExpenseList({
   description,
   items,
   onEdit,
+  onPay,
+  slug,
 }: {
   title: string;
   description: string;
   /** months: tüm zamanlar görünümünde bu aylık giderin kaç ay sayıldığı */
   items: (Expense & { months?: number })[];
   onEdit: (e: Expense) => void;
+  /** Verilirse ödenmemiş giderde "Öde" düğmesi çıkar (tek seferlik giderler) */
+  onPay?: (e: Expense) => void;
+  slug: string;
 }) {
   const total = items.reduce((s, e) => s + e.amount, 0);
   return (
@@ -298,8 +315,8 @@ function ExpenseList({
       ) : (
         <ul className="mt-2 divide-y divide-stone-100">
           {items.map((e) => (
-            <li key={e.id}>
-              <button type="button" onClick={() => onEdit(e)} className="flex w-full items-center gap-3 px-4 py-2.5 text-left hover:bg-stone-50 sm:px-5">
+            <li key={e.id} className="flex items-center gap-1 pr-3 hover:bg-stone-50 sm:pr-4">
+              <button type="button" onClick={() => onEdit(e)} className="flex min-w-0 flex-1 items-center gap-3 py-2.5 pl-4 text-left sm:pl-5">
                 <span className="min-w-0 flex-1">
                   <span className="flex items-center gap-2">
                     <span className="truncate text-[15px] font-semibold">{e.name}</span>
@@ -314,8 +331,35 @@ function ExpenseList({
                   </span>
                 </span>
                 <span className="text-[15px] font-bold tabular-nums">{tl(e.amount, { decimals: "never" })}</span>
-                <Pencil className="size-4 text-stone-400" />
+                <Pencil className="size-4 shrink-0 text-stone-400" />
               </button>
+              {e.file && (
+                <a
+                  href={`/${slug}/finans/dosya/${e.id}`}
+                  target="_blank"
+                  rel="noopener"
+                  className="grid size-9 shrink-0 place-items-center rounded-lg text-stone-500 hover:bg-stone-100 hover:text-stone-800"
+                  aria-label={`Fatura: ${e.file.name}`}
+                  title={e.file.name}
+                >
+                  <FileText className="size-4" />
+                </a>
+              )}
+              {onPay &&
+                (e.paid_at ? (
+                  <span className="flex shrink-0 items-center gap-1 rounded-lg bg-emerald-50 px-2 py-1 text-[12px] font-semibold text-emerald-800" title={e.paid_by ? `Ödeyen: ${e.paid_by}` : undefined}>
+                    <CheckCircle2 className="size-3.5" /> {e.paid_method === "cash" ? "Nakit" : "Kart"}
+                  </span>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => onPay(e)}
+                    className="h-9 shrink-0 rounded-lg bg-amber-100 px-3 text-[13px] font-bold text-amber-900 hover:bg-amber-200"
+                    aria-label={`${e.name} ödenmedi, öde`}
+                  >
+                    Öde
+                  </button>
+                ))}
             </li>
           ))}
         </ul>
@@ -329,15 +373,41 @@ function formatMonth(iso: string) {
   return `${MONTHS_TR[m - 1]} ${y}`;
 }
 
-function ExpenseEditor({ cafeId, expense, month, onClose }: { cafeId: string; expense: Expense | null; month: string; onClose: () => void }) {
+const MAX_FILE_BYTES = 3 * 1024 * 1024;
+
+/** Fatura dosyasını yükler (sunucu eylemlerinin gövde sınırı küçük olduğu için ayrı uç) */
+async function uploadFile(slug: string, expenseId: string, file: File): Promise<string | null> {
+  const body = new FormData();
+  body.append("file", file);
+  const res = await fetch(`/${slug}/finans/dosya/${expenseId}`, { method: "POST", body }).catch(() => null);
+  if (!res) return "Bağlantı sorunu.";
+  const json = (await res.json().catch(() => null)) as { ok?: boolean; error?: string } | null;
+  return res.ok && json?.ok ? null : (json?.error ?? "Dosya yüklenemedi.");
+}
+
+function ExpenseEditor({ cafeId, slug, expense, month, onClose }: { cafeId: string; slug: string; expense: Expense | null; month: string; onClose: () => void }) {
+  const router = useRouter();
   const toast = useToast();
-  const [kind, setKind] = useState<"monthly" | "one_time">(expense?.kind ?? "monthly");
+  const [file, setFile] = useState<File | null>(null);
+  const [removeFile, setRemoveFile] = useState(false);
+  const [unpay, setUnpay] = useState(false);
+  const [kind, setKindState] = useState<"monthly" | "one_time">(expense?.kind ?? "monthly");
   const [category, setCategory] = useState<ExpenseCategory>(expense?.category ?? "kira");
+  // Yeni giderde tür değişince varsayılan kategori de değişir (tek seferlik: çoğunlukla market alışverişi)
+  const setKind = (next: "monthly" | "one_time") => {
+    setKindState(next);
+    if (!expense) setCategory((c) => (next === "one_time" && c === "kira" ? "market" : next === "monthly" && c === "market" ? "kira" : c));
+  };
   const [name, setName] = useState(expense?.name ?? "");
   const [amount, setAmount] = useState<number | null>(expense?.amount ?? null);
   const [startMonth, setStartMonth] = useState((expense?.starts_on ?? month).slice(0, 7));
   const [endMonth, setEndMonth] = useState(expense?.ends_on?.slice(0, 7) ?? "");
-  const [date, setDate] = useState(expense?.kind === "one_time" ? expense.starts_on : month);
+  const [date, setDate] = useState(() => {
+    if (expense?.kind === "one_time") return expense.starts_on;
+    const now = new Date();
+    const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+    return today.slice(0, 7) === month.slice(0, 7) ? today : month;
+  });
   const [note, setNote] = useState(expense?.note ?? "");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -358,10 +428,29 @@ function ExpenseEditor({ cafeId, expense, month, onClose }: { cafeId: string; ex
       ends_on: kind === "monthly" && endMonth ? monthEnd(`${endMonth}-01`) : null,
       note: note.trim(),
     }).catch(() => null);
+    if (!result || !result.ok) {
+      setSaving(false);
+      return setError(result ? result.error : "Bağlantı sorunu.");
+    }
+    const savedId = result.data.id;
+    // Fatura dosyası ve ödeme durumu: kayıttan sonra
+    const extra: string[] = [];
+    if (file) {
+      const failed = await uploadFile(slug, savedId, file);
+      if (failed) extra.push(failed);
+    } else if (removeFile && expense?.file) {
+      const r = await deleteExpenseFileAction(cafeId, savedId).catch(() => null);
+      if (!r?.ok) extra.push("Fatura kaldırılamadı.");
+    }
+    if (unpay && expense?.paid_at) {
+      const r = await payExpenseAction(cafeId, savedId, null).catch(() => null);
+      if (!r?.ok) extra.push("Ödeme durumu değiştirilemedi.");
+    }
     setSaving(false);
-    if (!result) return setError("Bağlantı sorunu.");
-    if (!result.ok) return setError(result.error);
-    toast.show(expense ? "Gider güncellendi" : "Gider eklendi");
+    router.refresh();
+    // Gider kaydedildi; ek işlem başarısızsa uyar (yeniden kaydedip çift gider oluşmasın diye pencere kapanır)
+    if (extra.length) toast.show(`Gider kaydedildi; ${extra.join(" ")}`, "error");
+    else toast.show(expense ? "Gider güncellendi" : "Gider eklendi");
     onClose();
   };
 
@@ -449,6 +538,61 @@ function ExpenseEditor({ cafeId, expense, month, onClose }: { cafeId: string; ex
           <Field label="Not" hint="İsteğe bağlı">
             <Input value={note} onChange={(e) => setNote(e.target.value)} maxLength={200} />
           </Field>
+          <Field label="Fatura" hint="e-Arşiv PDF ya da fotoğraf · en fazla 3 MB · isteğe bağlı">
+            <div className="flex flex-wrap items-center gap-2">
+              {expense?.file && !removeFile && !file && (
+                <a
+                  href={`/${slug}/finans/dosya/${expense.id}`}
+                  target="_blank"
+                  rel="noopener"
+                  className="inline-flex h-10 items-center gap-1.5 rounded-xl border border-stone-200 px-3 text-[14px] font-semibold hover:bg-stone-50"
+                >
+                  <FileText className="size-4" /> {expense.file.name}
+                </a>
+              )}
+              <label className="inline-flex h-10 cursor-pointer items-center gap-1.5 rounded-xl border border-dashed border-stone-300 px-3 text-[14px] font-semibold text-stone-700 hover:bg-stone-50">
+                <Paperclip className="size-4" /> {file ? file.name : expense?.file ? "Değiştir" : "Dosya seç"}
+                <input
+                  type="file"
+                  accept="application/pdf,image/jpeg,image/png,image/webp"
+                  className="sr-only"
+                  onChange={(e) => {
+                    const f = e.target.files?.[0] ?? null;
+                    if (f && f.size > MAX_FILE_BYTES) {
+                      e.target.value = "";
+                      return setError("Dosya en fazla 3 MB olabilir.");
+                    }
+                    setError(null);
+                    setFile(f);
+                    setRemoveFile(false);
+                  }}
+                />
+              </label>
+              {(file || (expense?.file && !removeFile)) && (
+                <button
+                  type="button"
+                  className="h-10 rounded-xl px-2 text-[13px] font-semibold text-red-600 hover:bg-red-50"
+                  onClick={() => {
+                    setFile(null);
+                    setRemoveFile(true);
+                  }}
+                >
+                  Kaldır
+                </button>
+              )}
+            </div>
+          </Field>
+          {kind === "one_time" && expense?.paid_at && (
+            <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl bg-emerald-50 px-3 py-2 text-[14px] text-emerald-900">
+              <span className="flex items-center gap-1.5">
+                <CheckCircle2 className="size-4" />
+                {unpay ? "Kaydedince ödenmedi olarak işaretlenecek" : `${expense.paid_method === "cash" ? "Nakit" : "Kartla"} ödendi${expense.paid_by ? ` · ${expense.paid_by}` : ""}`}
+              </span>
+              <button type="button" className="text-[13px] font-semibold underline" onClick={() => setUnpay((v) => !v)}>
+                {unpay ? "Vazgeç" : "Ödenmedi yap"}
+              </button>
+            </div>
+          )}
         </div>
       </Sheet>
       <ConfirmSheet
@@ -462,5 +606,36 @@ function ExpenseEditor({ cafeId, expense, month, onClose }: { cafeId: string; ex
         confirmLabel="Sil"
       />
     </>
+  );
+}
+
+/** "Öde": nakit mi kart mı? Nakit ödeme açık günde kasadan düşülür. */
+function PaySheet({ cafeId, expense, onClose }: { cafeId: string; expense: Expense; onClose: () => void }) {
+  const router = useRouter();
+  const toast = useToast();
+  const [busy, setBusy] = useState<"cash" | "card" | null>(null);
+
+  const pay = async (method: "cash" | "card") => {
+    setBusy(method);
+    const result = await payExpenseAction(cafeId, expense.id, method).catch(() => null);
+    setBusy(null);
+    if (!result?.ok) return toast.show(result?.ok === false ? result.error : "Bağlantı sorunu.", "error");
+    toast.show(method === "cash" ? "Nakit ödendi; kasadan düşüldü" : "Kartla ödendi");
+    router.refresh();
+    onClose();
+  };
+
+  return (
+    <Sheet open onClose={onClose} title={`${expense.name} · ${tl(expense.amount)}`} description="Nasıl ödendi?" size="sm">
+      <div className="grid grid-cols-2 gap-3">
+        <Button size="xl" variant="secondary" disabled={!!busy} onClick={() => pay("cash")} className="h-20 flex-col gap-1">
+          <Banknote className="size-6" /> Nakit
+        </Button>
+        <Button size="xl" variant="secondary" disabled={!!busy} onClick={() => pay("card")} className="h-20 flex-col gap-1">
+          <CreditCard className="size-6" /> Kart
+        </Button>
+      </div>
+      <p className="mt-3 text-[13px] text-stone-500">Nakit ödeme, kafe açıksa gün sonu kasa sayımında beklenen nakitten düşülür.</p>
+    </Sheet>
   );
 }

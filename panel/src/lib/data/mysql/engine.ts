@@ -89,6 +89,11 @@ const FUNCTIONS: Record<string, Fn> = {
   finance_expenses: admin.finance_expenses,
   finance_save_expense: admin.finance_save_expense,
   finance_delete_expense: admin.finance_delete_expense,
+  finance_pay_expense: admin.finance_pay_expense,
+  finance_cash_expense: admin.finance_cash_expense,
+  finance_set_file: admin.finance_set_file,
+  finance_get_file: admin.finance_get_file,
+  finance_delete_file: admin.finance_delete_file,
   demo_status: admin.demo_status,
   demo_purge: admin.demo_purge,
 

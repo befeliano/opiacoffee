@@ -1,5 +1,5 @@
 // Veritabanı API'sinin davranış ve güvenlik testleri, MySQL motoru (gerçek MySQL/MariaDB).
-// Yerel motor testinin (local/engine.test.ts) aynısıdır; yalnızca Postgres'e özgü iki yer uyarlandı.
+// scripts/gen-mysql-test.mjs ile local/engine.test.ts'ten üretilir; elle düzenleme.
 // Çalıştırmak için: MYSQL_TEST_URL=mysql://kullanici:sifre@127.0.0.1:3306 (her test için geçici veritabanı açılır)
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import mysql, { type Pool } from "mysql2/promise";
@@ -846,5 +846,70 @@ describe.skipIf(!BASE_URL)("yağmur uyarısı", () => {
     // Yağış geçti ama 30 dk dolmadı: uyarı kaydı durur
     row = await report(false, null);
     expect(row.alert_since).not.toBeNull();
+  });
+});
+
+describe.skipIf(!BASE_URL)("gider ödemesi, fatura dosyası ve kasadan ödeme", () => {
+  type Exp = { id: string; name: string; paid_at: string | null; paid_method: string | null; paid_by: string; file: { name: string; size: number } | null };
+  type Live = { live: { expected_cash: number | null; expenses_cash: number; cash: number } | null };
+
+  it("tek seferlik gider ödenmedi girilir; nakit ödenince gün sonu beklenen nakitten düşer", async () => {
+    const saved = await localRpc<{ id: string }>(db, as(OWNER), "finance_save_expense", {
+      p_cafe: cafeA,
+      p_expense: { kind: "one_time", category: "market", name: "Limon", amount: 85.5, starts_on: "2026-11-23", note: "Migros" },
+    });
+    let list = await localRpc<Exp[]>(db, as(OWNER), "finance_expenses", { p_cafe: cafeA });
+    let e = list.find((x) => x.id === saved.id)!;
+    expect(e.paid_at).toBeNull();
+    expect(e.file).toBeNull();
+
+    // Ödeme yalnızca sahipte; geçersiz yöntem reddedilir
+    await expectError(localRpc(db, as(STAFF_F), "finance_pay_expense", { p_cafe: cafeA, p_id: saved.id, p_method: "cash" }), "E_FORBIDDEN");
+    await expectError(localRpc(db, as(OWNER), "finance_pay_expense", { p_cafe: cafeA, p_id: saved.id, p_method: "havale" }), "E_INVALID_INPUT");
+
+    // Gün kapalıysa aç (kasa beklentisi açık günde hesaplanır)
+    if (!(await localRpc<Live>(db, as(OWNER), "day_status", { p_cafe: cafeA })).live) {
+      await localRpc(db, as(OWNER), "day_open", { p_cafe: cafeA, p_opening_cash: 500 });
+    }
+    const before = await localRpc<Live>(db, as(OWNER), "day_status", { p_cafe: cafeA });
+    await localRpc(db, as(OWNER), "finance_pay_expense", { p_cafe: cafeA, p_id: saved.id, p_method: "cash" });
+    const after = await localRpc<Live>(db, as(OWNER), "day_status", { p_cafe: cafeA });
+    expect(after.live!.expenses_cash - before.live!.expenses_cash).toBeCloseTo(85.5);
+    expect(after.live!.expected_cash! - before.live!.expected_cash!).toBeCloseTo(-85.5);
+
+    list = await localRpc<Exp[]>(db, as(OWNER), "finance_expenses", { p_cafe: cafeA });
+    e = list.find((x) => x.id === saved.id)!;
+    expect(e.paid_method).toBe("cash");
+    expect(e.paid_by).toBe("Sahip");
+
+    // Ödendi geri alınınca kasaya etkisi de kalkar
+    await localRpc(db, as(OWNER), "finance_pay_expense", { p_cafe: cafeA, p_id: saved.id, p_method: null });
+    const undone = await localRpc<Live>(db, as(OWNER), "day_status", { p_cafe: cafeA });
+    expect(undone.live!.expected_cash).toBeCloseTo(before.live!.expected_cash!);
+  });
+
+  it("personel kasadan nakit ödediği alışverişi girer; fatura dosyası eklenir, okunur, kaldırılır", async () => {
+    const cash = await localRpc<{ id: string }>(db, as(STAFF_F), "finance_cash_expense", { p_cafe: cafeA, p_name: "Süt", p_amount: 120, p_note: "" });
+    await expectError(localRpc(db, as(STAFF_F), "finance_cash_expense", { p_cafe: cafeA, p_name: "Süt", p_amount: 0 }), "E_INVALID_AMOUNT");
+    await expectError(localRpc(db, as(STAFF_B), "finance_cash_expense", { p_cafe: cafeA, p_name: "Süt", p_amount: 10 }), "E_FORBIDDEN");
+
+    const pdf = Buffer.from("%PDF-1.4 deneme fatura").toString("base64");
+    await expectError(localRpc(db, as(STAFF_F), "finance_set_file", { p_cafe: cafeA, p_id: cash.id, p_name: "fatura.pdf", p_mime: "application/pdf", p_data: pdf }), "E_FORBIDDEN");
+    await expectError(localRpc(db, as(OWNER), "finance_set_file", { p_cafe: cafeA, p_id: cash.id, p_name: "x.exe", p_mime: "application/x-msdownload", p_data: pdf }), "E_INVALID_INPUT");
+    const file = await localRpc<{ size: number }>(db, as(OWNER), "finance_set_file", { p_cafe: cafeA, p_id: cash.id, p_name: "fatura.pdf", p_mime: "application/pdf", p_data: pdf });
+    expect(file.size).toBe(22);
+
+    const list = await localRpc<Exp[]>(db, as(OWNER), "finance_expenses", { p_cafe: cafeA });
+    const e = list.find((x) => x.id === cash.id)!;
+    expect(e.paid_method).toBe("cash");
+    expect(e.paid_by).toBe("Barista A");
+    expect(e.file?.name).toBe("fatura.pdf");
+
+    const got = await localRpc<{ data: string; mime: string }>(db, as(OWNER), "finance_get_file", { p_cafe: cafeA, p_id: cash.id });
+    expect(Buffer.from(got.data, "base64").toString()).toBe("%PDF-1.4 deneme fatura");
+    await expectError(localRpc(db, as(OWNER), "finance_get_file", { p_cafe: cafeB, p_id: cash.id }), "E_NOT_FOUND");
+
+    await localRpc(db, as(OWNER), "finance_delete_file", { p_cafe: cafeA, p_id: cash.id });
+    await expectError(localRpc(db, as(OWNER), "finance_get_file", { p_cafe: cafeA, p_id: cash.id }), "E_NOT_FOUND");
   });
 });

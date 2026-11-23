@@ -9,6 +9,7 @@ export const EXPENSE_CATEGORIES: Record<ExpenseCategory, string> = {
   vergi: "Vergi / muhasebe",
   ekipman: "Ekipman / bakım",
   pazarlama: "Pazarlama",
+  market: "Market / malzeme",
   diger: "Diğer",
 };
 

@@ -203,6 +203,8 @@ export interface DaySummary {
   card: number;
   ticket: number;
   commission: number;
+  /** Kasadan nakit ödenen giderler (beklenen nakitten düşülür; eski kayıtlarda yok) */
+  expenses_cash?: number;
 }
 
 export interface CafeDay {
@@ -389,7 +391,7 @@ export interface TeamMember {
   is_self: boolean;
 }
 
-export type ExpenseCategory = "kira" | "fatura" | "personel" | "banka" | "vergi" | "ekipman" | "pazarlama" | "diger";
+export type ExpenseCategory = "kira" | "fatura" | "personel" | "banka" | "vergi" | "ekipman" | "pazarlama" | "market" | "diger";
 
 export interface Expense {
   id: string;
@@ -400,6 +402,12 @@ export interface Expense {
   starts_on: string;
   ends_on: string | null;
   note: string;
+  /** Ödendiyse zamanı ve yöntemi (tek seferlik giderler "ödenmedi" girilir) */
+  paid_at?: string | null;
+  paid_method?: "cash" | "card" | null;
+  paid_by?: string;
+  /** Eklenmiş fatura dosyası (e-arşiv PDF ya da fotoğraf) */
+  file?: { name: string; mime: string; size: number } | null;
 }
 
 // ---------------------------------------------------------------------

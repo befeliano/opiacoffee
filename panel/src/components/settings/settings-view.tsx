@@ -161,7 +161,7 @@ export function SettingsView({
               label="Açılış ve kapanışta kasa sayımı"
               description={
                 cashCount
-                  ? "Satıştan önce “Kafeyi aç” (açılış nakdi), gece “Kafeyi kapat” (sayılan nakit ve POS toplamı) sorulur; beklenenle farkı kaydedilir. Sayım istenirse pas geçilebilir."
+                  ? "Satıştan önce “Dükkânı aç” (açılış nakdi), gece “Dükkânı kapat” (sayılan nakit ve POS toplamı) sorulur; beklenenle farkı kaydedilir. Sayım istenirse pas geçilebilir."
                   : "Kapalı: kafe çalışma saatlerinde kendiliğinden açık sayılır; açıp kapatmak ya da kasa saymak gerekmez."
               }
             />

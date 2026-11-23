@@ -128,7 +128,7 @@ export async function cafe_update_settings(ctx: Ctx, a: Row) {
         [
           ctx.now,
           JSON.stringify(summary),
-          day.opening_cash === null ? null : fromCents(cents(Number(day.opening_cash)) + cents(summary.cash)),
+          day.opening_cash === null ? null : fromCents(cents(Number(day.opening_cash)) + cents(summary.cash) - cents(summary.expenses_cash)),
           summary.card,
           left([day.note, "Kasa sayımı kapatıldı"].filter((x) => x).join(" · "), 200),
           day.id,
@@ -170,6 +170,8 @@ export interface WindowSummary {
   card: number;
   ticket: number;
   commission: number;
+  /** Kasadan nakit ödenen giderler (beklenen nakitten düşülür) */
+  expenses_cash: number;
 }
 
 export async function windowSummary(ctx: Ctx, cafe: string, from: Date, to: Date): Promise<WindowSummary> {
@@ -204,6 +206,12 @@ export async function windowSummary(ctx: Ctx, cafe: string, from: Date, to: Date
     card: Number(p?.card ?? 0),
     ticket: Number(p?.ticket ?? 0),
     commission: Number(p?.commission ?? 0),
+    expenses_cash: Number(
+      (await ctx.val(
+        "SELECT COALESCE(SUM(amount), 0) FROM expenses WHERE cafe_id = ? AND paid_method = 'cash' AND paid_at >= ? AND paid_at < ?",
+        [cafe, from, to],
+      )) ?? 0,
+    ),
   };
 }
 
@@ -263,7 +271,7 @@ export async function day_status(ctx: Ctx, a: Row) {
     // Açılış nakdi girilmediyse beklenen nakit bilinmez
     live = {
       ...summary,
-      expected_cash: open.opening_cash === null ? null : fromCents(cents(Number(open.opening_cash)) + cents(summary.cash)),
+      expected_cash: open.opening_cash === null ? null : fromCents(cents(Number(open.opening_cash)) + cents(summary.cash) - cents(summary.expenses_cash)),
     };
   }
   const history = await ctx.all(
@@ -321,7 +329,7 @@ export async function day_close(ctx: Ctx, a: Row) {
   }
 
   const summary = await windowSummary(ctx, cafe, new Date(day.opened_at), ctx.now);
-  const expected = day.opening_cash === null ? null : fromCents(cents(Number(day.opening_cash)) + cents(summary.cash));
+  const expected = day.opening_cash === null ? null : fromCents(cents(Number(day.opening_cash)) + cents(summary.cash) - cents(summary.expenses_cash));
   const card = summary.card;
   const diff = (x: number | null, y: number | null) => (x === null || y === null ? null : fromCents(cents(x) - cents(y)));
 

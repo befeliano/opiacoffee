@@ -11,7 +11,7 @@ const expenseSchema = z
   .object({
     id: id.nullable(),
     kind: z.enum(["monthly", "one_time"]),
-    category: z.enum(["kira", "fatura", "personel", "banka", "vergi", "ekipman", "pazarlama", "diger"]),
+    category: z.enum(["kira", "fatura", "personel", "banka", "vergi", "ekipman", "pazarlama", "market", "diger"]),
     name: z.string().trim().min(1).max(60),
     amount: z.number().min(0).max(99_999_999),
     starts_on: z.iso.date(),
@@ -34,6 +34,28 @@ export async function saveExpenseAction(cafeId: string, input: z.input<typeof ex
 export async function deleteExpenseAction(cafeId: string, expenseId: string): Promise<ActionResult<void>> {
   try {
     await rpc<void>("finance_delete_expense", { p_cafe: id.parse(cafeId), p_id: id.parse(expenseId) });
+    refresh();
+    return { ok: true, data: undefined };
+  } catch (error) {
+    return fail(error);
+  }
+}
+
+/** Ödendi (nakit / kart) ya da ödenmedi (null) */
+export async function payExpenseAction(cafeId: string, expenseId: string, method: "cash" | "card" | null): Promise<ActionResult<void>> {
+  try {
+    const m = z.enum(["cash", "card"]).nullable().parse(method);
+    await rpc<void>("finance_pay_expense", { p_cafe: id.parse(cafeId), p_id: id.parse(expenseId), p_method: m });
+    refresh();
+    return { ok: true, data: undefined };
+  } catch (error) {
+    return fail(error);
+  }
+}
+
+export async function deleteExpenseFileAction(cafeId: string, expenseId: string): Promise<ActionResult<void>> {
+  try {
+    await rpc<void>("finance_delete_file", { p_cafe: id.parse(cafeId), p_id: id.parse(expenseId) });
     refresh();
     return { ok: true, data: undefined };
   } catch (error) {

@@ -31,6 +31,10 @@ const OPTION_EN: Record<string, string> = {
   "ekstra shot": "Extra shot",
   "çikolata sos": "Chocolate sauce",
   dondurma: "Ice cream",
+  "yulaf sütü": "Oat milk",
+  "badem sütü": "Almond milk",
+  "hindistan cevizi sütü": "Coconut milk",
+  "yüksek protein süt": "High-protein milk",
 };
 const norm = (s: string) => s.trim().toLocaleLowerCase("tr-TR");
 const en = (name: string) => OPTION_EN[norm(name)] ?? name;

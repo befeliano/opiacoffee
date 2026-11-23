@@ -42,7 +42,7 @@ Bunlar için hiçbir dosyaya dokunma; `panel.opiacoffee.com.tr` adresinden yap:
 | Yerel SEO sayfası eklemek (ör. "Odunpazarı yakını kafe") | `src/site/content/locals.ts` | Diziye ekle; adres `/<slug>` olur. Görsel: `public/assets/img/<image>.jpg`. |
 | Üst menü, alt bölüm, çerez bildirimi | `src/site/shell.tsx` | Ortak metinler `src/site/i18n.ts` içinde (Türkçe ve İngilizce). |
 | Fotoğraflar | `public/assets/img/<ad>.jpg` (ya da `.webp`, `.png`) | Ad listesi aşağıda. Dosya yoksa gri yer tutucu görünür. |
-| Ürün fotoğrafı | `public/uploads/<dosya>.jpg` + `menu.json` içinde ürünün `"image"` alanı | |
+| Ürün fotoğrafı | `public/uploads/<dosya>.webp` + `menu.json` içinde ürünün `"image"` alanı | Kare, en az 500×500. Bilinmeyen alerjen için ürüne `"allergenUnknown": true` yazılır; sitede "personelimize sorun" görünür. |
 | Görünüm (renk, yazı, boşluk) | `public/assets/css/main.css` | |
 | Sayfadaki davranışlar (ürün penceresi, sepet, harita, çerez) | `public/assets/js/menu.js`, `main.js`, `consent.js` | |
 | Google Analytics, Search Console | Ortam değişkenleri `NEXT_PUBLIC_GA_ID`, `GSC_VERIFY` | GA açılırsa çerez ve gizlilik metinlerini de güncelle. |
@@ -123,5 +123,12 @@ Yerel MySQL (MariaDB) `D:\Opia\.devtools\mariadb` içinde; 3307 portunda çalı�
 5. **Alan adları:** `opiacoffee.com.tr` ve `panel.opiacoffee.com.tr` aynı uygulamaya yönlendirilir; hangi tarafın açılacağını uygulama alan adından anlar. Hostinger bir uygulamaya tek alan adı bağlatıyorsa aynı depodan iki uygulama aç: sitede `APP_MODE=site`, panelde `APP_MODE=panel`. İkisine de aynı `DATABASE_URL` ve `LOCAL_SESSION_SECRET` ver.
 6. **SSL:** iki alan adı için de ücretsiz SSL'i aç.
 7. **Kontrol:** `panel.opiacoffee.com.tr` adresinde sahip hesabıyla giriş yap, Masa düzeni › Masa QR kodları sayfasından kodları yazdır, bir kodu telefonla okutup deneme siparişi ver.
+
+**Menü güncellemesi (kurulumdan sonra):** `npm run setup:mysql` kurulu kafenin menüsüne dokunmaz. `src/lib/seed/opia.ts` değiştiyse (ör. 23 Kasım 2026 menüsü) önce yedek al, sonra:
+   ```bash
+   npm run menu:mysql              # ne değişeceğini gösterir
+   npm run menu:mysql -- --apply   # uygular
+   ```
+   Ürünler adla eşleşir; fiyat ve kategori güncellenir, yeni ürünler eklenir, menüden çıkanlar satıştan kalkar (geçmiş satışlar ve reçeteler kalır).
 
 `DATABASE_URL` tanımlı değilse site, `src/site/content/menu.json` içindeki fiyatlarla menüyü göstermeye devam eder; QR sipariş ve panel çalışmaz.

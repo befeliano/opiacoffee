@@ -3,10 +3,13 @@
 import type { Ctx, Row } from "./db";
 import {
   bit,
+  bizDate,
   cleanText,
   fail,
   field,
   idsJson,
+  iso,
+  left,
   newId,
   normalizeUuids,
   num,
@@ -328,12 +331,17 @@ export async function admin_cafe_seed_ids(ctx: Ctx, a: Row) {
 // ---------------------------------------------------------------------
 // Giderler
 // ---------------------------------------------------------------------
-const EXPENSE_CATEGORIES = ["kira", "fatura", "personel", "banka", "vergi", "ekipman", "pazarlama", "diger"];
+const EXPENSE_CATEGORIES = ["kira", "fatura", "personel", "banka", "vergi", "ekipman", "pazarlama", "market", "diger"];
 
 export async function finance_expenses(ctx: Ctx, a: Row) {
   const cafe = uuid(a.p_cafe);
   await requireRole(ctx, cafe, "owner");
-  const rows = await ctx.all("SELECT * FROM expenses WHERE cafe_id = ? ORDER BY kind, category, name", [cafe]);
+  const rows = await ctx.all(
+    `SELECT e.*, f.name AS file_name, f.mime AS file_mime, f.size AS file_size
+     FROM expenses e LEFT JOIN expense_files f ON f.expense_id = e.id
+     WHERE e.cafe_id = ? ORDER BY e.kind, e.category, e.name`,
+    [cafe],
+  );
   return rows.map((e) => ({
     id: e.id,
     kind: e.kind,
@@ -343,7 +351,92 @@ export async function finance_expenses(ctx: Ctx, a: Row) {
     starts_on: e.starts_on,
     ends_on: e.ends_on,
     note: e.note,
+    paid_at: iso(e.paid_at),
+    paid_method: e.paid_method ?? null,
+    paid_by: e.paid_by ?? "",
+    file: e.file_name ? { name: e.file_name, mime: e.file_mime, size: Number(e.file_size) } : null,
   }));
+}
+
+async function memberName(ctx: Ctx, cafe: string) {
+  return (await ctx.val<string>("SELECT display_name FROM cafe_members WHERE cafe_id = ? AND user_id = ?", [cafe, ctx.uid])) ?? "";
+}
+
+/** Ödendi (nakit / kart) ya da ödenmedi (p_method boş) */
+export async function finance_pay_expense(ctx: Ctx, a: Row) {
+  const cafe = uuid(a.p_cafe);
+  const id = uuid(a.p_id);
+  await requireRole(ctx, cafe, "owner");
+  const method = a.p_method === null || a.p_method === undefined ? null : String(a.p_method);
+  if (method !== null && method !== "cash" && method !== "card") fail("E_INVALID_INPUT");
+  if (!(await ctx.val("SELECT 1 FROM expenses WHERE id = ? AND cafe_id = ?", [id, cafe]))) fail("E_NOT_FOUND");
+  await ctx.run("UPDATE expenses SET paid_at = ?, paid_method = ?, paid_by = ?, updated_at = ? WHERE id = ?", [
+    method ? ctx.now : null,
+    method,
+    method ? await memberName(ctx, cafe) : "",
+    ctx.now,
+    id,
+  ]);
+  return null;
+}
+
+/** Personel: kasadan nakit ödenen alışveriş (bugünün tarihiyle, "Market" kategorisinde, ödendi) */
+export async function finance_cash_expense(ctx: Ctx, a: Row) {
+  const cafe = uuid(a.p_cafe);
+  await requireRole(ctx, cafe, "staff");
+  const name = cleanText(a.p_name, 60);
+  const raw = num(a.p_amount);
+  const amount = raw === null ? null : round(raw, 2);
+  if (name === "") fail("E_NAME_REQUIRED");
+  if (amount === null || amount <= 0 || amount >= 1000000) fail("E_INVALID_AMOUNT");
+  const tz = (await ctx.val<string>("SELECT timezone FROM cafes WHERE id = ?", [cafe])) ?? "Europe/Istanbul";
+  const id = newId();
+  await ctx.run(
+    `INSERT INTO expenses (id, cafe_id, kind, category, name, amount, starts_on, note, paid_at, paid_method, paid_by, created_at, updated_at)
+     VALUES (?, ?, 'one_time', 'market', ?, ?, ?, ?, ?, 'cash', ?, ?, ?)`,
+    [id, cafe, name, amount, bizDate(ctx.now, tz), cleanText(a.p_note ?? "", 200), ctx.now, await memberName(ctx, cafe), ctx.now, ctx.now],
+  );
+  return { id };
+}
+
+const FILE_MIMES = ["application/pdf", "image/jpeg", "image/png", "image/webp"];
+
+/** Fatura dosyası (base64): ekle ya da değiştir */
+export async function finance_set_file(ctx: Ctx, a: Row) {
+  const cafe = uuid(a.p_cafe);
+  const id = uuid(a.p_id);
+  await requireRole(ctx, cafe, "owner");
+  if (!(await ctx.val("SELECT 1 FROM expenses WHERE id = ? AND cafe_id = ?", [id, cafe]))) fail("E_NOT_FOUND");
+  const mime = String(a.p_mime ?? "");
+  const b64 = String(a.p_data ?? "");
+  if (!FILE_MIMES.includes(mime) || !/^[A-Za-z0-9+/=s]*$/.test(b64)) fail("E_INVALID_INPUT");
+  const data = Buffer.from(b64, "base64");
+  if (data.length < 1 || data.length > 3145728) fail("E_INVALID_INPUT");
+  const name = left(cleanText(a.p_name, 120), 120);
+  if (!name) fail("E_INVALID_INPUT");
+  await ctx.run(
+    `INSERT INTO expense_files (expense_id, cafe_id, name, mime, size, data, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)
+     ON DUPLICATE KEY UPDATE name = VALUES(name), mime = VALUES(mime), size = VALUES(size), data = VALUES(data), created_at = VALUES(created_at)`,
+    [id, cafe, name, mime, data.length, data, ctx.now],
+  );
+  return { name, mime, size: data.length };
+}
+
+export async function finance_get_file(ctx: Ctx, a: Row) {
+  const cafe = uuid(a.p_cafe);
+  const id = uuid(a.p_id);
+  await requireRole(ctx, cafe, "owner");
+  const f = await ctx.one("SELECT name, mime, size, data FROM expense_files WHERE expense_id = ? AND cafe_id = ?", [id, cafe]);
+  if (!f) fail("E_NOT_FOUND");
+  return { name: f.name, mime: f.mime, size: Number(f.size), data: Buffer.from(f.data).toString("base64") };
+}
+
+export async function finance_delete_file(ctx: Ctx, a: Row) {
+  const cafe = uuid(a.p_cafe);
+  const id = uuid(a.p_id);
+  await requireRole(ctx, cafe, "owner");
+  await ctx.run("DELETE FROM expense_files WHERE expense_id = ? AND cafe_id = ?", [id, cafe]);
+  return null;
 }
 
 function monthStart(date: string) {

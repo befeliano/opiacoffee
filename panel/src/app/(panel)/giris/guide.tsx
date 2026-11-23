@@ -35,8 +35,8 @@ const STEPS: { title: string; items: string[] }[] = [
     title: "Açılış ve kapanış",
     items: [
       "Kasa sayımı kapalıysa kafe çalışma saatlerinde kendiliğinden açık sayılır; açıp kapatmak gerekmez.",
-      "Kasa sayımı açıksa sabah Masalar ekranında “Kafeyi aç” → açılış nakdini yaz (yoksa “Pas geç”).",
-      "Gece tüm hesapları kapat; sayım açıksa “Kafeyi kapat” → kasadaki nakdi ve POS gün sonu toplamını yaz. Sistem “tuttu”, “eksik” ya da “fazla” der.",
+      "Kasa sayımı açıksa sabah Masalar ekranında “Dükkânı aç” → açılış nakdini yaz (yoksa “Pas geç”).",
+      "Gece tüm hesapları kapat; sayım açıksa “Dükkânı kapat” → kasadaki nakdi ve POS gün sonu toplamını yaz. Sistem “tuttu”, “eksik” ya da “fazla” der.",
     ],
   },
 ];

@@ -287,3 +287,13 @@ export async function setGuestsAction(cafeId: string, orderId: string, guests: n
     return rpc<TableOrderData>("pos_set_guests", { p_cafe: input.cafeId, p_order: input.orderId, p_guests: input.guests });
   });
 }
+
+/** Kasadan nakit ödenen alışveriş (ör. markete koşulup alınan limon): gider olarak kaydedilir, gün sonu kasadan düşer */
+export async function cashExpenseAction(cafeId: string, name: string, amount: number, note = ""): Promise<ActionResult<{ id: string }>> {
+  return run(async () => {
+    const input = z
+      .object({ cafeId: id, name: z.string().trim().min(1).max(60), amount: z.number().positive().max(999_999), note: z.string().trim().max(200) })
+      .parse({ cafeId, name, amount, note });
+    return rpc<{ id: string }>("finance_cash_expense", { p_cafe: input.cafeId, p_name: input.name, p_amount: input.amount, p_note: input.note });
+  });
+}

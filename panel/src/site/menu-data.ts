@@ -28,6 +28,8 @@ export interface SiteProduct {
   tags: string[];
   tags_en: string[];
   allergens: string[];
+  /** Alerjen bilgisi yok: "içermez" denmez, personele sorulması söylenir */
+  allergenUnknown: boolean;
   seasonal: boolean;
   featured: boolean;
   soldout: boolean;
@@ -71,6 +73,7 @@ function fromContent(p: ContentProduct): SiteProduct {
   return {
     ...p,
     dbId: null,
+    allergenUnknown: p.allergenUnknown ?? false,
     soldout: false,
     options: { milk: false, shot: false, temp: false, dessert: false },
     nutrition: p.nutrition as Nutrition,
@@ -175,6 +178,7 @@ async function loadLive(): Promise<SiteMenu> {
       tags: base?.tags ?? [],
       tags_en: base?.tags_en ?? [],
       allergens: base?.allergens ?? [],
+      allergenUnknown: base ? base.allergenUnknown : true,
       seasonal: base?.seasonal ?? false,
       featured: base?.featured ?? false,
       soldout: !p.is_active,

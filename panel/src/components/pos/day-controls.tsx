@@ -2,10 +2,10 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { AlertTriangle, Banknote, CheckCircle2, CreditCard, DoorClosed, DoorOpen, Sunrise, Ticket } from "lucide-react";
-import { dayCloseAction, dayOpenAction, dayStatusAction } from "@/app/(panel)/[cafe]/masalar/actions";
+import { AlertTriangle, Banknote, CheckCircle2, CreditCard, DoorClosed, DoorOpen, ShoppingBasket, Sunrise, Ticket } from "lucide-react";
+import { cashExpenseAction, dayCloseAction, dayOpenAction, dayStatusAction } from "@/app/(panel)/[cafe]/masalar/actions";
 import { Button, Spinner } from "@/components/ui/button";
-import { Field, NumberInput } from "@/components/ui/field";
+import { Field, Input, NumberInput } from "@/components/ui/field";
 import { Sheet } from "@/components/ui/sheet";
 import { useToast } from "@/components/ui/toast";
 import type { CafeDay, DayCloseResult, DayStatus, FloorData } from "@/lib/api/types";
@@ -14,7 +14,7 @@ import { formatTime } from "@/lib/domain/time";
 import { tl, currencySymbol } from "@/lib/format";
 
 /**
- * Sabah "Kafeyi aç", gece "Kafeyi kapat". Kapanışta kasadaki nakit sayılır;
+ * Sabah "Dükkânı aç", gece "Dükkânı kapat". Kapanışta kasadaki nakit sayılır;
  * sistem beklenen nakitle karşılaştırıp farkı kaydeder. Sayımlar isteğe
  * bağlıdır: "Pas geç" ile girilmeden de açılıp kapanır.
  */
@@ -31,7 +31,7 @@ export function DayBar({
   timezone: string;
   openOrders: number;
 }) {
-  const [sheet, setSheet] = useState<null | "open" | "close">(null);
+  const [sheet, setSheet] = useState<null | "open" | "close" | "expense">(null);
   const stale = !!day && day.business_date < businessDate;
 
   // Sayfalar, gün kapanınca da (sonuç ekranı) açık kalsın diye dalların dışında
@@ -39,6 +39,7 @@ export function DayBar({
     <>
       {sheet === "open" && <OpenDaySheet cafeId={cafeId} onClose={() => setSheet(null)} />}
       {sheet === "close" && <CloseDaySheet cafeId={cafeId} timezone={timezone} openOrders={openOrders} onClose={() => setSheet(null)} />}
+      {sheet === "expense" && <CashExpenseSheet cafeId={cafeId} onClose={() => setSheet(null)} />}
     </>
   );
 
@@ -50,11 +51,11 @@ export function DayBar({
             <Sunrise className="size-6" />
           </span>
           <span className="flex-1">
-            <span className="block text-[17px] font-extrabold text-stone-900">Kafe kapalı</span>
+            <span className="block text-[17px] font-extrabold text-stone-900">Dükkân kapalı</span>
             <span className="block text-[13px] text-stone-600">Satışa başlamak için günü aç. Gece kapanışta kasa sayılır.</span>
           </span>
           <Button size="lg" onClick={() => setSheet("open")}>
-            <DoorOpen className="size-5" /> Kafeyi aç
+            <DoorOpen className="size-5" /> Dükkânı aç
           </Button>
         </div>
         {sheets}
@@ -76,16 +77,24 @@ export function DayBar({
             <b className="text-amber-900">Önceki gün kapatılmamış</b>
           ) : (
             <>
-              <b className="text-stone-900">Kafe açık</b> · {formatTime(day.opened_at, timezone)}’den beri
+              <b className="text-stone-900">Dükkân açık</b> · {formatTime(day.opened_at, timezone)}’den beri
             </>
           )}
         </span>
         <button
           type="button"
+          onClick={() => setSheet("expense")}
+          className="flex h-10 shrink-0 items-center gap-1.5 rounded-xl border border-stone-200 bg-white px-3 text-[14px] font-bold text-stone-800 hover:bg-stone-50"
+          title="Kasadan nakit ödenen alışveriş (ör. markete koşulup alınan limon)"
+        >
+          <ShoppingBasket className="size-4" /> <span className="hidden sm:inline">Kasadan ödeme</span>
+        </button>
+        <button
+          type="button"
           onClick={() => setSheet("close")}
           className="flex h-10 shrink-0 items-center gap-1.5 rounded-xl bg-stone-900 px-3.5 text-[14px] font-bold text-white hover:bg-stone-800"
         >
-          <DoorClosed className="size-4" /> Kafeyi kapat
+          <DoorClosed className="size-4" /> Dükkânı kapat
         </button>
       </div>
       {sheets}
@@ -106,7 +115,7 @@ function OpenDaySheet({ cafeId, onClose }: { cafeId: string; onClose: () => void
     setBusy(null);
     if (!result) return toast.show("Bağlantı sorunu. Tekrar dene.", "error");
     if (!result.ok) return toast.show(result.error, "error");
-    toast.show("Günaydın! Kafe açıldı ☕");
+    toast.show("Günaydın! Dükkân açıldı ☕");
     onClose();
     router.refresh();
   };
@@ -115,7 +124,7 @@ function OpenDaySheet({ cafeId, onClose }: { cafeId: string; onClose: () => void
     <Sheet
       open
       onClose={onClose}
-      title="Kafeyi aç"
+      title="Dükkânı aç"
       description="Güne başlarken kasada bulunan nakdi gir ya da pas geç"
       size="sm"
       footer={
@@ -124,7 +133,7 @@ function OpenDaySheet({ cafeId, onClose }: { cafeId: string; onClose: () => void
             {busy === "skip" && <Spinner />} Pas geç
           </Button>
           <Button size="xl" className="flex-[2] px-4" disabled={!!busy || cash === null} onClick={() => submit(cash)}>
-            {busy === "open" ? <Spinner /> : <DoorOpen className="size-5" />} Kafeyi aç
+            {busy === "open" ? <Spinner /> : <DoorOpen className="size-5" />} Dükkânı aç
           </Button>
         </div>
       }
@@ -209,7 +218,7 @@ function CloseDaySheet({
     <Sheet
       open
       onClose={onClose}
-      title="Kafeyi kapat"
+      title="Dükkânı kapat"
       description="Kasadaki nakdi ve POS kart toplamını gir ya da pas geç"
       size="sm"
       footer={
@@ -236,7 +245,7 @@ function CloseDaySheet({
         ) : open > 0 ? (
           <p className="flex items-start gap-2 rounded-xl bg-amber-50 px-3 py-2.5 text-[14px] text-amber-900">
             <AlertTriangle className="mt-0.5 size-5 shrink-0" />
-            {open} açık masa var. Kafeyi kapatmadan önce hesapları kapat ya da iptal et.
+            {open} açık masa var. Dükkânı kapatmadan önce hesapları kapat ya da iptal et.
           </p>
         ) : null}
 
@@ -254,6 +263,7 @@ function CloseDaySheet({
                   <p className="text-[22px] font-extrabold tabular-nums">{tl(live.expected_cash)}</p>
                   <p className="text-[11px] text-stone-400">
                     Açılış {tl(status?.open?.opening_cash ?? 0)} + nakit satış {tl(live.cash)}
+                    {(live.expenses_cash ?? 0) > 0 && <> − kasadan ödenen gider {tl(live.expenses_cash ?? 0)}</>}
                   </p>
                 </>
               ) : (
@@ -383,5 +393,57 @@ function Stat({ label, value, icon }: { label: string; value: string; icon?: Rea
       </p>
       <p className="text-[16px] font-extrabold tabular-nums">{value}</p>
     </div>
+  );
+}
+
+/**
+ * Kasadan nakit ödenen alışveriş (ör. limon bitti, markete koşuldu): gider olarak "Market / malzeme"
+ * kategorisinde ödendi kaydedilir; gün sonunda beklenen nakitten düşülür. Faturası sonra Finans ekranından eklenir.
+ */
+function CashExpenseSheet({ cafeId, onClose }: { cafeId: string; onClose: () => void }) {
+  const router = useRouter();
+  const toast = useToast();
+  const [name, setName] = useState("");
+  const [amount, setAmount] = useState<number | null>(null);
+  const [note, setNote] = useState("");
+  const [busy, setBusy] = useState(false);
+
+  const submit = async () => {
+    if (!name.trim() || !amount) return toast.show("Ne alındığını ve tutarı yaz.", "error");
+    setBusy(true);
+    const result = await cashExpenseAction(cafeId, name.trim(), amount, note.trim()).catch(() => null);
+    setBusy(false);
+    if (!result) return toast.show("Bağlantı sorunu. Tekrar dene.", "error");
+    if (!result.ok) return toast.show(result.error, "error");
+    toast.show("Kaydedildi; gün sonu kasadan düşülecek");
+    onClose();
+    router.refresh();
+  };
+
+  return (
+    <Sheet
+      open
+      onClose={onClose}
+      title="Kasadan ödeme"
+      description="Kasadaki nakitle yapılan alışveriş. Gün sonu kasa sayımında hesaba katılır."
+      size="sm"
+      footer={
+        <Button size="xl" className="w-full" disabled={busy || !name.trim() || !amount} onClick={submit}>
+          {busy ? <Spinner /> : <ShoppingBasket className="size-5" />} Kaydet
+        </Button>
+      }
+    >
+      <div className="flex flex-col gap-3">
+        <Field label="Ne alındı?">
+          <Input value={name} onChange={(e) => setName(e.target.value)} maxLength={60} placeholder="örn. Limon (Migros)" autoFocus />
+        </Field>
+        <Field label="Tutar">
+          <NumberInput value={amount} onValueChange={setAmount} suffix={currencySymbol()} placeholder="0" inputClassName="h-14 text-[22px] font-bold" />
+        </Field>
+        <Field label="Not" hint="İsteğe bağlı">
+          <Input value={note} onChange={(e) => setNote(e.target.value)} maxLength={200} />
+        </Field>
+      </div>
+    </Sheet>
   );
 }

@@ -1,53 +1,117 @@
 {
  "_note": "Sitedeki menü içerikleri. Fiyat, satışta olma ve sıra adisyondan (panel > Menü) gelir; buradaki price yalnızca veritabanına ulaşılamazsa kullanılır. Ürünler adisyondaki adıyla eşleşir.",
  "season": {
-  "title": "Kışa Özel",
-  "label": "Kış 2026",
-  "subtitle": "Zencefil, tarçın, bal ve salep. Soğuk günlerin fincanları barda.",
-  "title_en": "Winter Specials",
-  "label_en": "Winter 2026",
-  "subtitle_en": "Ginger, cinnamon, honey and salep. Cups for cold days, at the bar now."
+  "title": "OPIA Fall&Winter",
+  "label": "Sonbahar & Kış",
+  "subtitle": "Levant, Pumpkin Spice Latte, salep ve sıcak çikolata: soğuk günlerin fincanları barda.",
+  "title_en": "OPIA Fall&Winter",
+  "label_en": "Fall & Winter",
+  "subtitle_en": "Levant, pumpkin spice latte, salep and hot chocolate: cups for cold days, at the bar now."
  },
  "categories": [
   {
-   "id": "sicak-kahveler",
-   "name": "Sıcak Kahveler",
-   "name_en": "Hot Coffee",
-   "note": "Espresso bazlı, filtre ve Türk kahvesi.",
-   "note_en": "Espresso drinks, filter and Turkish coffee.",
+   "id": "opia-fall-winter",
+   "name": "OPIA Fall&Winter",
+   "name_en": "OPIA Fall&Winter",
+   "note": "Sezonun fincanları.",
+   "note_en": "This season's cups.",
    "sort": 1
+  },
+  {
+   "id": "protein-bar",
+   "name": "PROTEIN Bar",
+   "name_en": "PROTEIN Bar",
+   "note": "Protein shake'ler; besin değerleri açıklamada.",
+   "note_en": "Protein shakes; macros in the description.",
+   "sort": 2
+  },
+  {
+   "id": "espresso-bar",
+   "name": "Espresso Bar",
+   "name_en": "Espresso Bar",
+   "note": "Espresso bazlı sıcak kahveler.",
+   "note_en": "Hot espresso drinks.",
+   "sort": 3
+  },
+  {
+   "id": "brew-bar",
+   "name": "Brew Bar",
+   "name_en": "Brew Bar",
+   "note": "Filtre kahve ve günün çekirdekleri: V60/Kalita ya da Japanese Cold Brew.",
+   "note_en": "Filter coffee and single origins: V60/Kalita or Japanese cold brew.",
+   "sort": 4
+  },
+  {
+   "id": "cold-coffee",
+   "name": "Cold Coffee",
+   "name_en": "Cold Coffee",
+   "note": "Buzlu kahveler.",
+   "note_en": "Iced coffees.",
+   "sort": 5
+  },
+  {
+   "id": "turk-kahvesi",
+   "name": "Türk Kahvesi",
+   "name_en": "Turkish Coffee",
+   "note": "",
+   "note_en": "",
+   "sort": 6
   },
   {
    "id": "matcha-bar",
    "name": "Matcha Bar",
    "name_en": "Matcha Bar",
-   "note": "",
-   "note_en": "",
-   "sort": 2
+   "note": "Sıcak ve soğuk matcha.",
+   "note_en": "Hot and iced matcha.",
+   "sort": 7
   },
   {
-   "id": "kisa-ozel",
-   "name": "Kışa Özel",
-   "name_en": "Winter Specials",
-   "note": "Soğuk günlerin fincanları.",
-   "note_en": "Cups for cold days.",
-   "sort": 3
+   "id": "ube-bar",
+   "name": "Ube Bar",
+   "name_en": "Ube Bar",
+   "note": "Sıcak ve soğuk ube.",
+   "note_en": "Hot and iced ube.",
+   "sort": 8
   },
   {
-   "id": "sicak-cikolata",
-   "name": "Sıcak Çikolata",
-   "name_en": "Hot Chocolate",
-   "note": "",
-   "note_en": "",
-   "sort": 4
+   "id": "tea-bar",
+   "name": "Tea Bar",
+   "name_en": "Tea Bar",
+   "note": "Demlik çaylar.",
+   "note_en": "Loose-leaf teas.",
+   "sort": 9
   },
   {
    "id": "tatlilar",
    "name": "Tatlılar",
    "name_en": "Desserts",
    "note": "Günlük çeşitlerimizi sorunuz.",
-   "note_en": "Ask for today’s selection.",
-   "sort": 5
+   "note_en": "Ask for today's selection.",
+   "sort": 10
+  },
+  {
+   "id": "sandvicler",
+   "name": "Sandviçler",
+   "name_en": "Sandwiches",
+   "note": "",
+   "note_en": "",
+   "sort": 11
+  },
+  {
+   "id": "diger-sicak-icecekler",
+   "name": "Diğer Sıcak İçecekler",
+   "name_en": "Other Hot Drinks",
+   "note": "",
+   "note_en": "",
+   "sort": 12
+  },
+  {
+   "id": "diger-soguk-icecekler",
+   "name": "Diğer Soğuk İçecekler",
+   "name_en": "Other Cold Drinks",
+   "note": "",
+   "note_en": "",
+   "sort": 13
   },
   {
    "id": "ekstralar",
@@ -55,7 +119,7 @@
    "name_en": "Extras",
    "note": "İçeceğine ve tatlına ekle.",
    "note_en": "Add to your drink or dessert.",
-   "sort": 6
+   "sort": 14
   }
  ],
  "allergens": [
@@ -132,24 +196,395 @@
  ],
  "products": [
   {
+   "id": "levant",
+   "category": "opia-fall-winter",
+   "name": "Levant",
+   "name_en": "",
+   "lang": "en",
+   "description": "Espresso, çikolata ve tahinli ipeksi foam ile hazırlanan modern mocha yorumu.",
+   "description_en": "",
+   "price": 275,
+   "priceNote": "",
+   "priceNote_en": "",
+   "image": "",
+   "tags": [],
+   "tags_en": [],
+   "allergens": [
+    "sut",
+    "susam"
+   ],
+   "allergenUnknown": false,
+   "seasonal": true,
+   "featured": false,
+   "orderable": true,
+   "sort": 1,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "sicak-cikolata",
+   "category": "opia-fall-winter",
+   "name": "Sıcak Çikolata",
+   "name_en": "Hot Chocolate",
+   "lang": "tr",
+   "description": "Çikolata ve süt. Yoğun ve koyu.",
+   "description_en": "Chocolate and milk. Rich and dark.",
+   "price": 200,
+   "priceNote": "",
+   "priceNote_en": "",
+   "image": "",
+   "tags": [],
+   "tags_en": [],
+   "allergens": [
+    "sut",
+    "soya"
+   ],
+   "allergenUnknown": false,
+   "seasonal": true,
+   "featured": false,
+   "orderable": true,
+   "sort": 2,
+   "nutrition": {
+    "basis": "ml",
+    "per100": {
+     "kcal": 103,
+     "fat": 3.2,
+     "satFat": 1.9,
+     "carb": 15.1,
+     "sugar": 14.9,
+     "protein": 3.2,
+     "salt": 0.11,
+     "caffeine": 0
+    },
+    "servings": [
+     {
+      "label": "Standart (300 ml)",
+      "amount": 300,
+      "price": 200
+     }
+    ]
+   }
+  },
+  {
+   "id": "salep",
+   "category": "opia-fall-winter",
+   "name": "Salep",
+   "name_en": "Salep",
+   "lang": "en",
+   "description": "Sütle pişen, tarçınla servis edilen klasik kış içeceği.",
+   "description_en": "A classic Turkish winter drink, cooked with milk and served with cinnamon.",
+   "price": 200,
+   "priceNote": "",
+   "priceNote_en": "",
+   "image": "",
+   "tags": [],
+   "tags_en": [],
+   "allergens": [
+    "sut"
+   ],
+   "allergenUnknown": false,
+   "seasonal": true,
+   "featured": false,
+   "orderable": true,
+   "sort": 3,
+   "nutrition": {
+    "basis": "ml",
+    "per100": {
+     "kcal": 94,
+     "fat": 2.6,
+     "satFat": 1.6,
+     "carb": 14.5,
+     "sugar": 12.5,
+     "protein": 2.8,
+     "salt": 0.1,
+     "caffeine": 0
+    },
+    "servings": [
+     {
+      "label": "Standart (250 ml)",
+      "amount": 250,
+      "price": 200
+     }
+    ]
+   }
+  },
+  {
+   "id": "cafe-miel",
+   "category": "opia-fall-winter",
+   "name": "Cafe Miel",
+   "name_en": "Cafe Miel",
+   "lang": "en",
+   "description": "Tarçın, Bal, Espresso, Süt.",
+   "description_en": "",
+   "price": 220,
+   "priceNote": "",
+   "priceNote_en": "",
+   "image": "",
+   "tags": [],
+   "tags_en": [],
+   "allergens": [
+    "sut"
+   ],
+   "allergenUnknown": false,
+   "seasonal": true,
+   "featured": false,
+   "orderable": true,
+   "sort": 4,
+   "nutrition": {
+    "basis": "ml",
+    "per100": {
+     "kcal": 62,
+     "fat": 2.4,
+     "satFat": 1.4,
+     "carb": 8.1,
+     "sugar": 7.6,
+     "protein": 2.3,
+     "salt": 0.08,
+     "caffeine": 42
+    },
+    "servings": [
+     {
+      "label": "Standart (300 ml)",
+      "amount": 300,
+      "price": 220
+     }
+    ]
+   }
+  },
+  {
+   "id": "golden-latte",
+   "category": "opia-fall-winter",
+   "name": "Golden Latte",
+   "name_en": "Golden Latte",
+   "lang": "en",
+   "description": "Zencefil, Tarçın, Bal, Süt",
+   "description_en": "",
+   "price": 210,
+   "priceNote": "",
+   "priceNote_en": "",
+   "image": "",
+   "tags": [],
+   "tags_en": [],
+   "allergens": [
+    "sut"
+   ],
+   "allergenUnknown": false,
+   "seasonal": true,
+   "featured": false,
+   "orderable": true,
+   "sort": 5,
+   "nutrition": {
+    "basis": "ml",
+    "per100": {
+     "kcal": 72,
+     "fat": 3,
+     "satFat": 1.7,
+     "carb": 8.8,
+     "sugar": 8.4,
+     "protein": 2.8,
+     "salt": 0.1,
+     "caffeine": 0
+    },
+    "servings": [
+     {
+      "label": "Standart (300 ml)",
+      "amount": 300,
+      "price": 210
+     }
+    ]
+   }
+  },
+  {
+   "id": "pumpkin-spice-latte",
+   "category": "opia-fall-winter",
+   "name": "Pumpkin Spice Latte",
+   "name_en": "",
+   "lang": "en",
+   "description": "",
+   "description_en": "",
+   "price": 220,
+   "priceNote": "",
+   "priceNote_en": "",
+   "image": "",
+   "tags": [],
+   "tags_en": [],
+   "allergens": [
+    "sut"
+   ],
+   "allergenUnknown": false,
+   "seasonal": true,
+   "featured": false,
+   "orderable": true,
+   "sort": 6,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "berry-bliss",
+   "category": "protein-bar",
+   "name": "Berry Bliss",
+   "name_en": "",
+   "lang": "en",
+   "description": "24 g protein / 13 g karbonhidrat / 5 g yağ Protein Tozu, Kırmızı Meyveler, Süt, Buz",
+   "description_en": "",
+   "price": 260,
+   "priceNote": "",
+   "priceNote_en": "",
+   "image": "berry-bliss.webp",
+   "tags": [],
+   "tags_en": [],
+   "allergens": [
+    "sut"
+   ],
+   "allergenUnknown": false,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 7,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "golden-crunch",
+   "category": "protein-bar",
+   "name": "Golden Crunch",
+   "name_en": "",
+   "lang": "en",
+   "description": "24 g protein / 20 g karbonhidrat / 5 g yağ Protein Tozu, Muz, Tarçın, Süt, Buz",
+   "description_en": "",
+   "price": 280,
+   "priceNote": "",
+   "priceNote_en": "",
+   "image": "golden-crunch.webp",
+   "tags": [],
+   "tags_en": [],
+   "allergens": [
+    "sut"
+   ],
+   "allergenUnknown": false,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 8,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "dark-matter",
+   "category": "protein-bar",
+   "name": "Dark Matter",
+   "name_en": "",
+   "lang": "en",
+   "description": "25 g protein / 14 g karbonhidrat / 10 g yağ Protein Tozu, Espresso, Bitter Çikolata, Kakao, Süt, Buz",
+   "description_en": "",
+   "price": 290,
+   "priceNote": "",
+   "priceNote_en": "",
+   "image": "dark-matter.webp",
+   "tags": [],
+   "tags_en": [],
+   "allergens": [
+    "sut"
+   ],
+   "allergenUnknown": false,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 9,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "green-muse",
+   "category": "protein-bar",
+   "name": "Green Muse",
+   "name_en": "",
+   "lang": "en",
+   "description": "24 g protein / 19 g karbonhidrat / 5 g yağ Protein Tozu, Matcha, Muz, Süt, Buz",
+   "description_en": "",
+   "price": 320,
+   "priceNote": "",
+   "priceNote_en": "",
+   "image": "green-muse.webp",
+   "tags": [],
+   "tags_en": [],
+   "allergens": [
+    "sut"
+   ],
+   "allergenUnknown": false,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 10,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "mango-ritual",
+   "category": "protein-bar",
+   "name": "Mango Ritual",
+   "name_en": "",
+   "lang": "en",
+   "description": "21 g protein / 11 g karbonhidrat / 3 g yağ Protein Tozu, Mango, Hindistan Cevizi Sütü, Buz",
+   "description_en": "",
+   "price": 320,
+   "priceNote": "",
+   "priceNote_en": "",
+   "image": "mango-ritual.webp",
+   "tags": [],
+   "tags_en": [],
+   "allergens": [
+    "sut"
+   ],
+   "allergenUnknown": false,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 11,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
    "id": "espresso",
-   "category": "sicak-kahveler",
+   "category": "espresso-bar",
    "name": "Espresso",
    "name_en": "Espresso",
    "lang": "en",
    "description": "Yoğun ve dengeli, tek shot.",
    "description_en": "Intense and balanced, a single shot.",
-   "price": 120,
+   "price": 140,
    "priceNote": "",
    "priceNote_en": "",
    "image": "",
    "tags": [],
    "tags_en": [],
    "allergens": [],
+   "allergenUnknown": false,
    "seasonal": false,
    "featured": false,
    "orderable": true,
-   "sort": 1,
+   "sort": 12,
    "nutrition": {
     "basis": "ml",
     "per100": {
@@ -166,30 +601,31 @@
      {
       "label": "Single (30 ml)",
       "amount": 30,
-      "price": 120
+      "price": 140
      }
     ]
    }
   },
   {
    "id": "americano",
-   "category": "sicak-kahveler",
+   "category": "espresso-bar",
    "name": "Americano",
    "name_en": "Americano",
    "lang": "en",
    "description": "Espresso ve sıcak su. Temiz ve hafif.",
    "description_en": "Espresso and hot water. Clean and light.",
-   "price": 140,
+   "price": 170,
    "priceNote": "",
    "priceNote_en": "",
    "image": "",
    "tags": [],
    "tags_en": [],
    "allergens": [],
+   "allergenUnknown": false,
    "seasonal": false,
    "featured": false,
    "orderable": true,
-   "sort": 2,
+   "sort": 13,
    "nutrition": {
     "basis": "ml",
     "per100": {
@@ -206,20 +642,20 @@
      {
       "label": "Standart (240 ml)",
       "amount": 240,
-      "price": 140
+      "price": 170
      }
     ]
    }
   },
   {
    "id": "latte",
-   "category": "sicak-kahveler",
+   "category": "espresso-bar",
    "name": "Latte",
    "name_en": "Latte",
    "lang": "en",
    "description": "Yumuşak, sütlü, uzun içimli.",
    "description_en": "Smooth, milky and long.",
-   "price": 170,
+   "price": 190,
    "priceNote": "",
    "priceNote_en": "",
    "image": "",
@@ -228,10 +664,11 @@
    "allergens": [
     "sut"
    ],
+   "allergenUnknown": false,
    "seasonal": false,
    "featured": false,
    "orderable": true,
-   "sort": 3,
+   "sort": 14,
    "nutrition": {
     "basis": "ml",
     "per100": {
@@ -248,62 +685,20 @@
      {
       "label": "Standart (300 ml)",
       "amount": 300,
-      "price": 170
-     }
-    ]
-   }
-  },
-  {
-   "id": "piccolo-latte",
-   "category": "sicak-kahveler",
-   "name": "Piccolo Latte",
-   "name_en": "Piccolo Latte",
-   "lang": "en",
-   "description": "Küçük bardakta yoğun, sütlü bir içim.",
-   "description_en": "A small, strong and milky cup.",
-   "price": 160,
-   "priceNote": "",
-   "priceNote_en": "",
-   "image": "",
-   "tags": [],
-   "tags_en": [],
-   "allergens": [
-    "sut"
-   ],
-   "seasonal": false,
-   "featured": false,
-   "orderable": true,
-   "sort": 4,
-   "nutrition": {
-    "basis": "ml",
-    "per100": {
-     "kcal": 45,
-     "fat": 2.4,
-     "satFat": 1.3,
-     "carb": 3.9,
-     "sugar": 3.4,
-     "protein": 2.2,
-     "salt": 0.08,
-     "caffeine": 64
-    },
-    "servings": [
-     {
-      "label": "Standart (100 ml)",
-      "amount": 100,
-      "price": 160
+      "price": 190
      }
     ]
    }
   },
   {
    "id": "flat-white",
-   "category": "sicak-kahveler",
+   "category": "espresso-bar",
    "name": "Flat White",
    "name_en": "Flat White",
    "lang": "en",
    "description": "Çift shot, ipek dokulu süt. Kahve karakteri önde.",
    "description_en": "Double shot with silky milk. The coffee leads.",
-   "price": 170,
+   "price": 190,
    "priceNote": "",
    "priceNote_en": "",
    "image": "",
@@ -312,10 +707,11 @@
    "allergens": [
     "sut"
    ],
+   "allergenUnknown": false,
    "seasonal": false,
    "featured": true,
    "orderable": true,
-   "sort": 5,
+   "sort": 15,
    "nutrition": {
     "basis": "ml",
     "per100": {
@@ -332,20 +728,20 @@
      {
       "label": "Standart (180 ml)",
       "amount": 180,
-      "price": 170
+      "price": 190
      }
     ]
    }
   },
   {
-   "id": "cappuccino",
-   "category": "sicak-kahveler",
-   "name": "Cappuccino",
+   "id": "cappucino",
+   "category": "espresso-bar",
+   "name": "Cappucino",
    "name_en": "Cappuccino",
    "lang": "en",
    "description": "Espresso, süt ve yoğun süt köpüğü.",
    "description_en": "Espresso, milk and a thick layer of foam.",
-   "price": 170,
+   "price": 190,
    "priceNote": "",
    "priceNote_en": "",
    "image": "",
@@ -354,10 +750,11 @@
    "allergens": [
     "sut"
    ],
+   "allergenUnknown": false,
    "seasonal": false,
    "featured": false,
    "orderable": true,
-   "sort": 6,
+   "sort": 16,
    "nutrition": {
     "basis": "ml",
     "per100": {
@@ -374,20 +771,20 @@
      {
       "label": "Standart (200 ml)",
       "amount": 200,
-      "price": 170
+      "price": 190
      }
     ]
    }
   },
   {
    "id": "cortado",
-   "category": "sicak-kahveler",
+   "category": "espresso-bar",
    "name": "Cortado",
    "name_en": "Cortado",
    "lang": "en",
    "description": "Espresso ve az miktarda sıcak süt.",
    "description_en": "Espresso cut with a little warm milk.",
-   "price": 150,
+   "price": 170,
    "priceNote": "",
    "priceNote_en": "",
    "image": "",
@@ -396,10 +793,11 @@
    "allergens": [
     "sut"
    ],
+   "allergenUnknown": false,
    "seasonal": false,
    "featured": false,
    "orderable": true,
-   "sort": 7,
+   "sort": 17,
    "nutrition": {
     "basis": "ml",
     "per100": {
@@ -416,108 +814,20 @@
      {
       "label": "Standart (120 ml)",
       "amount": 120,
-      "price": 150
-     }
-    ]
-   }
-  },
-  {
-   "id": "rooibos-cortado",
-   "category": "sicak-kahveler",
-   "name": "Rooibos Cortado",
-   "name_en": "Rooibos Cortado",
-   "lang": "en",
-   "description": "Kafeinsiz alternatif: rooibos ve sıcak süt.",
-   "description_en": "Caffeine-free alternative: rooibos and warm milk.",
-   "price": 170,
-   "priceNote": "",
-   "priceNote_en": "",
-   "image": "",
-   "tags": [
-    "Kafeinsiz"
-   ],
-   "tags_en": [
-    "Caffeine-free"
-   ],
-   "allergens": [
-    "sut"
-   ],
-   "seasonal": false,
-   "featured": false,
-   "orderable": true,
-   "sort": 8,
-   "nutrition": {
-    "basis": "ml",
-    "per100": {
-     "kcal": 31,
-     "fat": 1.7,
-     "satFat": 0.9,
-     "carb": 2.5,
-     "sugar": 2.4,
-     "protein": 1.6,
-     "salt": 0.06,
-     "caffeine": 0
-    },
-    "servings": [
-     {
-      "label": "Standart (120 ml)",
-      "amount": 120,
       "price": 170
      }
     ]
    }
   },
   {
-   "id": "sut-receli-latte",
-   "category": "sicak-kahveler",
-   "name": "Süt Reçelli Latte",
-   "name_en": "Milk Jam Latte",
-   "lang": "tr",
-   "description": "Süt reçeli ile tatlandırılmış latte.",
-   "description_en": "Latte sweetened with Turkish milk jam (dulce de leche).",
-   "price": 180,
-   "priceNote": "",
-   "priceNote_en": "",
-   "image": "",
-   "tags": [],
-   "tags_en": [],
-   "allergens": [
-    "sut"
-   ],
-   "seasonal": false,
-   "featured": false,
-   "orderable": true,
-   "sort": 9,
-   "nutrition": {
-    "basis": "ml",
-    "per100": {
-     "kcal": 73,
-     "fat": 3,
-     "satFat": 1.8,
-     "carb": 8.4,
-     "sugar": 8.1,
-     "protein": 2.9,
-     "salt": 0.11,
-     "caffeine": 42
-    },
-    "servings": [
-     {
-      "label": "Standart (300 ml)",
-      "amount": 300,
-      "price": 180
-     }
-    ]
-   }
-  },
-  {
-   "id": "mocha",
-   "category": "sicak-kahveler",
-   "name": "Mocha",
+   "id": "dark-chocolate-mocha",
+   "category": "espresso-bar",
+   "name": "Dark Chocolate Mocha",
    "name_en": "Mocha",
    "lang": "en",
    "description": "Espresso, çikolata ve süt. Chocolate, white chocolate ya da caramel seçenekleriyle.",
    "description_en": "Espresso, chocolate and milk. Choose chocolate, white chocolate or caramel.",
-   "price": 180,
+   "price": 220,
    "priceNote": "",
    "priceNote_en": "",
    "image": "",
@@ -527,10 +837,11 @@
     "sut",
     "soya"
    ],
+   "allergenUnknown": false,
    "seasonal": false,
    "featured": false,
    "orderable": true,
-   "sort": 10,
+   "sort": 18,
    "nutrition": {
     "basis": "ml",
     "per100": {
@@ -547,74 +858,201 @@
      {
       "label": "Standart (300 ml)",
       "amount": 300,
-      "price": 180
+      "price": 220
      }
     ]
    }
   },
   {
-   "id": "filtre-kahve",
-   "category": "sicak-kahveler",
-   "name": "Filtre Kahve",
-   "name_en": "Filter Coffee",
-   "lang": "tr",
-   "description": "Günün filtre çekirdeği, temiz ve aydınlık bir fincan.",
-   "description_en": "Our filter coffee of the day, clean and bright.",
-   "price": 150,
+   "id": "white-chocolate-mocha",
+   "category": "espresso-bar",
+   "name": "White Chocolate Mocha",
+   "name_en": "",
+   "lang": "en",
+   "description": "",
+   "description_en": "",
+   "price": 220,
    "priceNote": "",
    "priceNote_en": "",
    "image": "",
-   "tags": [
-    "Nitelikli"
+   "tags": [],
+   "tags_en": [],
+   "allergens": [
+    "sut"
    ],
-   "tags_en": [
-    "Specialty"
-   ],
-   "allergens": [],
+   "allergenUnknown": false,
    "seasonal": false,
-   "featured": true,
+   "featured": false,
    "orderable": true,
-   "sort": 11,
+   "sort": 19,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "caramel-mocha",
+   "category": "espresso-bar",
+   "name": "Caramel Mocha",
+   "name_en": "",
+   "lang": "en",
+   "description": "",
+   "description_en": "",
+   "price": 220,
+   "priceNote": "",
+   "priceNote_en": "",
+   "image": "",
+   "tags": [],
+   "tags_en": [],
+   "allergens": [
+    "sut"
+   ],
+   "allergenUnknown": false,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 20,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "caramel-latte",
+   "category": "espresso-bar",
+   "name": "Caramel Latte",
+   "name_en": "",
+   "lang": "en",
+   "description": "",
+   "description_en": "",
+   "price": 220,
+   "priceNote": "",
+   "priceNote_en": "",
+   "image": "",
+   "tags": [],
+   "tags_en": [],
+   "allergens": [
+    "sut"
+   ],
+   "allergenUnknown": false,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 21,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "sut-recelli-latte",
+   "category": "espresso-bar",
+   "name": "Süt Reçelli Latte",
+   "name_en": "Dulce de Leche Latte",
+   "lang": "tr",
+   "description": "Süt reçeli ile tatlandırılmış latte.",
+   "description_en": "Latte sweetened with Turkish milk jam (dulce de leche).",
+   "price": 210,
+   "priceNote": "",
+   "priceNote_en": "",
+   "image": "",
+   "tags": [],
+   "tags_en": [],
+   "allergens": [
+    "sut"
+   ],
+   "allergenUnknown": false,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 22,
    "nutrition": {
     "basis": "ml",
     "per100": {
-     "kcal": 1,
-     "fat": 0,
-     "satFat": 0,
-     "carb": 0,
-     "sugar": 0,
-     "protein": 0.1,
-     "salt": 0.01,
-     "caffeine": 40
+     "kcal": 73,
+     "fat": 3,
+     "satFat": 1.8,
+     "carb": 8.4,
+     "sugar": 8.1,
+     "protein": 2.9,
+     "salt": 0.11,
+     "caffeine": 42
     },
     "servings": [
      {
-      "label": "Standart (250 ml)",
-      "amount": 250,
-      "price": 150
+      "label": "Standart (300 ml)",
+      "amount": 300,
+      "price": 210
      }
     ]
    }
   },
   {
-   "id": "red-eye",
-   "category": "sicak-kahveler",
-   "name": "Red Eye",
-   "name_en": "Red Eye",
+   "id": "rooibos-cortado",
+   "category": "espresso-bar",
+   "name": "Rooibos Cortado",
+   "name_en": "Rooibos Cortado",
    "lang": "en",
-   "description": "Filtre kahveye bir shot espresso.",
-   "description_en": "Filter coffee with a shot of espresso.",
+   "description": "Kafeinsiz alternatif: rooibos ve sıcak süt.",
+   "description_en": "Caffeine-free alternative: rooibos and warm milk.",
    "price": 180,
    "priceNote": "",
    "priceNote_en": "",
    "image": "",
    "tags": [],
    "tags_en": [],
-   "allergens": [],
+   "allergens": [
+    "sut"
+   ],
+   "allergenUnknown": false,
    "seasonal": false,
    "featured": false,
    "orderable": true,
-   "sort": 12,
+   "sort": 23,
+   "nutrition": {
+    "basis": "ml",
+    "per100": {
+     "kcal": 31,
+     "fat": 1.7,
+     "satFat": 0.9,
+     "carb": 2.5,
+     "sugar": 2.4,
+     "protein": 1.6,
+     "salt": 0.06,
+     "caffeine": 0
+    },
+    "servings": [
+     {
+      "label": "Standart (120 ml)",
+      "amount": 120,
+      "price": 180
+     }
+    ]
+   }
+  },
+  {
+   "id": "red-eye",
+   "category": "espresso-bar",
+   "name": "RED EYE",
+   "name_en": "Red Eye",
+   "lang": "en",
+   "description": "Filtre kahveye bir shot espresso.",
+   "description_en": "Filter coffee with a shot of espresso.",
+   "price": 210,
+   "priceNote": "",
+   "priceNote_en": "",
+   "image": "",
+   "tags": [],
+   "tags_en": [],
+   "allergens": [],
+   "allergenUnknown": false,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 24,
    "nutrition": {
     "basis": "ml",
     "per100": {
@@ -631,30 +1069,31 @@
      {
       "label": "Standart (250 ml)",
       "amount": 250,
-      "price": 180
+      "price": 210
      }
     ]
    }
   },
   {
    "id": "black-eye",
-   "category": "sicak-kahveler",
-   "name": "Black Eye",
+   "category": "espresso-bar",
+   "name": "BLACK EYE",
    "name_en": "Black Eye",
    "lang": "en",
    "description": "Filtre kahveye çift shot espresso. En sert seçenek.",
    "description_en": "Filter coffee with a double shot. Our strongest cup.",
-   "price": 200,
+   "price": 240,
    "priceNote": "",
    "priceNote_en": "",
    "image": "",
    "tags": [],
    "tags_en": [],
    "allergens": [],
+   "allergenUnknown": false,
    "seasonal": false,
    "featured": false,
    "orderable": true,
-   "sort": 13,
+   "sort": 25,
    "nutrition": {
     "basis": "ml",
     "per100": {
@@ -671,14 +1110,615 @@
      {
       "label": "Standart (250 ml)",
       "amount": 250,
-      "price": 200
+      "price": 240
      }
     ]
    }
   },
   {
+   "id": "filtre-kahve",
+   "category": "brew-bar",
+   "name": "Filtre Kahve",
+   "name_en": "Filter Coffee",
+   "lang": "tr",
+   "description": "Günün filtre çekirdeği, temiz ve aydınlık bir fincan.",
+   "description_en": "Our filter coffee of the day, clean and bright.",
+   "price": 180,
+   "priceNote": "",
+   "priceNote_en": "",
+   "image": "",
+   "tags": [],
+   "tags_en": [],
+   "allergens": [],
+   "allergenUnknown": false,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 26,
+   "nutrition": {
+    "basis": "ml",
+    "per100": {
+     "kcal": 1,
+     "fat": 0,
+     "satFat": 0,
+     "carb": 0,
+     "sugar": 0,
+     "protein": 0.1,
+     "salt": 0.01,
+     "caffeine": 40
+    },
+    "servings": [
+     {
+      "label": "Standart (250 ml)",
+      "amount": 250,
+      "price": 180
+     }
+    ]
+   }
+  },
+  {
+   "id": "etiyopya-chelbesa-v60-kalita",
+   "category": "brew-bar",
+   "name": "Etiyopya Chelbesa V60/Kalita",
+   "name_en": "Ethiopia Chelbesa V60/Kalita",
+   "lang": "tr",
+   "description": "Yöre: Etiyopya, Yirgacheffe Çiftlik/İstasyon: Worka Chelbesa Üretici: Worka Chelbesa ile Çalışan Çiftçiler Rakım: 2.000-2.100 m Varyete: Heirloom İşlem: Natürel Profil: Filtre Tadım Notları: Karpuz, Kayısı, Şeftali, Yaban Mersini Tadım Puanı: 86,5",
+   "description_en": "",
+   "price": 270,
+   "priceNote": "",
+   "priceNote_en": "",
+   "image": "",
+   "tags": [],
+   "tags_en": [],
+   "allergens": [],
+   "allergenUnknown": false,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 27,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "etiyopya-chelbesa-japanese-cold-brew",
+   "category": "brew-bar",
+   "name": "Etiyopya Chelbesa Japanese Cold Brew",
+   "name_en": "Ethiopia Chelbesa Japanese Cold Brew",
+   "lang": "tr",
+   "description": "Yöre: Etiyopya, Yirgacheffe Çiftlik/İstasyon: Worka Chelbesa Üretici: Worka Chelbesa ile Çalışan Çiftçiler Rakım: 2.000-2.100 m Varyete: Heirloom İşlem: Natürel Profil: Filtre Tadım Notları: Karpuz, Kayısı, Şeftali, Yaban Mersini Tadım Puanı: 86,5",
+   "description_en": "",
+   "price": 300,
+   "priceNote": "",
+   "priceNote_en": "",
+   "image": "",
+   "tags": [],
+   "tags_en": [],
+   "allergens": [],
+   "allergenUnknown": false,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 28,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "peru-edilberto-torres-v60-kalita",
+   "category": "brew-bar",
+   "name": "Peru Edilberto Torres V60/Kalita",
+   "name_en": "",
+   "lang": "en",
+   "description": "Yöre: Peru, Jaén, Cajamarca İstasyon: Chacra Coffee Company Üretici: Edilberto Torres Rakım: 1.800 – 2.100 m Varyete: Harman Varyeteler İşlem: Natürel Tadım Notaları: Kırmızı Erik, Kuru Üzüm, Bal Tadım Puanı: 86",
+   "description_en": "",
+   "price": 250,
+   "priceNote": "",
+   "priceNote_en": "",
+   "image": "",
+   "tags": [],
+   "tags_en": [],
+   "allergens": [],
+   "allergenUnknown": false,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 29,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "peru-edilberto-torres-japanese-cold-brew",
+   "category": "brew-bar",
+   "name": "Peru Edilberto Torres Japanese Cold Brew",
+   "name_en": "",
+   "lang": "en",
+   "description": "Yöre: Peru, Jaén, Cajamarca İstasyon: Chacra Coffee Company Üretici: Edilberto Torres Rakım: 1.800 – 2.100 m Varyete: Harman Varyeteler İşlem: Natürel Tadım Notaları: Kırmızı Erik, Kuru Üzüm, Bal Tadım Puanı: 86",
+   "description_en": "",
+   "price": 280,
+   "priceNote": "",
+   "priceNote_en": "",
+   "image": "",
+   "tags": [],
+   "tags_en": [],
+   "allergens": [],
+   "allergenUnknown": false,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 30,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "kolombiya-diego-horta-v60-kalita",
+   "category": "brew-bar",
+   "name": "Kolombiya Diego Horta V60/Kalita",
+   "name_en": "Colombia Diego Horta V60/Kalita",
+   "lang": "tr",
+   "description": "Yöre: Kolombiya, Santa Maria, Huila İstasyon: Diego Horta ile çalışan küçük üreticiler Üretici: Diego Horta Rakım: 1.500 – 2.000 m Varyete: Colombia, Castillo İşlem: Natürel Tadım Notları: Portakal, Kırmızı Üzüm, Şarapsı, Kayısı Tadım Puanı: 86,25",
+   "description_en": "",
+   "price": 300,
+   "priceNote": "",
+   "priceNote_en": "",
+   "image": "",
+   "tags": [],
+   "tags_en": [],
+   "allergens": [],
+   "allergenUnknown": false,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 31,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "kolombiya-diego-horta-japanese-cold-brew",
+   "category": "brew-bar",
+   "name": "Kolombiya Diego Horta Japanese Cold Brew",
+   "name_en": "Colombia Diego Horta Japanese Cold Brew",
+   "lang": "tr",
+   "description": "Yöre: Kolombiya, Santa Maria, Huila İstasyon: Diego Horta ile çalışan küçük üreticiler Üretici: Diego Horta Rakım: 1.500 – 2.000 m Varyete: Colombia, Castillo İşlem: Natürel Tadım Notları: Portakal, Kırmızı Üzüm, Şarapsı, Kayısı Tadım Puanı: 86,25",
+   "description_en": "",
+   "price": 330,
+   "priceNote": "",
+   "priceNote_en": "",
+   "image": "",
+   "tags": [],
+   "tags_en": [],
+   "allergens": [],
+   "allergenUnknown": false,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 32,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "kenya-wanrich-v60-kalita",
+   "category": "brew-bar",
+   "name": "Kenya Wanrich V60/Kalita",
+   "name_en": "",
+   "lang": "en",
+   "description": "Yöre: Kenya, Rift Vadisi Çiftlik/İstasyon: Wanrich Üretici: Jane Wanjiku Kiriri–Kamau Rakım: 1.800-2.000 m Varyete: SL28, SL34, Batian, Ruiru İşlem: Anaerobik Yıkanmış Profil: Filtre Tadım Notları: Portakal, Beyaz Üzüm, Yeşil Elma, Limon Tadım Puanı: 86",
+   "description_en": "",
+   "price": 300,
+   "priceNote": "",
+   "priceNote_en": "",
+   "image": "",
+   "tags": [],
+   "tags_en": [],
+   "allergens": [],
+   "allergenUnknown": false,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 33,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "kenya-wanrich-japanese-cold-brew",
+   "category": "brew-bar",
+   "name": "Kenya Wanrich Japanese Cold Brew",
+   "name_en": "",
+   "lang": "en",
+   "description": "Yöre: Kenya, Rift Vadisi Çiftlik/İstasyon: Wanrich Üretici: Jane Wanjiku Kiriri–Kamau Rakım: 1.800-2.000 m Varyete: SL28, SL34, Batian, Ruiru İşlem: Anaerobik Yıkanmış Profil: Filtre Tadım Notları: Portakal, Beyaz Üzüm, Yeşil Elma, Limon Tadım Puanı: 86",
+   "description_en": "",
+   "price": 330,
+   "priceNote": "",
+   "priceNote_en": "",
+   "image": "",
+   "tags": [],
+   "tags_en": [],
+   "allergens": [],
+   "allergenUnknown": false,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 34,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "kenya-kathakwa-v60-kalita",
+   "category": "brew-bar",
+   "name": "Kenya Kathakwa V60/Kalita",
+   "name_en": "",
+   "lang": "en",
+   "description": "Yöre: Kenya, Kirinyaga Çiftlik/İstasyon: Kathakwa Üretici: Kathakwa İstasyonu ile Çalışan Çiftçiler Rakım: 1.610 m. Varyete: SL28, SL34, Batian İşlem: Yıkanmış Profil: Filtre Tadım Notları: Greyfurt, Kumkat, Kırmızı Elma, Kuşburnu Tadım Puanı: 87",
+   "description_en": "",
+   "price": 280,
+   "priceNote": "",
+   "priceNote_en": "",
+   "image": "",
+   "tags": [],
+   "tags_en": [],
+   "allergens": [],
+   "allergenUnknown": false,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 35,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "kenya-kathakwa-japanese-cold-brew",
+   "category": "brew-bar",
+   "name": "Kenya Kathakwa Japanese Cold Brew",
+   "name_en": "",
+   "lang": "en",
+   "description": "Kenya, Kirinyaga Çiftlik/İstasyon: Kathakwa Üretici: Kathakwa İstasyonu ile Çalışan Çiftçiler Rakım: 1.610 m. Varyete: SL28, SL34, Batian İşlem: Yıkanmış Profil: Filtre Tadım Notları: Greyfurt, Kumkat, Kırmızı Elma, Kuşburnu Tadım Puanı: 87",
+   "description_en": "",
+   "price": 310,
+   "priceNote": "",
+   "priceNote_en": "",
+   "image": "",
+   "tags": [],
+   "tags_en": [],
+   "allergens": [],
+   "allergenUnknown": false,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 36,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "iced-espresso",
+   "category": "cold-coffee",
+   "name": "Iced Espresso",
+   "name_en": "",
+   "lang": "en",
+   "description": "",
+   "description_en": "",
+   "price": 150,
+   "priceNote": "",
+   "priceNote_en": "",
+   "image": "",
+   "tags": [],
+   "tags_en": [],
+   "allergens": [],
+   "allergenUnknown": false,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 37,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "iced-americano",
+   "category": "cold-coffee",
+   "name": "Iced Americano",
+   "name_en": "",
+   "lang": "en",
+   "description": "",
+   "description_en": "",
+   "price": 180,
+   "priceNote": "",
+   "priceNote_en": "",
+   "image": "",
+   "tags": [],
+   "tags_en": [],
+   "allergens": [],
+   "allergenUnknown": false,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 38,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "iced-latte",
+   "category": "cold-coffee",
+   "name": "Iced Latte",
+   "name_en": "",
+   "lang": "en",
+   "description": "",
+   "description_en": "",
+   "price": 200,
+   "priceNote": "",
+   "priceNote_en": "",
+   "image": "",
+   "tags": [],
+   "tags_en": [],
+   "allergens": [
+    "sut"
+   ],
+   "allergenUnknown": false,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 39,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "iced-flat-white",
+   "category": "cold-coffee",
+   "name": "Iced Flat White",
+   "name_en": "",
+   "lang": "en",
+   "description": "",
+   "description_en": "",
+   "price": 200,
+   "priceNote": "",
+   "priceNote_en": "",
+   "image": "",
+   "tags": [],
+   "tags_en": [],
+   "allergens": [
+    "sut"
+   ],
+   "allergenUnknown": false,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 40,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "iced-caramel-latte",
+   "category": "cold-coffee",
+   "name": "Iced Caramel Latte",
+   "name_en": "",
+   "lang": "en",
+   "description": "",
+   "description_en": "",
+   "price": 230,
+   "priceNote": "",
+   "priceNote_en": "",
+   "image": "",
+   "tags": [],
+   "tags_en": [],
+   "allergens": [
+    "sut"
+   ],
+   "allergenUnknown": false,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 41,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "iced-mocha",
+   "category": "cold-coffee",
+   "name": "Iced Mocha",
+   "name_en": "",
+   "lang": "en",
+   "description": "",
+   "description_en": "",
+   "price": 230,
+   "priceNote": "",
+   "priceNote_en": "",
+   "image": "",
+   "tags": [],
+   "tags_en": [],
+   "allergens": [
+    "sut"
+   ],
+   "allergenUnknown": false,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 42,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "iced-caramel-mocha",
+   "category": "cold-coffee",
+   "name": "Iced Caramel Mocha",
+   "name_en": "",
+   "lang": "en",
+   "description": "",
+   "description_en": "",
+   "price": 230,
+   "priceNote": "",
+   "priceNote_en": "",
+   "image": "",
+   "tags": [],
+   "tags_en": [],
+   "allergens": [
+    "sut"
+   ],
+   "allergenUnknown": false,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 43,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "iced-white-mocha",
+   "category": "cold-coffee",
+   "name": "Iced White Mocha",
+   "name_en": "",
+   "lang": "en",
+   "description": "",
+   "description_en": "",
+   "price": 230,
+   "priceNote": "",
+   "priceNote_en": "",
+   "image": "",
+   "tags": [],
+   "tags_en": [],
+   "allergens": [
+    "sut"
+   ],
+   "allergenUnknown": false,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 44,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "sut-recelli-iced-latte",
+   "category": "cold-coffee",
+   "name": "Süt Reçelli Iced Latte",
+   "name_en": "Dulce de Leche Iced Latte",
+   "lang": "tr",
+   "description": "",
+   "description_en": "",
+   "price": 220,
+   "priceNote": "",
+   "priceNote_en": "",
+   "image": "",
+   "tags": [],
+   "tags_en": [],
+   "allergens": [
+    "sut"
+   ],
+   "allergenUnknown": false,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 45,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "espresso-soda",
+   "category": "cold-coffee",
+   "name": "Espresso Soda",
+   "name_en": "",
+   "lang": "en",
+   "description": "",
+   "description_en": "",
+   "price": 200,
+   "priceNote": "",
+   "priceNote_en": "",
+   "image": "",
+   "tags": [],
+   "tags_en": [],
+   "allergens": [],
+   "allergenUnknown": false,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 46,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "espresso-tonic",
+   "category": "cold-coffee",
+   "name": "Espresso Tonic",
+   "name_en": "",
+   "lang": "en",
+   "description": "",
+   "description_en": "",
+   "price": 190,
+   "priceNote": "",
+   "priceNote_en": "",
+   "image": "",
+   "tags": [],
+   "tags_en": [],
+   "allergens": [],
+   "allergenUnknown": false,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 47,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
    "id": "turk-kahvesi",
-   "category": "sicak-kahveler",
+   "category": "turk-kahvesi",
    "name": "Türk Kahvesi",
    "name_en": "Turkish Coffee",
    "lang": "tr",
@@ -688,17 +1728,14 @@
    "priceNote": "",
    "priceNote_en": "",
    "image": "",
-   "tags": [
-    "Geleneksel"
-   ],
-   "tags_en": [
-    "Traditional"
-   ],
+   "tags": [],
+   "tags_en": [],
    "allergens": [],
+   "allergenUnknown": false,
    "seasonal": false,
    "featured": false,
    "orderable": true,
-   "sort": 14,
+   "sort": 48,
    "nutrition": {
     "basis": "ml",
     "per100": {
@@ -721,9 +1758,9 @@
    }
   },
   {
-   "id": "duble-turk-kahvesi",
-   "category": "sicak-kahveler",
-   "name": "Duble Türk Kahvesi",
+   "id": "double-turk-kahvesi",
+   "category": "turk-kahvesi",
+   "name": "Double Türk Kahvesi",
    "name_en": "Double Turkish Coffee",
    "lang": "tr",
    "description": "Türk kahvesi, çift porsiyon.",
@@ -732,17 +1769,14 @@
    "priceNote": "",
    "priceNote_en": "",
    "image": "",
-   "tags": [
-    "Geleneksel"
-   ],
-   "tags_en": [
-    "Traditional"
-   ],
+   "tags": [],
+   "tags_en": [],
    "allergens": [],
+   "allergenUnknown": false,
    "seasonal": false,
    "featured": false,
    "orderable": true,
-   "sort": 15,
+   "sort": 49,
    "nutrition": {
     "basis": "ml",
     "per100": {
@@ -772,21 +1806,22 @@
    "lang": "tr",
    "description": "Çırpılmış matcha, sıcak su ile.",
    "description_en": "Whisked matcha with hot water.",
-   "price": 160,
-   "priceNote": "",
-   "priceNote_en": "",
+   "price": 190,
+   "priceNote": "Sıcak",
+   "priceNote_en": "Hot",
    "image": "",
    "tags": [
-    "Vegan"
+    "Sıcak"
    ],
    "tags_en": [
-    "Vegan"
+    "Hot"
    ],
    "allergens": [],
+   "allergenUnknown": false,
    "seasonal": false,
    "featured": false,
    "orderable": true,
-   "sort": 16,
+   "sort": 50,
    "nutrition": {
     "basis": "ml",
     "per100": {
@@ -803,7 +1838,7 @@
      {
       "label": "Standart (200 ml)",
       "amount": 200,
-      "price": 160
+      "price": 190
      }
     ]
    }
@@ -816,19 +1851,24 @@
    "lang": "en",
    "description": "Matcha ve süt. Bitkisel süt seçeneğiyle vegan olur.",
    "description_en": "Matcha and milk. Vegan with plant-based milk.",
-   "price": 180,
-   "priceNote": "",
-   "priceNote_en": "",
+   "price": 220,
+   "priceNote": "Sıcak",
+   "priceNote_en": "Hot",
    "image": "",
-   "tags": [],
-   "tags_en": [],
+   "tags": [
+    "Sıcak"
+   ],
+   "tags_en": [
+    "Hot"
+   ],
    "allergens": [
     "sut"
    ],
+   "allergenUnknown": false,
    "seasonal": false,
-   "featured": true,
+   "featured": false,
    "orderable": true,
-   "sort": 17,
+   "sort": 51,
    "nutrition": {
     "basis": "ml",
     "per100": {
@@ -845,622 +1885,719 @@
      {
       "label": "Standart (300 ml)",
       "amount": 300,
-      "price": 180
+      "price": 220
      }
     ]
    }
   },
   {
-   "id": "oat-pistachio-matcha",
+   "id": "vanilla-matcha-latte",
    "category": "matcha-bar",
-   "name": "Oat Pistachio, Matcha",
-   "name_en": "Oat Pistachio, Matcha",
+   "name": "Vanilla Matcha Latte",
+   "name_en": "",
    "lang": "en",
-   "description": "Yulaf sütü, Antep fıstığı ve matcha çayı.",
-   "description_en": "Oat milk, Antep pistachio and matcha.",
+   "description": "",
+   "description_en": "",
    "price": 250,
-   "priceNote": "",
-   "priceNote_en": "",
+   "priceNote": "Sıcak",
+   "priceNote_en": "Hot",
    "image": "",
    "tags": [
-    "Vegan"
+    "Sıcak"
    ],
    "tags_en": [
-    "Vegan"
+    "Hot"
    ],
    "allergens": [
-    "gluten",
-    "sert-kabuklu"
+    "sut"
    ],
+   "allergenUnknown": false,
    "seasonal": false,
    "featured": false,
    "orderable": true,
-   "sort": 18,
+   "sort": 52,
    "nutrition": {
-    "basis": "ml",
-    "per100": {
-     "kcal": 85,
-     "fat": 5.1,
-     "satFat": 0.6,
-     "carb": 7.6,
-     "sugar": 3.1,
-     "protein": 2.4,
-     "salt": 0.08,
-     "caffeine": 35
-    },
-    "servings": [
-     {
-      "label": "Standart (300 ml)",
-      "amount": 300,
-      "price": 250
-     }
-    ]
+    "basis": "",
+    "per100": {},
+    "servings": []
    }
   },
   {
-   "id": "golden-latte",
-   "category": "kisa-ozel",
-   "name": "Golden Latte",
-   "name_en": "Golden Latte",
+   "id": "coconut-matcha-latte",
+   "category": "matcha-bar",
+   "name": "Coconut Matcha Latte",
+   "name_en": "",
    "lang": "en",
-   "description": "Zencefil, tarçın, bal ve süt. Kahvesiz, sıcacık.",
-   "description_en": "Ginger, cinnamon, honey and milk. Coffee-free and warming.",
-   "price": 160,
-   "priceNote": "",
-   "priceNote_en": "",
+   "description": "",
+   "description_en": "",
+   "price": 270,
+   "priceNote": "Sıcak",
+   "priceNote_en": "Hot",
    "image": "",
    "tags": [
-    "Kafeinsiz"
+    "Sıcak"
    ],
    "tags_en": [
-    "Caffeine-free"
+    "Hot"
    ],
    "allergens": [
     "sut"
    ],
-   "seasonal": true,
+   "allergenUnknown": false,
+   "seasonal": false,
    "featured": false,
    "orderable": true,
-   "sort": 19,
+   "sort": 53,
    "nutrition": {
-    "basis": "ml",
-    "per100": {
-     "kcal": 72,
-     "fat": 3,
-     "satFat": 1.7,
-     "carb": 8.8,
-     "sugar": 8.4,
-     "protein": 2.8,
-     "salt": 0.1,
-     "caffeine": 0
-    },
-    "servings": [
-     {
-      "label": "Standart (300 ml)",
-      "amount": 300,
-      "price": 160
-     }
-    ]
+    "basis": "",
+    "per100": {},
+    "servings": []
    }
   },
   {
-   "id": "cafe-miel",
-   "category": "kisa-ozel",
-   "name": "Cafe Miel",
-   "name_en": "Cafe Miel",
+   "id": "iced-matcha-latte",
+   "category": "matcha-bar",
+   "name": "Iced Matcha Latte",
+   "name_en": "",
    "lang": "en",
-   "description": "Tarçın, bal, espresso ve süt.",
-   "description_en": "Cinnamon, honey, espresso and milk.",
-   "price": 180,
-   "priceNote": "",
-   "priceNote_en": "",
-   "image": "",
-   "tags": [],
-   "tags_en": [],
-   "allergens": [
-    "sut"
-   ],
-   "seasonal": true,
-   "featured": false,
-   "orderable": true,
-   "sort": 20,
-   "nutrition": {
-    "basis": "ml",
-    "per100": {
-     "kcal": 62,
-     "fat": 2.4,
-     "satFat": 1.4,
-     "carb": 8.1,
-     "sugar": 7.6,
-     "protein": 2.3,
-     "salt": 0.08,
-     "caffeine": 42
-    },
-    "servings": [
-     {
-      "label": "Standart (300 ml)",
-      "amount": 300,
-      "price": 180
-     }
-    ]
-   }
-  },
-  {
-   "id": "chai-tea-latte",
-   "category": "kisa-ozel",
-   "name": "Chai Tea Latte",
-   "name_en": "Chai Tea Latte",
-   "lang": "en",
-   "description": "Baharatlı çay ve süt.",
-   "description_en": "Spiced tea and milk.",
-   "price": 180,
-   "priceNote": "",
-   "priceNote_en": "",
-   "image": "",
-   "tags": [],
-   "tags_en": [],
-   "allergens": [
-    "sut"
-   ],
-   "seasonal": true,
-   "featured": false,
-   "orderable": true,
-   "sort": 21,
-   "nutrition": {
-    "basis": "ml",
-    "per100": {
-     "kcal": 58,
-     "fat": 1.9,
-     "satFat": 1.2,
-     "carb": 8.6,
-     "sugar": 7.1,
-     "protein": 1.7,
-     "salt": 0.07,
-     "caffeine": 20
-    },
-    "servings": [
-     {
-      "label": "Standart (300 ml)",
-      "amount": 300,
-      "price": 180
-     }
-    ]
-   }
-  },
-  {
-   "id": "salep",
-   "category": "kisa-ozel",
-   "name": "Salep",
-   "name_en": "Salep",
-   "lang": "tr",
-   "description": "Sütle pişen, tarçınla servis edilen klasik kış içeceği.",
-   "description_en": "A classic Turkish winter drink, cooked with milk and served with cinnamon.",
-   "price": 180,
-   "priceNote": "",
-   "priceNote_en": "",
-   "image": "",
-   "tags": [],
-   "tags_en": [],
-   "allergens": [
-    "sut"
-   ],
-   "seasonal": true,
-   "featured": false,
-   "orderable": true,
-   "sort": 22,
-   "nutrition": {
-    "basis": "ml",
-    "per100": {
-     "kcal": 94,
-     "fat": 2.6,
-     "satFat": 1.6,
-     "carb": 14.5,
-     "sugar": 12.5,
-     "protein": 2.8,
-     "salt": 0.1,
-     "caffeine": 0
-    },
-    "servings": [
-     {
-      "label": "Standart (250 ml)",
-      "amount": 250,
-      "price": 180
-     }
-    ]
-   }
-  },
-  {
-   "id": "klasik-sicak-cikolata",
-   "category": "sicak-cikolata",
-   "name": "Klasik Sıcak Çikolata",
-   "name_en": "Classic Hot Chocolate",
-   "lang": "tr",
-   "description": "Çikolata ve süt. Yoğun ve koyu.",
-   "description_en": "Chocolate and milk. Rich and dark.",
-   "price": 180,
-   "priceNote": "",
-   "priceNote_en": "",
-   "image": "",
-   "tags": [],
-   "tags_en": [],
-   "allergens": [
-    "sut",
-    "soya"
-   ],
-   "seasonal": false,
-   "featured": false,
-   "orderable": true,
-   "sort": 23,
-   "nutrition": {
-    "basis": "ml",
-    "per100": {
-     "kcal": 103,
-     "fat": 3.2,
-     "satFat": 1.9,
-     "carb": 15.1,
-     "sugar": 14.9,
-     "protein": 3.2,
-     "salt": 0.11,
-     "caffeine": 0
-    },
-    "servings": [
-     {
-      "label": "Standart (300 ml)",
-      "amount": 300,
-      "price": 180
-     }
-    ]
-   }
-  },
-  {
-   "id": "matcha-beyaz-cikolata",
-   "category": "sicak-cikolata",
-   "name": "Matcha Beyaz Çikolata",
-   "name_en": "Matcha White Chocolate",
-   "lang": "tr",
-   "description": "Matcha ve beyaz çikolata. Badem sütü ile hazırlanır.",
-   "description_en": "Matcha and white chocolate, made with almond milk.",
-   "price": 220,
-   "priceNote": "badem sütü +50 ₺",
-   "priceNote_en": "almond milk +50 ₺",
-   "image": "",
-   "tags": [],
-   "tags_en": [],
-   "allergens": [
-    "sut",
-    "sert-kabuklu",
-    "soya"
-   ],
-   "seasonal": false,
-   "featured": false,
-   "orderable": true,
-   "sort": 24,
-   "nutrition": {
-    "basis": "ml",
-    "per100": {
-     "kcal": 67,
-     "fat": 1.8,
-     "satFat": 0.4,
-     "carb": 11.8,
-     "sugar": 10.7,
-     "protein": 1.1,
-     "salt": 0.1,
-     "caffeine": 35
-    },
-    "servings": [
-     {
-      "label": "Standart (300 ml)",
-      "amount": 300,
-      "price": 220
-     }
-    ]
-   }
-  },
-  {
-   "id": "gingerbread-cikolata",
-   "category": "sicak-cikolata",
-   "name": "Gingerbread Çikolata",
-   "name_en": "Gingerbread Hot Chocolate",
-   "lang": "en",
-   "description": "Tarçın, zencefil, muskat ve vanilya ile sıcak çikolata.",
-   "description_en": "Hot chocolate with cinnamon, ginger, nutmeg and vanilla.",
-   "price": 180,
-   "priceNote": "",
-   "priceNote_en": "",
-   "image": "",
-   "tags": [],
-   "tags_en": [],
-   "allergens": [
-    "sut",
-    "soya"
-   ],
-   "seasonal": false,
-   "featured": false,
-   "orderable": true,
-   "sort": 25,
-   "nutrition": {
-    "basis": "ml",
-    "per100": {
-     "kcal": 105,
-     "fat": 2.9,
-     "satFat": 1.7,
-     "carb": 16.6,
-     "sugar": 16.3,
-     "protein": 2.8,
-     "salt": 0.1,
-     "caffeine": 0
-    },
-    "servings": [
-     {
-      "label": "Standart (300 ml)",
-      "amount": 300,
-      "price": 180
-     }
-    ]
-   }
-  },
-  {
-   "id": "tart",
-   "category": "tatlilar",
-   "name": "Tart",
-   "name_en": "Tart",
-   "lang": "tr",
-   "description": "Süt reçelli ya da çikolatalı. Günlük çeşidi sorunuz.",
-   "description_en": "Milk jam or chocolate. Ask for today’s choice.",
-   "price": 220,
-   "priceNote": "",
-   "priceNote_en": "",
-   "image": "",
-   "tags": [],
-   "tags_en": [],
-   "allergens": [
-    "gluten",
-    "sut",
-    "yumurta"
-   ],
-   "seasonal": false,
-   "featured": false,
-   "orderable": true,
-   "sort": 26,
-   "nutrition": {
-    "basis": "g",
-    "per100": {
-     "kcal": 410,
-     "fat": 20,
-     "satFat": 11,
-     "carb": 52,
-     "sugar": 33,
-     "protein": 5,
-     "salt": 0.3,
-     "caffeine": 0
-    },
-    "servings": [
-     {
-      "label": "Dilim (120 g)",
-      "amount": 120,
-      "price": 220
-     }
-    ]
-   }
-  },
-  {
-   "id": "opia-cup",
-   "category": "tatlilar",
-   "name": "Opia Cup",
-   "name_en": "Opia Cup",
-   "lang": "en",
-   "description": "Bardakta servis edilen imza tatlımız.",
-   "description_en": "Our signature dessert served in a cup.",
-   "price": 220,
-   "priceNote": "",
-   "priceNote_en": "",
-   "image": "",
-   "tags": [],
-   "tags_en": [],
-   "allergens": [
-    "gluten",
-    "sut",
-    "yumurta"
-   ],
-   "seasonal": false,
-   "featured": false,
-   "orderable": true,
-   "sort": 27,
-   "nutrition": {
-    "basis": "g",
-    "per100": {
-     "kcal": 260,
-     "fat": 14,
-     "satFat": 8.5,
-     "carb": 30,
-     "sugar": 20,
-     "protein": 4,
-     "salt": 0.2,
-     "caffeine": 0
-    },
-    "servings": [
-     {
-      "label": "Bardak (150 g)",
-      "amount": 150,
-      "price": 220
-     }
-    ]
-   }
-  },
-  {
-   "id": "tiramisu",
-   "category": "tatlilar",
-   "name": "Tiramisu",
-   "name_en": "Tiramisu",
-   "lang": "en",
-   "description": "Espresso ile ıslanmış kedi dili, mascarpone, kakao.",
-   "description_en": "Ladyfingers soaked in espresso, mascarpone and cocoa.",
-   "price": 200,
-   "priceNote": "",
-   "priceNote_en": "",
-   "image": "",
-   "tags": [],
-   "tags_en": [],
-   "allergens": [
-    "gluten",
-    "sut",
-    "yumurta"
-   ],
-   "seasonal": false,
-   "featured": false,
-   "orderable": true,
-   "sort": 28,
-   "nutrition": {
-    "basis": "g",
-    "per100": {
-     "kcal": 283,
-     "fat": 18.2,
-     "satFat": 10.5,
-     "carb": 24.4,
-     "sugar": 16,
-     "protein": 4.8,
-     "salt": 0.12,
-     "caffeine": 0
-    },
-    "servings": [
-     {
-      "label": "Kase (130 g)",
-      "amount": 130,
-      "price": 200
-     }
-    ]
-   }
-  },
-  {
-   "id": "buyukanne-turtasi",
-   "category": "tatlilar",
-   "name": "Büyükanne Turtası",
-   "name_en": "Grandma’s Pie",
-   "lang": "tr",
-   "description": "Ev usulü turta, sıcak servis edilebilir.",
-   "description_en": "Homestyle pie, can be served warm.",
+   "description": "",
+   "description_en": "",
    "price": 230,
-   "priceNote": "",
-   "priceNote_en": "",
-   "image": "",
-   "tags": [],
-   "tags_en": [],
-   "allergens": [
-    "gluten",
-    "sut",
-    "yumurta"
+   "priceNote": "Soğuk",
+   "priceNote_en": "Iced",
+   "image": "iced-matcha-latte.webp",
+   "tags": [
+    "Soğuk"
    ],
+   "tags_en": [
+    "Iced"
+   ],
+   "allergens": [
+    "sut"
+   ],
+   "allergenUnknown": false,
    "seasonal": false,
-   "featured": false,
+   "featured": true,
    "orderable": true,
-   "sort": 29,
+   "sort": 54,
    "nutrition": {
-    "basis": "g",
-    "per100": {
-     "kcal": 300,
-     "fat": 14,
-     "satFat": 6.5,
-     "carb": 40,
-     "sugar": 22,
-     "protein": 4,
-     "salt": 0.3,
-     "caffeine": 0
-    },
-    "servings": [
-     {
-      "label": "Dilim (130 g)",
-      "amount": 130,
-      "price": 230
-     }
-    ]
+    "basis": "",
+    "per100": {},
+    "servings": []
    }
   },
   {
-   "id": "torte",
-   "category": "tatlilar",
-   "name": "Torte",
-   "name_en": "Torte",
+   "id": "strawberry-matcha-cloud",
+   "category": "matcha-bar",
+   "name": "Strawberry Matcha Cloud",
+   "name_en": "",
    "lang": "en",
-   "description": "Katmanlı, kremalı pasta dilimi.",
-   "description_en": "A layered cream cake slice.",
-   "price": 240,
-   "priceNote": "",
-   "priceNote_en": "",
-   "image": "",
-   "tags": [],
-   "tags_en": [],
-   "allergens": [
-    "gluten",
-    "sut",
-    "yumurta"
+   "description": "",
+   "description_en": "",
+   "price": 280,
+   "priceNote": "Soğuk",
+   "priceNote_en": "Iced",
+   "image": "strawberry-matcha-cloud.webp",
+   "tags": [
+    "Soğuk"
    ],
+   "tags_en": [
+    "Iced"
+   ],
+   "allergens": [],
+   "allergenUnknown": true,
    "seasonal": false,
    "featured": false,
    "orderable": true,
-   "sort": 30,
+   "sort": 55,
    "nutrition": {
-    "basis": "g",
-    "per100": {
-     "kcal": 350,
-     "fat": 19,
-     "satFat": 10,
-     "carb": 42,
-     "sugar": 30,
-     "protein": 5,
-     "salt": 0.3,
-     "caffeine": 0
-    },
-    "servings": [
-     {
-      "label": "Dilim (140 g)",
-      "amount": 140,
-      "price": 240
-     }
-    ]
+    "basis": "",
+    "per100": {},
+    "servings": []
    }
   },
   {
-   "id": "cheesecake",
-   "category": "tatlilar",
-   "name": "Cheesecake",
-   "name_en": "Cheesecake",
+   "id": "mango-matcha-cloud",
+   "category": "matcha-bar",
+   "name": "Mango Matcha Cloud",
+   "name_en": "",
    "lang": "en",
-   "description": "Klasik, kremsi, bisküvi tabanlı.",
-   "description_en": "Classic and creamy on a biscuit base.",
-   "price": 240,
-   "priceNote": "",
-   "priceNote_en": "",
-   "image": "",
-   "tags": [],
-   "tags_en": [],
-   "allergens": [
-    "gluten",
-    "sut",
-    "yumurta"
+   "description": "",
+   "description_en": "",
+   "price": 280,
+   "priceNote": "Soğuk",
+   "priceNote_en": "Iced",
+   "image": "mango-matcha-cloud.webp",
+   "tags": [
+    "Soğuk"
    ],
+   "tags_en": [
+    "Iced"
+   ],
+   "allergens": [],
+   "allergenUnknown": true,
    "seasonal": false,
    "featured": false,
    "orderable": true,
-   "sort": 31,
+   "sort": 56,
    "nutrition": {
-    "basis": "g",
-    "per100": {
-     "kcal": 321,
-     "fat": 22.5,
-     "satFat": 12.6,
-     "carb": 25.5,
-     "sugar": 21.9,
-     "protein": 5.5,
-     "salt": 1.1,
-     "caffeine": 0
-    },
-    "servings": [
-     {
-      "label": "Dilim (130 g)",
-      "amount": 130,
-      "price": 240
-     }
-    ]
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "blueberry-matcha-cloud",
+   "category": "matcha-bar",
+   "name": "Blueberry Matcha Cloud",
+   "name_en": "",
+   "lang": "en",
+   "description": "",
+   "description_en": "",
+   "price": 280,
+   "priceNote": "Soğuk",
+   "priceNote_en": "Iced",
+   "image": "blueberry-matcha-cloud.webp",
+   "tags": [
+    "Soğuk"
+   ],
+   "tags_en": [
+    "Iced"
+   ],
+   "allergens": [],
+   "allergenUnknown": true,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 57,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "coconut-matcha-breeze",
+   "category": "matcha-bar",
+   "name": "Coconut Matcha Breeze",
+   "name_en": "",
+   "lang": "en",
+   "description": "",
+   "description_en": "",
+   "price": 280,
+   "priceNote": "Soğuk",
+   "priceNote_en": "Iced",
+   "image": "coconut-matcha-breeze.webp",
+   "tags": [
+    "Soğuk"
+   ],
+   "tags_en": [
+    "Iced"
+   ],
+   "allergens": [],
+   "allergenUnknown": true,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 58,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "matcha-lemonade",
+   "category": "matcha-bar",
+   "name": "Matcha Lemonade",
+   "name_en": "",
+   "lang": "en",
+   "description": "Taze limonata, matcha, hafif tatlılık",
+   "description_en": "",
+   "price": 280,
+   "priceNote": "Soğuk",
+   "priceNote_en": "Iced",
+   "image": "",
+   "tags": [
+    "Soğuk"
+   ],
+   "tags_en": [
+    "Iced"
+   ],
+   "allergens": [],
+   "allergenUnknown": true,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 59,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "matcha-affogato",
+   "category": "matcha-bar",
+   "name": "Matcha Affogato",
+   "name_en": "",
+   "lang": "en",
+   "description": "",
+   "description_en": "",
+   "price": 290,
+   "priceNote": "Soğuk",
+   "priceNote_en": "Iced",
+   "image": "",
+   "tags": [
+    "Soğuk"
+   ],
+   "tags_en": [
+    "Iced"
+   ],
+   "allergens": [],
+   "allergenUnknown": true,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 60,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "ube-cayi",
+   "category": "ube-bar",
+   "name": "Ube Çayı",
+   "name_en": "Ube Tea",
+   "lang": "tr",
+   "description": "",
+   "description_en": "",
+   "price": 190,
+   "priceNote": "Sıcak",
+   "priceNote_en": "Hot",
+   "image": "",
+   "tags": [
+    "Sıcak"
+   ],
+   "tags_en": [
+    "Hot"
+   ],
+   "allergens": [],
+   "allergenUnknown": false,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 61,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "ube-latte",
+   "category": "ube-bar",
+   "name": "Ube Latte",
+   "name_en": "",
+   "lang": "en",
+   "description": "",
+   "description_en": "",
+   "price": 220,
+   "priceNote": "Sıcak",
+   "priceNote_en": "Hot",
+   "image": "",
+   "tags": [
+    "Sıcak"
+   ],
+   "tags_en": [
+    "Hot"
+   ],
+   "allergens": [
+    "sut"
+   ],
+   "allergenUnknown": false,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 62,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "vanilla-ube-latte",
+   "category": "ube-bar",
+   "name": "Vanilla Ube Latte",
+   "name_en": "",
+   "lang": "en",
+   "description": "",
+   "description_en": "",
+   "price": 250,
+   "priceNote": "Sıcak",
+   "priceNote_en": "Hot",
+   "image": "",
+   "tags": [
+    "Sıcak"
+   ],
+   "tags_en": [
+    "Hot"
+   ],
+   "allergens": [
+    "sut"
+   ],
+   "allergenUnknown": false,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 63,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "coconut-ube-latte",
+   "category": "ube-bar",
+   "name": "Coconut Ube Latte",
+   "name_en": "",
+   "lang": "en",
+   "description": "",
+   "description_en": "",
+   "price": 270,
+   "priceNote": "Sıcak",
+   "priceNote_en": "Hot",
+   "image": "",
+   "tags": [
+    "Sıcak"
+   ],
+   "tags_en": [
+    "Hot"
+   ],
+   "allergens": [
+    "sut"
+   ],
+   "allergenUnknown": false,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 64,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "iced-ube-latte",
+   "category": "ube-bar",
+   "name": "Iced Ube Latte",
+   "name_en": "",
+   "lang": "en",
+   "description": "",
+   "description_en": "",
+   "price": 230,
+   "priceNote": "Soğuk",
+   "priceNote_en": "Iced",
+   "image": "iced-ube-latte.webp",
+   "tags": [
+    "Soğuk"
+   ],
+   "tags_en": [
+    "Iced"
+   ],
+   "allergens": [
+    "sut"
+   ],
+   "allergenUnknown": false,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 65,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "strawberry-ube-cloud",
+   "category": "ube-bar",
+   "name": "Strawberry Ube Cloud",
+   "name_en": "",
+   "lang": "en",
+   "description": "",
+   "description_en": "",
+   "price": 280,
+   "priceNote": "Soğuk",
+   "priceNote_en": "Iced",
+   "image": "strawberry-ube-cloud.webp",
+   "tags": [
+    "Soğuk"
+   ],
+   "tags_en": [
+    "Iced"
+   ],
+   "allergens": [],
+   "allergenUnknown": true,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 66,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "mango-ube-cloud",
+   "category": "ube-bar",
+   "name": "Mango Ube Cloud",
+   "name_en": "",
+   "lang": "en",
+   "description": "",
+   "description_en": "",
+   "price": 280,
+   "priceNote": "Soğuk",
+   "priceNote_en": "Iced",
+   "image": "mango-ube-cloud.webp",
+   "tags": [
+    "Soğuk"
+   ],
+   "tags_en": [
+    "Iced"
+   ],
+   "allergens": [],
+   "allergenUnknown": true,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 67,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "blueberry-ube-cloud",
+   "category": "ube-bar",
+   "name": "Blueberry Ube Cloud",
+   "name_en": "",
+   "lang": "en",
+   "description": "",
+   "description_en": "",
+   "price": 280,
+   "priceNote": "Soğuk",
+   "priceNote_en": "Iced",
+   "image": "blueberry-ube-cloud.webp",
+   "tags": [
+    "Soğuk"
+   ],
+   "tags_en": [
+    "Iced"
+   ],
+   "allergens": [],
+   "allergenUnknown": true,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 68,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "coconut-ube-breeze",
+   "category": "ube-bar",
+   "name": "Coconut Ube Breeze",
+   "name_en": "",
+   "lang": "en",
+   "description": "",
+   "description_en": "",
+   "price": 280,
+   "priceNote": "Soğuk",
+   "priceNote_en": "Iced",
+   "image": "coconut-ube-breeze.webp",
+   "tags": [
+    "Soğuk"
+   ],
+   "tags_en": [
+    "Iced"
+   ],
+   "allergens": [],
+   "allergenUnknown": true,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 69,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "tropical-green",
+   "category": "tea-bar",
+   "name": "Tropical Green",
+   "name_en": "",
+   "lang": "en",
+   "description": "Yeşil çay, gül yaprakları, hindistan cevizi, tropikal aromalar",
+   "description_en": "",
+   "price": 180,
+   "priceNote": "",
+   "priceNote_en": "",
+   "image": "tropical-green.webp",
+   "tags": [],
+   "tags_en": [],
+   "allergens": [],
+   "allergenUnknown": false,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 70,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "white-yasmine",
+   "category": "tea-bar",
+   "name": "White Yasmine",
+   "name_en": "",
+   "lang": "en",
+   "description": "Beyaz çay yaprağı, yasemin çiçeği",
+   "description_en": "",
+   "price": 180,
+   "priceNote": "",
+   "priceNote_en": "",
+   "image": "white-yasmine.webp",
+   "tags": [],
+   "tags_en": [],
+   "allergens": [],
+   "allergenUnknown": false,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 71,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "berry-punch",
+   "category": "tea-bar",
+   "name": "Berry Punch",
+   "name_en": "",
+   "lang": "en",
+   "description": "Böğürtlen, çilek, gül yaprağı, hibiskus, portakal kurusu",
+   "description_en": "",
+   "price": 180,
+   "priceNote": "",
+   "priceNote_en": "",
+   "image": "berry-punch.webp",
+   "tags": [],
+   "tags_en": [],
+   "allergens": [],
+   "allergenUnknown": false,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 72,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "blue-flowers-earl-grey",
+   "category": "tea-bar",
+   "name": "Blue Flowers Earl Grey",
+   "name_en": "",
+   "lang": "en",
+   "description": "Siyah Çay, Ebegümeci, Bergamut",
+   "description_en": "",
+   "price": 180,
+   "priceNote": "",
+   "priceNote_en": "",
+   "image": "blue-flowers-earl-grey.webp",
+   "tags": [],
+   "tags_en": [],
+   "allergens": [],
+   "allergenUnknown": false,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 73,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "rooibos-vanilla",
+   "category": "tea-bar",
+   "name": "Rooibos Vanilla",
+   "name_en": "",
+   "lang": "en",
+   "description": "Rooibos yaprağı,vanilya parçaları, vanilya aroması",
+   "description_en": "",
+   "price": 180,
+   "priceNote": "",
+   "priceNote_en": "",
+   "image": "rooibos-vanilla.webp",
+   "tags": [],
+   "tags_en": [],
+   "allergens": [],
+   "allergenUnknown": false,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 74,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "tropical-mate",
+   "category": "tea-bar",
+   "name": "Tropical Mate",
+   "name_en": "",
+   "lang": "en",
+   "description": "Mate çayı, ananas parçaları, peygamber çiçeği, tropik meyve ve aromalar",
+   "description_en": "",
+   "price": 180,
+   "priceNote": "",
+   "priceNote_en": "",
+   "image": "tropical-mate.webp",
+   "tags": [],
+   "tags_en": [],
+   "allergens": [],
+   "allergenUnknown": false,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 75,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
    }
   },
   {
@@ -1471,10 +2608,10 @@
    "lang": "en",
    "description": "Yanık yüzeyli, içi akışkan, baskın krem peynir.",
    "description_en": "Burnt top, soft centre, rich cream cheese.",
-   "price": 230,
+   "price": 280,
    "priceNote": "",
    "priceNote_en": "",
-   "image": "",
+   "image": "san-sebastian-cheesecake.webp",
    "tags": [],
    "tags_en": [],
    "allergens": [
@@ -1482,10 +2619,11 @@
     "yumurta",
     "gluten"
    ],
+   "allergenUnknown": false,
    "seasonal": false,
    "featured": true,
    "orderable": true,
-   "sort": 32,
+   "sort": 76,
    "nutrition": {
     "basis": "g",
     "per100": {
@@ -1502,23 +2640,49 @@
      {
       "label": "Dilim (120 g)",
       "amount": 120,
-      "price": 230
+      "price": 280
      }
     ]
    }
   },
   {
-   "id": "brownie",
+   "id": "cikolatali-san-sebastian-cheesecake",
    "category": "tatlilar",
-   "name": "Brownie",
-   "name_en": "Brownie",
-   "lang": "en",
-   "description": "Beyaz çikolatalı ve vişneli.",
-   "description_en": "With white chocolate and sour cherry.",
-   "price": 240,
+   "name": "Çikolatalı San Sebastian Cheesecake",
+   "name_en": "Chocolate San Sebastian Cheesecake",
+   "lang": "tr",
+   "description": "",
+   "description_en": "",
+   "price": 350,
    "priceNote": "",
    "priceNote_en": "",
-   "image": "",
+   "image": "cikolatali-san-sebastian-cheesecake.webp",
+   "tags": [],
+   "tags_en": [],
+   "allergens": [],
+   "allergenUnknown": true,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 77,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "beyaz-cikolatali-brownie",
+   "category": "tatlilar",
+   "name": "Beyaz Çikolatalı Brownie",
+   "name_en": "White Chocolate Brownie",
+   "lang": "tr",
+   "description": "Beyaz çikolatalı ve vişneli.",
+   "description_en": "With white chocolate and sour cherry.",
+   "price": 280,
+   "priceNote": "",
+   "priceNote_en": "",
+   "image": "beyaz-cikolatali-brownie.webp",
    "tags": [],
    "tags_en": [],
    "allergens": [
@@ -1527,10 +2691,11 @@
     "yumurta",
     "soya"
    ],
+   "allergenUnknown": false,
    "seasonal": false,
    "featured": false,
    "orderable": true,
-   "sort": 33,
+   "sort": 78,
    "nutrition": {
     "basis": "g",
     "per100": {
@@ -1547,184 +2712,513 @@
      {
       "label": "Kare (90 g)",
       "amount": 90,
+      "price": 280
+     }
+    ]
+   }
+  },
+  {
+   "id": "tiramisu",
+   "category": "tatlilar",
+   "name": "Tiramisu",
+   "name_en": "Tiramisu",
+   "lang": "en",
+   "description": "Espresso ile ıslanmış kedi dili, mascarpone, kakao.",
+   "description_en": "Ladyfingers soaked in espresso, mascarpone and cocoa.",
+   "price": 240,
+   "priceNote": "",
+   "priceNote_en": "",
+   "image": "tiramisu.webp",
+   "tags": [],
+   "tags_en": [],
+   "allergens": [
+    "gluten",
+    "sut",
+    "yumurta"
+   ],
+   "allergenUnknown": false,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 79,
+   "nutrition": {
+    "basis": "g",
+    "per100": {
+     "kcal": 283,
+     "fat": 18.2,
+     "satFat": 10.5,
+     "carb": 24.4,
+     "sugar": 16,
+     "protein": 4.8,
+     "salt": 0.12,
+     "caffeine": 0
+    },
+    "servings": [
+     {
+      "label": "Kase (130 g)",
+      "amount": 130,
       "price": 240
      }
     ]
    }
   },
   {
-   "id": "ekstra-sut",
-   "category": "ekstralar",
-   "name": "Süt",
-   "name_en": "Milk",
-   "lang": "tr",
-   "description": "İçeceğine ekstra süt.",
-   "description_en": "Extra milk for your drink.",
-   "price": 10,
-   "priceNote": "ekstra",
-   "priceNote_en": "extra",
+   "id": "torte-della-nonna",
+   "category": "tatlilar",
+   "name": "Torte Della Nonna",
+   "name_en": "Grandma’s Pie",
+   "lang": "en",
+   "description": "Ev usulü turta, sıcak servis edilebilir.",
+   "description_en": "Homestyle pie, can be served warm.",
+   "price": 260,
+   "priceNote": "",
+   "priceNote_en": "",
    "image": "",
    "tags": [],
    "tags_en": [],
-   "allergens": [
-    "sut"
-   ],
-   "seasonal": false,
-   "featured": false,
-   "orderable": false,
-   "sort": 34,
-   "nutrition": {
-    "basis": "ml",
-    "per100": {
-     "kcal": 61,
-     "fat": 3.3,
-     "satFat": 1.9,
-     "carb": 4.8,
-     "sugar": 4.8,
-     "protein": 3.1,
-     "salt": 0.11,
-     "caffeine": 0
-    },
-    "servings": [
-     {
-      "label": "Porsiyon (50 ml)",
-      "amount": 50,
-      "price": 10
-     }
-    ]
-   }
-  },
-  {
-   "id": "ekstra-laktozsuz-sut",
-   "category": "ekstralar",
-   "name": "Laktozsuz Süt",
-   "name_en": "Lactose-free Milk",
-   "lang": "tr",
-   "description": "Süt yerine laktozsuz süt.",
-   "description_en": "Lactose-free milk instead of regular.",
-   "price": 20,
-   "priceNote": "ekstra",
-   "priceNote_en": "extra",
-   "image": "",
-   "tags": [],
-   "tags_en": [],
-   "allergens": [
-    "sut"
-   ],
-   "seasonal": false,
-   "featured": false,
-   "orderable": false,
-   "sort": 35,
-   "nutrition": {
-    "basis": "ml",
-    "per100": {
-     "kcal": 61,
-     "fat": 3.3,
-     "satFat": 1.9,
-     "carb": 4.8,
-     "sugar": 4.8,
-     "protein": 3.1,
-     "salt": 0.11,
-     "caffeine": 0
-    },
-    "servings": [
-     {
-      "label": "Porsiyon (200 ml)",
-      "amount": 200,
-      "price": 20
-     }
-    ]
-   }
-  },
-  {
-   "id": "ekstra-bitkisel-sut",
-   "category": "ekstralar",
-   "name": "Bitkisel Süt",
-   "name_en": "Plant-based Milk",
-   "lang": "tr",
-   "description": "Yulaf ya da badem sütü.",
-   "description_en": "Oat or almond milk.",
-   "price": 50,
-   "priceNote": "ekstra",
-   "priceNote_en": "extra",
-   "image": "",
-   "tags": [
-    "Vegan"
-   ],
-   "tags_en": [
-    "Vegan"
-   ],
    "allergens": [
     "gluten",
-    "sert-kabuklu"
+    "sut",
+    "yumurta"
    ],
+   "allergenUnknown": false,
    "seasonal": false,
    "featured": false,
-   "orderable": false,
-   "sort": 36,
+   "orderable": true,
+   "sort": 80,
    "nutrition": {
-    "basis": "ml",
+    "basis": "g",
     "per100": {
-     "kcal": 61,
-     "fat": 3,
-     "satFat": 0.3,
-     "carb": 7.1,
-     "sugar": 3.4,
-     "protein": 1.1,
-     "salt": 0.1,
+     "kcal": 300,
+     "fat": 14,
+     "satFat": 6.5,
+     "carb": 40,
+     "sugar": 22,
+     "protein": 4,
+     "salt": 0.3,
      "caffeine": 0
     },
     "servings": [
      {
-      "label": "Porsiyon (200 ml)",
-      "amount": 200,
-      "price": 50
+      "label": "Dilim (130 g)",
+      "amount": 130,
+      "price": 260
      }
     ]
    }
   },
   {
-   "id": "ekstra-single-espresso",
-   "category": "ekstralar",
-   "name": "Single Espresso İlave",
-   "name_en": "Extra Espresso Shot",
-   "lang": "tr",
-   "description": "İçeceğine bir shot espresso daha.",
-   "description_en": "One more shot in your drink.",
-   "price": 50,
-   "priceNote": "ekstra",
-   "priceNote_en": "extra",
+   "id": "cinnamon-roll",
+   "category": "tatlilar",
+   "name": "Cinnamon Roll",
+   "name_en": "",
+   "lang": "en",
+   "description": "",
+   "description_en": "",
+   "price": 200,
+   "priceNote": "",
+   "priceNote_en": "",
    "image": "",
    "tags": [],
    "tags_en": [],
    "allergens": [],
+   "allergenUnknown": true,
    "seasonal": false,
    "featured": false,
-   "orderable": false,
-   "sort": 37,
+   "orderable": true,
+   "sort": 81,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "dana-fume",
+   "category": "sandvicler",
+   "name": "Dana Füme",
+   "name_en": "Smoked Beef",
+   "lang": "tr",
+   "description": "Dana füme, eski kaşar, krem peynir, pesto sos, roka, balzamik glaze sos.",
+   "description_en": "",
+   "price": 380,
+   "priceNote": "",
+   "priceNote_en": "",
+   "image": "",
+   "tags": [],
+   "tags_en": [],
+   "allergens": [
+    "sut",
+    "gluten"
+   ],
+   "allergenUnknown": false,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 82,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "akdeniz",
+   "category": "sandvicler",
+   "name": "Akdeniz",
+   "name_en": "Mediterranean",
+   "lang": "tr",
+   "description": "Suda mozzarella, domates, krem peynir, pesto sos, roka, zeytinyağı, balzamik glaze sos.",
+   "description_en": "",
+   "price": 330,
+   "priceNote": "",
+   "priceNote_en": "",
+   "image": "",
+   "tags": [],
+   "tags_en": [],
+   "allergens": [
+    "sut",
+    "gluten"
+   ],
+   "allergenUnknown": false,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 83,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "hindi-fume",
+   "category": "sandvicler",
+   "name": "Hindi füme",
+   "name_en": "Smoked Turkey",
+   "lang": "tr",
+   "description": "Hindi füme, cheddar peyniri, krem peynir, pesto sos, roka.",
+   "description_en": "",
+   "price": 330,
+   "priceNote": "",
+   "priceNote_en": "",
+   "image": "",
+   "tags": [],
+   "tags_en": [],
+   "allergens": [
+    "sut",
+    "gluten"
+   ],
+   "allergenUnknown": false,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 84,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "fincan-cay",
+   "category": "diger-sicak-icecekler",
+   "name": "Fincan Çay",
+   "name_en": "Cup of Tea",
+   "lang": "tr",
+   "description": "",
+   "description_en": "",
+   "price": 100,
+   "priceNote": "",
+   "priceNote_en": "",
+   "image": "",
+   "tags": [],
+   "tags_en": [],
+   "allergens": [],
+   "allergenUnknown": false,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 85,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "chai-tea-latte",
+   "category": "diger-sicak-icecekler",
+   "name": "Chai Tea Latte",
+   "name_en": "Chai Tea Latte",
+   "lang": "en",
+   "description": "Baharatlı çay ve süt.",
+   "description_en": "Spiced tea and milk.",
+   "price": 190,
+   "priceNote": "",
+   "priceNote_en": "",
+   "image": "",
+   "tags": [],
+   "tags_en": [],
+   "allergens": [
+    "sut"
+   ],
+   "allergenUnknown": false,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 86,
    "nutrition": {
     "basis": "ml",
     "per100": {
-     "kcal": 9,
-     "fat": 0.2,
-     "satFat": 0,
-     "carb": 1.7,
-     "sugar": 0,
-     "protein": 0.1,
-     "salt": 0.01,
-     "caffeine": 212
+     "kcal": 58,
+     "fat": 1.9,
+     "satFat": 1.2,
+     "carb": 8.6,
+     "sugar": 7.1,
+     "protein": 1.7,
+     "salt": 0.07,
+     "caffeine": 20
     },
     "servings": [
      {
-      "label": "Shot (30 ml)",
-      "amount": 30,
-      "price": 50
+      "label": "Standart (300 ml)",
+      "amount": 300,
+      "price": 190
      }
     ]
    }
   },
   {
-   "id": "ekstra-cikolata",
+   "id": "su",
+   "category": "diger-soguk-icecekler",
+   "name": "Su",
+   "name_en": "Water",
+   "lang": "tr",
+   "description": "",
+   "description_en": "",
+   "price": 40,
+   "priceNote": "",
+   "priceNote_en": "",
+   "image": "",
+   "tags": [],
+   "tags_en": [],
+   "allergens": [],
+   "allergenUnknown": false,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 87,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "soda",
+   "category": "diger-soguk-icecekler",
+   "name": "Soda",
+   "name_en": "Sparkling Water",
+   "lang": "tr",
+   "description": "",
+   "description_en": "",
+   "price": 80,
+   "priceNote": "",
+   "priceNote_en": "",
+   "image": "",
+   "tags": [],
+   "tags_en": [],
+   "allergens": [],
+   "allergenUnknown": false,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 88,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "churchill",
+   "category": "diger-soguk-icecekler",
+   "name": "Churchill",
+   "name_en": "",
+   "lang": "en",
+   "description": "",
+   "description_en": "",
+   "price": 120,
+   "priceNote": "",
+   "priceNote_en": "",
+   "image": "",
+   "tags": [],
+   "tags_en": [],
+   "allergens": [],
+   "allergenUnknown": true,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 89,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "iced-chai-tea-latte",
+   "category": "diger-soguk-icecekler",
+   "name": "Iced Chai Tea Latte",
+   "name_en": "",
+   "lang": "en",
+   "description": "",
+   "description_en": "",
+   "price": 200,
+   "priceNote": "",
+   "priceNote_en": "",
+   "image": "",
+   "tags": [],
+   "tags_en": [],
+   "allergens": [
+    "sut"
+   ],
+   "allergenUnknown": false,
+   "seasonal": false,
+   "featured": false,
+   "orderable": true,
+   "sort": 90,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "yulaf-sutu",
+   "category": "ekstralar",
+   "name": "Yulaf Sütü",
+   "name_en": "Oat Milk",
+   "lang": "tr",
+   "description": "",
+   "description_en": "",
+   "price": 50,
+   "priceNote": "",
+   "priceNote_en": "",
+   "image": "",
+   "tags": [],
+   "tags_en": [],
+   "allergens": [],
+   "allergenUnknown": true,
+   "seasonal": false,
+   "featured": false,
+   "orderable": false,
+   "sort": 91,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "badem-sutu",
+   "category": "ekstralar",
+   "name": "Badem Sütü",
+   "name_en": "Almond Milk",
+   "lang": "tr",
+   "description": "",
+   "description_en": "",
+   "price": 50,
+   "priceNote": "",
+   "priceNote_en": "",
+   "image": "",
+   "tags": [],
+   "tags_en": [],
+   "allergens": [],
+   "allergenUnknown": true,
+   "seasonal": false,
+   "featured": false,
+   "orderable": false,
+   "sort": 92,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "hindistan-cevizi-sutu",
+   "category": "ekstralar",
+   "name": "Hindistan Cevizi Sütü",
+   "name_en": "Coconut Milk",
+   "lang": "tr",
+   "description": "",
+   "description_en": "",
+   "price": 50,
+   "priceNote": "",
+   "priceNote_en": "",
+   "image": "",
+   "tags": [],
+   "tags_en": [],
+   "allergens": [],
+   "allergenUnknown": true,
+   "seasonal": false,
+   "featured": false,
+   "orderable": false,
+   "sort": 93,
+   "nutrition": {
+    "basis": "",
+    "per100": {},
+    "servings": []
+   }
+  },
+  {
+   "id": "dondurma",
+   "category": "ekstralar",
+   "name": "Dondurma",
+   "name_en": "Ice Cream",
+   "lang": "tr",
+   "description": "Tatlının yanına vanilyalı dondurma.",
+   "description_en": "Vanilla ice cream with your dessert.",
+   "price": 60,
+   "priceNote": "",
+   "priceNote_en": "",
+   "image": "",
+   "tags": [],
+   "tags_en": [],
+   "allergens": [
+    "sut",
+    "yumurta"
+   ],
+   "allergenUnknown": false,
+   "seasonal": false,
+   "featured": false,
+   "orderable": false,
+   "sort": 94,
+   "nutrition": {
+    "basis": "g",
+    "per100": {
+     "kcal": 207,
+     "fat": 11,
+     "satFat": 6.8,
+     "carb": 23.6,
+     "sugar": 21.2,
+     "protein": 3.5,
+     "salt": 0.2,
+     "caffeine": 0
+    },
+    "servings": [
+     {
+      "label": "Top (50 g)",
+      "amount": 50,
+      "price": 60
+     }
+    ]
+   }
+  },
+  {
+   "id": "cikolata",
    "category": "ekstralar",
    "name": "Çikolata",
    "name_en": "Chocolate",
@@ -1732,8 +3226,8 @@
    "description": "Tatlının yanına çikolata sosu.",
    "description_en": "Chocolate sauce with your dessert.",
    "price": 70,
-   "priceNote": "tatlıya",
-   "priceNote_en": "with dessert",
+   "priceNote": "",
+   "priceNote_en": "",
    "image": "",
    "tags": [],
    "tags_en": [],
@@ -1741,10 +3235,11 @@
     "sut",
     "soya"
    ],
+   "allergenUnknown": false,
    "seasonal": false,
    "featured": false,
    "orderable": false,
-   "sort": 38,
+   "sort": 95,
    "nutrition": {
     "basis": "g",
     "per100": {
@@ -1767,46 +3262,31 @@
    }
   },
   {
-   "id": "ekstra-dondurma",
+   "id": "yuksek-protein-sut-50-g",
    "category": "ekstralar",
-   "name": "Dondurma",
-   "name_en": "Ice Cream",
+   "name": "Yüksek Protein Süt ( 50 G )",
+   "name_en": "High-Protein Milk (50 g)",
    "lang": "tr",
-   "description": "Tatlının yanına vanilyalı dondurma.",
-   "description_en": "Vanilla ice cream with your dessert.",
+   "description": "",
+   "description_en": "",
    "price": 50,
-   "priceNote": "tatlıya",
-   "priceNote_en": "with dessert",
+   "priceNote": "",
+   "priceNote_en": "",
    "image": "",
    "tags": [],
    "tags_en": [],
    "allergens": [
-    "sut",
-    "yumurta"
+    "sut"
    ],
+   "allergenUnknown": false,
    "seasonal": false,
    "featured": false,
    "orderable": false,
-   "sort": 39,
+   "sort": 96,
    "nutrition": {
-    "basis": "g",
-    "per100": {
-     "kcal": 207,
-     "fat": 11,
-     "satFat": 6.8,
-     "carb": 23.6,
-     "sugar": 21.2,
-     "protein": 3.5,
-     "salt": 0.2,
-     "caffeine": 0
-    },
-    "servings": [
-     {
-      "label": "Top (50 g)",
-      "amount": 50,
-      "price": 50
-     }
-    ]
+    "basis": "",
+    "per100": {},
+    "servings": []
    }
   }
  ]

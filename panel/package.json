@@ -19,6 +19,7 @@
     "theme": "node scripts/gen-theme.mjs",
     "db:mysql-schema": "node scripts/mysql-schema.mjs",
     "test:mysql": "vitest run src/lib/data/mysql",
+    "menu:mysql": "tsx scripts/sync-menu-mysql.ts",
     "setup:mysql": "tsx scripts/setup-mysql.ts"
   },
   "dependencies": {

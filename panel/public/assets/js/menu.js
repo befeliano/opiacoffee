@@ -8,7 +8,7 @@
   var EN = document.documentElement.lang === 'en';
   var LOC = EN ? 'en-GB' : 'tr-TR';
   var S = EN ? {
-    seasonal: 'Seasonal', soldout: 'Sold out', noAllergen: 'No known allergens', per: 'per', energy: 'Energy', fat: 'Fat', sat: 'Saturates',
+    seasonal: 'Seasonal', soldout: 'Sold out', noAllergen: 'No known allergens', askAllergen: 'Please ask our staff about allergens.', per: 'per', energy: 'Energy', fat: 'Fat', sat: 'Saturates',
     carb: 'Carbohydrate', sugar: 'Sugars', protein: 'Protein', salt: 'Salt', caffeine: 'Caffeine',
     milk: 'Milk', temp: 'Hot / iced', extra: 'Extra', dessert: 'Add to your dessert', qty: 'Quantity', dec: 'Decrease', inc: 'Increase',
     add: 'Add to basket', closedNow: 'Not taking orders now', soldoutNow: 'Sold out right now', added: ' added to your basket.',
@@ -20,7 +20,7 @@
     sending: 'Sending', sent: 'Your order reached the bar (#{id}). We will bring it to your table when it is ready.',
     netErr: 'Connection error. Please try again or ask our staff.', orderStatus: 'Order #{id}: ', bill: 'Table bill (unpaid)', conn: 'Connection error.'
   } : {
-    seasonal: 'Sezonluk', soldout: 'Tükendi', noAllergen: 'Bilinen alerjen içermez', per: 'başına', energy: 'Enerji', fat: 'Yağ', sat: 'Doymuş yağ',
+    seasonal: 'Sezonluk', soldout: 'Tükendi', noAllergen: 'Bilinen alerjen içermez', askAllergen: 'Alerjen bilgisi için lütfen personelimize sorun.', per: 'başına', energy: 'Enerji', fat: 'Yağ', sat: 'Doymuş yağ',
     carb: 'Karbonhidrat', sugar: 'Şekerler', protein: 'Protein', salt: 'Tuz', caffeine: 'Kafein',
     milk: 'Süt', temp: 'Sıcak / soğuk', extra: 'Ekstra', dessert: 'Tatlına ekle', qty: 'Adet', dec: 'Azalt', inc: 'Arttır',
     add: 'Sepete ekle', closedNow: 'Şu an sipariş alınmıyor', soldoutNow: 'Şu an tükendi', added: ' sepete eklendi.',
@@ -73,7 +73,7 @@
     var idx = $('[data-pm-serving]', dlg).value, factor, priceNow = p.price;
     if (idx === 'per100') factor = 1;
     else { var s = p.nutrition.servings[+idx]; factor = s.amount / 100; if (s.price) priceNow = s.price; }
-    $('[data-pm-nutr] tbody', dlg).innerHTML = nutrRows(p, factor);
+    $('[data-pm-nutr] tbody', dlg).innerHTML = p.nutrition.basis ? nutrRows(p, factor) : '';
     $('[data-pm-price]', dlg).innerHTML = money(priceNow) + (p.priceNote ? '<small>' + esc(p.priceNote) + '</small>' : '');
   }
 
@@ -91,8 +91,9 @@
     $('[data-pm-desc]', dlg).textContent = p.description;
     $('[data-pm-allergens]', dlg).innerHTML = p.allergens.length
       ? p.allergens.map(function (a) { return '<li>' + esc(a) + '</li>'; }).join('')
-      : '<li class="none">' + S.noAllergen + '</li>';
-    var sel = $('[data-pm-serving]', dlg);
+      : '<li class="none">' + (p.allergenUnknown ? S.askAllergen : S.noAllergen) + '</li>';
+    var sel = $('[data-pm-serving]', dlg), hasNutr = !!p.nutrition.basis;
+    $('[data-pm-nutr-blk]', dlg).style.display = hasNutr ? '' : 'none';
     var unit = p.nutrition.basis === 'g' ? '100 g' : '100 ml';
     sel.innerHTML = p.nutrition.servings.map(function (s, i) { return '<option value="' + i + '">' + esc(s.label) + '</option>'; }).join('') +
       '<option value="per100">' + (EN ? S.per + ' ' + unit : unit + ' ' + S.per) + '</option>';

@@ -349,13 +349,33 @@ CREATE TABLE IF NOT EXISTS expenses (
   created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
   updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
   is_demo TINYINT(1) NOT NULL DEFAULT 0,
+  paid_at DATETIME(6) NULL,
+  paid_method VARCHAR(4) NULL,
+  paid_by VARCHAR(60) NOT NULL DEFAULT '',
   KEY expenses_cafe_idx (cafe_id, starts_on),
+  KEY expenses_paid_idx (cafe_id, paid_method, paid_at),
   CONSTRAINT expenses_kind_check CHECK (kind IN ('monthly','one_time')),
-  CONSTRAINT expenses_category_check CHECK (category IN ('kira','fatura','personel','banka','vergi','ekipman','pazarlama','diger')),
+  CONSTRAINT expenses_category_check CHECK (category IN ('kira','fatura','personel','banka','vergi','ekipman','pazarlama','market','diger')),
+  CONSTRAINT expenses_paid_method_check CHECK (paid_method IS NULL OR paid_method IN ('cash','card')),
   CONSTRAINT expenses_amount_check CHECK (amount >= 0 AND amount < 100000000),
   CONSTRAINT expenses_one_time_check CHECK (kind = 'monthly' OR ends_on IS NULL),
   CONSTRAINT expenses_range_check CHECK (ends_on IS NULL OR ends_on >= starts_on),
   CONSTRAINT expenses_cafe_fk FOREIGN KEY (cafe_id) REFERENCES cafes(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+
+-- Gidere eklenen fatura (e-arşiv PDF ya da fotoğraf); en fazla 3 MB, veritabanında durur
+CREATE TABLE IF NOT EXISTS expense_files (
+  expense_id VARCHAR(36) NOT NULL PRIMARY KEY,
+  cafe_id VARCHAR(36) NOT NULL,
+  name VARCHAR(120) NOT NULL,
+  mime VARCHAR(40) NOT NULL,
+  size INT NOT NULL,
+  data MEDIUMBLOB NOT NULL,
+  created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  CONSTRAINT expense_files_mime_check CHECK (mime IN ('application/pdf','image/jpeg','image/png','image/webp')),
+  CONSTRAINT expense_files_size_check CHECK (size BETWEEN 1 AND 3145728),
+  CONSTRAINT expense_files_expense_fk FOREIGN KEY (expense_id) REFERENCES expenses(id) ON DELETE CASCADE,
+  CONSTRAINT expense_files_cafe_fk FOREIGN KEY (cafe_id) REFERENCES cafes(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 -- Masadaki QR koddan gelen istekler (sipariş, garson çağırma, hesap isteme). Yalnızca MySQL sürümünde var.
@@ -405,5 +425,14 @@ CREATE TABLE IF NOT EXISTS rain_status (
 export const SCHEMA_COLUMNS: [table: string, column: string, ddl: string][] = [
   ["cafes", "qr_ordering", "ADD COLUMN qr_ordering TINYINT(1) NOT NULL DEFAULT 1"],
   ["cafes", "lat", "ADD COLUMN lat DECIMAL(9,6) NULL, ADD COLUMN lon DECIMAL(9,6) NULL, ADD COLUMN rain_warn_min INT NOT NULL DEFAULT 15"],
+  [
+    "expenses",
+    "paid_at",
+    "ADD COLUMN paid_at DATETIME(6) NULL, ADD COLUMN paid_method VARCHAR(4) NULL, ADD COLUMN paid_by VARCHAR(60) NOT NULL DEFAULT '', " +
+      "ADD KEY expenses_paid_idx (cafe_id, paid_method, paid_at), " +
+      "ADD CONSTRAINT expenses_paid_method_check CHECK (paid_method IS NULL OR paid_method IN ('cash','card')), " +
+      "DROP CONSTRAINT expenses_category_check, " +
+      "ADD CONSTRAINT expenses_category_check CHECK (category IN ('kira','fatura','personel','banka','vergi','ekipman','pazarlama','market','diger'))",
+  ],
   ["dining_tables", "qr_token", "ADD COLUMN qr_token VARCHAR(32) NULL, ADD UNIQUE KEY dining_tables_qr_token (qr_token)"],
 ];

@@ -7,8 +7,8 @@ import { addDays, isIsoDate, monthStart, businessToday, weekStart } from "@/lib/
 
 export const metadata: Metadata = { title: "Ürün satışları" };
 
-export const PERIODS = ["bugun", "hafta", "ay", "90gun", "aralik", "tum"] as const;
-export type Period = (typeof PERIODS)[number];
+const PERIODS = ["bugun", "hafta", "ay", "90gun", "aralik", "tum"] as const;
+type Period = (typeof PERIODS)[number];
 
 export default async function ProductsPage({ params, searchParams }: PageProps<"/[cafe]/urunler">) {
   const { cafe } = await params;

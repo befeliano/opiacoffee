@@ -72,6 +72,8 @@ async function main() {
   let ids: ReturnType<typeof buildCafePayload>["ids"] | null = null;
   if (cafeId) {
     console.log(`Kafe zaten kurulu (${OPIA_CAFE.slug}); menüye dokunulmadı.`);
+    // Yarıda kalmış kurulum (konum hiç yazılmamış): kurulum ayarlarını tamamla
+    await pool.query("UPDATE cafes SET vat_rate = 0.10, lat = 39.785454, lon = 30.502377, cash_count = 1 WHERE id = ? AND lat IS NULL", [cafeId]);
   } else {
     console.log("Opia kafesi, menü ve masalar…");
     const built = buildCafePayload(OPIA_CAFE, { demo, uuid: randomUUID });
@@ -79,12 +81,16 @@ async function main() {
     cafeId = built.ids.cafeId;
     ids = built.ids;
 
-    const logo = await readFile(path.join(process.cwd(), "public", "opia", "logo.png"));
     // Konum: yağmur uyarısı ve hava durumu için (src/site/config.ts ile aynı)
-    await pool.query("UPDATE cafes SET logo = ?, vat_rate = 0.10, lat = 39.785454, lon = 30.502377, cash_count = 1 WHERE id = ?", [
-      `data:image/png;base64,${logo.toString("base64")}`,
-      cafeId,
-    ]);
+    await pool.query("UPDATE cafes SET vat_rate = 0.10, lat = 39.785454, lon = 30.502377, cash_count = 1 WHERE id = ?", [cafeId]);
+  }
+
+  // Logo yoksa eklenir (yarıda kalan kurulum da tamamlansın); dosya bulunamazsa kurulum durmaz
+  const logo = await readFile(path.join(process.cwd(), "public", "opia", "logo.png")).catch(() => null);
+  if (logo) {
+    await pool.query("UPDATE cafes SET logo = ? WHERE id = ? AND (logo IS NULL OR logo = '')", [`data:image/png;base64,${logo.toString("base64")}`, cafeId]);
+  } else {
+    console.log("  public/opia/logo.png bulunamadı; logoyu Ayarlar'dan yükleyebilirsin.");
   }
 
   await mysqlRpc(pool, null, "admin_add_member", { p_cafe: cafeId, p_user: ownerId, p_role: "owner", p_display_name: ownerName }, service);

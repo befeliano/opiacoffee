@@ -51,3 +51,6 @@ supabase/_bundle.sql
 
 # Başka projeye ait iç notlar (depoya girmez)
 BRIEF.md
+
+# Uygulamanın kullandığı görseller (kökteki *.png kuralına rağmen)
+!/public/**/*.png

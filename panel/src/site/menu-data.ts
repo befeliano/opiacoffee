@@ -5,6 +5,7 @@ import "server-only";
 
 import content from "./content/menu.json";
 import { SITE, type Lang } from "./config";
+import { getSiteExtras } from "./site-data";
 
 export interface Nutrition {
   basis: string;
@@ -126,6 +127,7 @@ async function loadLive(): Promise<SiteMenu> {
     [cafe.id],
   );
 
+  const extras = await getSiteExtras();
   const contentCats = new Map(content.categories.map((c) => [norm(c.name), c]));
   const contentProds = new Map(content.products.map((p) => [norm(p.name), p]));
   const groupsOf = new Map<string, Set<string>>();
@@ -159,6 +161,10 @@ async function loadLive(): Promise<SiteMenu> {
     const base = cp ? fromContent(cp) : null;
     const g = groupsOf.get(p.id) ?? new Set<string>();
     const price = Number(p.price);
+    // Panelde (Web sitesi ekranı) girilen site bilgileri menü dosyasındakilerin üstüne yazılır
+    const site = extras.products.get(p.id);
+    const o = site?.info_set ? site : undefined;
+    const image = site?.image_mode === "custom" ? `/gorsel/urun/${p.id}?v=${site.image_ver}` : site?.image_mode === "none" ? "" : (base?.image ?? "");
     const nutrition: Nutrition = base
       ? { ...base.nutrition, servings: base.nutrition.servings.map((s) => ({ ...s, price })) }
       : { basis: "", per100: {}, servings: [] };
@@ -167,20 +173,20 @@ async function loadLive(): Promise<SiteMenu> {
       dbId: p.id,
       category: cat.id,
       name: p.name,
-      name_en: base?.name_en ?? "",
+      name_en: o?.name_en || base?.name_en || "",
       lang: base?.lang ?? "tr",
       description: p.description || base?.description || "",
-      description_en: base?.description_en ?? "",
+      description_en: o?.description_en || base?.description_en || "",
       price,
       priceNote: base?.priceNote ?? "",
       priceNote_en: base?.priceNote_en ?? "",
-      image: base?.image ?? "",
+      image,
       tags: base?.tags ?? [],
       tags_en: base?.tags_en ?? [],
-      allergens: base?.allergens ?? [],
-      allergenUnknown: base ? base.allergenUnknown : true,
-      seasonal: base?.seasonal ?? false,
-      featured: base?.featured ?? false,
+      allergens: o ? o.allergens : (base?.allergens ?? []),
+      allergenUnknown: o ? o.allergen_unknown : base ? base.allergenUnknown : true,
+      seasonal: o ? o.seasonal : (base?.seasonal ?? false),
+      featured: o ? o.featured : (base?.featured ?? false),
       soldout: !p.is_active,
       orderable: (base?.orderable ?? true) && cat.id !== "ekstralar",
       options: {
@@ -193,12 +199,14 @@ async function loadLive(): Promise<SiteMenu> {
       nutrition,
     });
   }
-  return { categories: cats, products: list, allergens: content.allergens, season: content.season, live: true };
+  return { categories: cats, products: list, allergens: content.allergens, season: extras.settings.season, live: true };
 }
 
 // ---------------------------------------------------------------------
 // Dil yardımcıları (PHP sürümündeki pn/pd/ptags/pnote/cn/cnote)
 // ---------------------------------------------------------------------
+/** Menü dosyasındaki fotoğraf: public/uploads/<ad>; panelden yüklenen: /gorsel/urun/<id>?v=n */
+export const productImg = (image: string) => (image.startsWith("/") ? image : `/uploads/${image}`);
 export const pn = (p: SiteProduct, lang: Lang) => (lang === "en" && p.name_en) || p.name;
 export const pd = (p: SiteProduct, lang: Lang) => (lang === "en" && p.description_en) || p.description;
 export const ptags = (p: SiteProduct, lang: Lang) => (lang === "en" ? p.tags_en : p.tags);

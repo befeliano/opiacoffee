@@ -58,6 +58,7 @@ export const PAGE_PAIRS: Record<string, string> = {
   "/menu": "/en/menu",
   "/hakkimizda": "/en/about",
   "/iletisim": "/en/contact",
+  "/magaza": "/en/shop",
   "/kvkk-aydinlatma-metni": "/en/personal-data-notice",
   "/gizlilik-politikasi": "/en/privacy-policy",
   "/cerez-politikasi": "/en/cookie-policy",

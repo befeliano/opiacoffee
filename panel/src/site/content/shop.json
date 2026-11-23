@@ -1,0 +1,60 @@
+{
+ "_note": "Mağazanın varsayılan listesi: panelde (Web sitesi › Mağaza) ürün eklenene kadar sitede bu liste görünür. Bilgiler Brew Bar menüsünden.",
+ "items": [
+  {
+   "name": "Etiyopya Chelbesa",
+   "name_en": "Ethiopia Chelbesa",
+   "origin": "Etiyopya, Yirgacheffe · Natürel",
+   "notes": "Karpuz, kayısı, şeftali, yaban mersini",
+   "notes_en": "Watermelon, apricot, peach, blueberry",
+   "description": "Worka Chelbesa istasyonu, 2.000-2.100 m. Heirloom varyete, filtre profil. Tadım puanı 86,5.",
+   "description_en": "Worka Chelbesa station, 2,000-2,100 m. Heirloom, filter roast. Cupping score 86.5.",
+   "weight": "250 g",
+   "image": ""
+  },
+  {
+   "name": "Peru Edilberto Torres",
+   "name_en": "Peru Edilberto Torres",
+   "origin": "Peru, Jaén, Cajamarca · Natürel",
+   "notes": "Kırmızı erik, kuru üzüm, bal",
+   "notes_en": "Red plum, raisin, honey",
+   "description": "Chacra Coffee Company, 1.800-2.100 m. Harman varyeteler. Tadım puanı 86.",
+   "description_en": "Chacra Coffee Company, 1,800-2,100 m. Mixed varieties. Cupping score 86.",
+   "weight": "250 g",
+   "image": ""
+  },
+  {
+   "name": "Kolombiya Diego Horta",
+   "name_en": "Colombia Diego Horta",
+   "origin": "Kolombiya, Huila · Natürel",
+   "notes": "Portakal, kırmızı üzüm, şarapsı, kayısı",
+   "notes_en": "Orange, red grape, winey, apricot",
+   "description": "Diego Horta ile çalışan küçük üreticiler, 1.500-2.000 m. Colombia, Castillo. Tadım puanı 86,25.",
+   "description_en": "Small producers working with Diego Horta, 1,500-2,000 m. Colombia, Castillo. Cupping score 86.25.",
+   "weight": "250 g",
+   "image": ""
+  },
+  {
+   "name": "Kenya Wanrich",
+   "name_en": "Kenya Wanrich",
+   "origin": "Kenya, Rift Vadisi · Anaerobik yıkanmış",
+   "notes": "Portakal, beyaz üzüm, yeşil elma, limon",
+   "notes_en": "Orange, white grape, green apple, lemon",
+   "description": "Wanrich, 1.800-2.000 m. SL28, SL34, Batian, Ruiru; filtre profil. Tadım puanı 86.",
+   "description_en": "Wanrich, 1,800-2,000 m. SL28, SL34, Batian, Ruiru; filter roast. Cupping score 86.",
+   "weight": "250 g",
+   "image": ""
+  },
+  {
+   "name": "Kenya Kathakwa",
+   "name_en": "Kenya Kathakwa",
+   "origin": "Kenya, Kirinyaga · Yıkanmış",
+   "notes": "Greyfurt, kumkat, kırmızı elma, kuşburnu",
+   "notes_en": "Grapefruit, kumquat, red apple, rosehip",
+   "description": "Kathakwa istasyonu, 1.610 m. SL28, SL34, Batian; filtre profil. Tadım puanı 87.",
+   "description_en": "Kathakwa station, 1,610 m. SL28, SL34, Batian; filter roast. Cupping score 87.",
+   "weight": "250 g",
+   "image": ""
+  }
+ ]
+}

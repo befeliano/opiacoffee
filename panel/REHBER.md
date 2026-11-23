@@ -21,6 +21,9 @@ Bunlar için hiçbir dosyaya dokunma; `panel.opiacoffee.com.tr` adresinden yap:
 - **Masa eklemek ya da adını değiştirmek:** Masa düzeni.
 - **QR kodları yazdırmak, QR siparişi açıp kapatmak:** Masa düzeni › Masa QR kodları.
 - **Ekip hesapları ve şifreler:** Ayarlar › Ekip.
+- **Sitenin renkleri, köşeleri, düğme biçimi, sezon başlığı:** Web sitesi › Görünüm (kaydetmeden önce önizlemede görünür).
+- **Ürün fotoğrafı, İngilizce ad, alerjenler, öne çıkan / sezonluk:** Web sitesi › Menü fotoğrafları. Fotoğraf tarayıcıda küçültülüp veritabanına kaydedilir.
+- **Mağaza (çekirdekler):** Web sitesi › Mağaza. Satış kapalı; her üründe "Yakında satışta" yazar. Ödeme altyapısı (iyzico) sonra bağlanacak.
 
 > Seçenek gruplarının adları sabit kalmalı: **Süt**, **Sıcaklık**, **Ekstra shot**, **Tatlı ekstra**. Site, QR siparişteki seçenekleri bu adlarla eşleştirir (`src/site/menu-data.ts` içinde `GROUP_NAMES`). Bir grubun adını değiştirirsen o seçenek QR menüde görünmez.
 

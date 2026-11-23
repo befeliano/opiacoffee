@@ -5,10 +5,12 @@ import type { Lang } from "./config";
 import { LOCALS } from "./content/locals";
 import { POSTS } from "./content/posts";
 import { getSiteMenu } from "./menu-data";
+import { getSiteExtras } from "./site-data";
 import { BlogIndex, BlogPost, blogIndexSchema, postSchema, sortedPosts } from "./pages/blog";
 import Home from "./pages/home";
 import { Local } from "./pages/local";
 import MenuPage from "./pages/menu";
+import ShopPage from "./pages/shop";
 import { menuSchema } from "./products";
 import { renderPage, type PageMeta } from "./shell";
 import { faqSchema } from "./ui";
@@ -129,3 +131,28 @@ export function notFound(request: Request) {
     ),
   });
 }
+
+const SHOP: Record<Lang, PageMeta> = {
+  tr: {
+    path: "/magaza",
+    lang: "tr",
+    title: "Mağaza: Kahve Çekirdekleri | Opia Coffee Co. Eskişehir",
+    description: "Opia Coffee Co. barında demlediğimiz nitelikli kahve çekirdekleri: Etiyopya, Kenya, Kolombiya, Peru. Online satış yakında.",
+  },
+  en: {
+    path: "/en/shop",
+    lang: "en",
+    title: "Shop: Coffee Beans | Opia Coffee Co. Eskişehir",
+    description: "Specialty coffee beans we brew at Opia Coffee Co.: Ethiopia, Kenya, Colombia, Peru. Online orders coming soon.",
+  },
+};
+
+export const shopRoute = (lang: Lang) => async (request: Request) => {
+  const { settings, shop } = await getSiteExtras();
+  const crumbs: [string, string][] = lang === "en" ? [["Home", "/en"], ["Shop", "/en/shop"]] : [["Ana Sayfa", "/"], ["Mağaza", "/magaza"]];
+  return renderPage(request, {
+    meta: SHOP[lang],
+    breadcrumb: crumbs,
+    content: <ShopPage lang={lang} items={shop} intro={lang === "en" ? settings.shop.intro_en : settings.shop.intro} />,
+  });
+};

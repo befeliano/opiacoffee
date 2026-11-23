@@ -81,7 +81,7 @@
     var p = DATA[id]; if (!p || !dlg || !dlg.showModal) return;
     current = p; lastTrigger = trigger || null;
     $('[data-pm-img]', dlg).innerHTML = p.image
-      ? '<img src="/uploads/' + encodeURI(p.image) + '" alt="' + esc(p.name) + ', Opia Coffee Co. Eskişehir" decoding="async">'
+      ? '<img src="' + (p.image.charAt(0) === '/' ? encodeURI(p.image) : '/uploads/' + encodeURI(p.image)) + '" alt="' + esc(p.name) + ', Opia Coffee Co. Eskişehir" decoding="async">'
       : CUP;
     var eb = $('[data-pm-eyebrow]', dlg), tags = (p.tags || []).slice();
     if (p.soldout) tags.unshift(S.soldout); else if (p.seasonal) tags.unshift(S.seasonal);

@@ -16,6 +16,7 @@ import * as rain from "./rain";
 import * as menu from "./menu";
 import * as pos from "./pos";
 import * as reports from "./reports";
+import * as site from "./site";
 import * as tables from "./tables";
 import * as team from "./team";
 
@@ -117,6 +118,13 @@ const FUNCTIONS: Record<string, Fn> = {
   rain_report: rain.rain_report,
   rain_get: rain.rain_get,
   rain_ack: rain.rain_ack,
+  site_admin: site.site_admin,
+  site_save_settings: site.site_save_settings,
+  site_save_product: site.site_save_product,
+  site_product_image: site.site_product_image,
+  shop_save: site.shop_save,
+  shop_delete: site.shop_delete,
+  shop_image: site.shop_image,
 };
 
 export const MYSQL_FUNCTIONS = Object.keys(FUNCTIONS);

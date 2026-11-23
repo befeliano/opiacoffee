@@ -17,6 +17,7 @@ import {
   TrendingUp,
   Trophy,
   Wallet,
+  Globe,
   type LucideIcon,
 } from "lucide-react";
 import { logoutAction } from "@/app/(panel)/giris/actions";
@@ -49,6 +50,7 @@ const NAV: NavItem[] = [
   { segment: "masa-duzeni", label: "Masa düzeni", short: "Masalar", icon: Table2, min: "staff", perm: "menu" },
   { segment: "z-raporu", label: "Z raporu", short: "Z raporu", icon: FileSpreadsheet, min: "owner" },
   { segment: "finans", label: "Finans", short: "Finans", icon: Wallet, min: "owner" },
+  { segment: "site", label: "Web sitesi", short: "Site", icon: Globe, min: "owner" },
   { segment: "ayarlar", label: "Ayarlar ve ekip", short: "Ayarlar", icon: Settings, min: "owner" },
 ];
 

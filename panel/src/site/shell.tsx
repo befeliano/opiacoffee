@@ -88,6 +88,7 @@ function Head({ meta, graph, nonce }: { meta: PageMeta; graph: unknown[]; nonce?
       <link rel="preload" href="/assets/fonts/barlow-normal-400-latin.woff2" as="font" type="font/woff2" crossOrigin="" />
       <link rel="stylesheet" href={asset("/assets/css/fonts.css")} />
       <link rel="stylesheet" href={asset("/assets/css/main.css")} />
+      <link rel="stylesheet" href="/tema.css" />
       <JsonLd data={{ "@context": "https://schema.org", "@graph": graph }} nonce={nonce} />
     </head>
   );
@@ -160,6 +161,7 @@ export function renderPage(request: Request, { meta, content, business, breadcru
   const nav: [string, string][] = [
     [lp("/", lang), tx("nav_home")],
     [lp("/menu", lang), tx("nav_menu")],
+    [lp("/magaza", lang), tx("nav_shop")],
     ["/blog", tx("nav_blog") + (en ? " (TR)" : "")],
     [lp("/hakkimizda", lang), tx("nav_about")],
     [lp("/iletisim", lang), tx("nav_contact")],
@@ -208,6 +210,7 @@ export function renderPage(request: Request, { meta, content, business, breadcru
           </button>
           <nav className="nav nav--l" aria-label={tx("nav_main")}>
             <a href={lp("/menu", lang)} {...active(lp("/menu", lang))}>{tx("nav_menu")}</a>
+            <a href={lp("/magaza", lang)} {...active(lp("/magaza", lang))}>{tx("nav_shop")}</a>
             {en ? (
               <a href={lp("/hakkimizda", lang)} {...active(lp("/hakkimizda", lang))}>{tx("nav_about")}</a>
             ) : (
@@ -276,6 +279,7 @@ export function renderPage(request: Request, { meta, content, business, breadcru
             <h2 className="ftr__h">{tx("f_explore")}</h2>
             <ul className="ftr__list">
               <li><a href={lp("/menu", lang)}>{tx("nav_menu")}</a></li>
+              <li><a href={lp("/magaza", lang)}>{tx("nav_shop")}</a></li>
               <li><a href={lp("/hakkimizda", lang)}>{tx("nav_about")}</a></li>
               <li><a href={lp("/iletisim", lang)}>{tx("nav_contact")}</a></li>
               {en ? (

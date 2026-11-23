@@ -3,12 +3,12 @@
 
 import { money, url, type Lang } from "./config";
 import { t } from "./i18n";
-import { allergenNames, cn, pd, pn, pnote, productsIn, ptags, servingLabel, type SiteMenu, type SiteProduct } from "./menu-data";
+import { allergenNames, cn, productImg, pd, pn, pnote, productsIn, ptags, servingLabel, type SiteMenu, type SiteProduct } from "./menu-data";
 import { Icon } from "./ui";
 
 function ProductImg({ p, lang }: { p: SiteProduct; lang: Lang }) {
   if (p.image) {
-    return <img src={`/uploads/${p.image}`} alt={`${pn(p, lang)}, Opia Coffee Co. Eskişehir`} loading="lazy" decoding="async" />;
+    return <img src={productImg(p.image)} alt={`${pn(p, lang)}, Opia Coffee Co. Eskişehir`} loading="lazy" decoding="async" />;
   }
   return (
     <span className="noimg" aria-hidden="true">
@@ -130,7 +130,7 @@ export function menuSchema(m: SiteMenu, lang: Lang) {
           availability: p.soldout ? "https://schema.org/SoldOut" : "https://schema.org/InStock",
         },
       };
-      if (p.image) item.image = url(`/uploads/${p.image}`);
+      if (p.image) item.image = url(productImg(p.image));
       const s = p.nutrition.servings[0];
       if (p.nutrition.per100?.kcal && p.nutrition.basis && s) {
         item.nutrition = {

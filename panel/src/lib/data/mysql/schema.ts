@@ -419,10 +419,64 @@ CREATE TABLE IF NOT EXISTS rain_status (
   ack_by VARCHAR(60) NOT NULL DEFAULT '',
   CONSTRAINT rain_status_cafe_fk FOREIGN KEY (cafe_id) REFERENCES cafes(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+
+-- Tanıtım sitesi (yalnızca MySQL sürümünde): görünüm ayarları, ürünlerin site bilgileri, mağaza.
+-- Görseller veritabanında durur (sunucuya yeniden dağıtımda silinmesin diye).
+CREATE TABLE IF NOT EXISTS site_settings (
+  cafe_id VARCHAR(36) NOT NULL PRIMARY KEY,
+  data TEXT NOT NULL,
+  updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  CONSTRAINT site_settings_cafe_fk FOREIGN KEY (cafe_id) REFERENCES cafes(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+
+CREATE TABLE IF NOT EXISTS site_products (
+  product_id VARCHAR(36) NOT NULL PRIMARY KEY,
+  cafe_id VARCHAR(36) NOT NULL,
+  name_en VARCHAR(60) NOT NULL DEFAULT '',
+  description_en VARCHAR(300) NOT NULL DEFAULT '',
+  allergens VARCHAR(200) NOT NULL DEFAULT '[]',
+  allergen_unknown TINYINT(1) NOT NULL DEFAULT 0,
+  featured TINYINT(1) NOT NULL DEFAULT 0,
+  seasonal TINYINT(1) NOT NULL DEFAULT 0,
+  -- 1: metin bilgileri panelde kaydedildi (0 iken menü dosyasındakiler geçerli; satır yalnızca fotoğraf için açılmış olabilir)
+  info_set TINYINT(1) NOT NULL DEFAULT 0,
+  image_mode VARCHAR(8) NOT NULL DEFAULT 'default',
+  image MEDIUMBLOB NULL,
+  image_mime VARCHAR(20) NULL,
+  image_ver INT NOT NULL DEFAULT 0,
+  updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  KEY site_products_cafe_idx (cafe_id),
+  CONSTRAINT site_products_mode_check CHECK (image_mode IN ('default','custom','none')),
+  CONSTRAINT site_products_product_fk FOREIGN KEY (cafe_id, product_id) REFERENCES products(cafe_id, id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+
+CREATE TABLE IF NOT EXISTS shop_items (
+  id VARCHAR(36) NOT NULL PRIMARY KEY,
+  cafe_id VARCHAR(36) NOT NULL,
+  name VARCHAR(80) NOT NULL,
+  name_en VARCHAR(80) NOT NULL DEFAULT '',
+  origin VARCHAR(80) NOT NULL DEFAULT '',
+  notes VARCHAR(160) NOT NULL DEFAULT '',
+  notes_en VARCHAR(160) NOT NULL DEFAULT '',
+  description VARCHAR(600) NOT NULL DEFAULT '',
+  description_en VARCHAR(600) NOT NULL DEFAULT '',
+  weight VARCHAR(20) NOT NULL DEFAULT '',
+  price DECIMAL(12,2) NULL,
+  is_active TINYINT(1) NOT NULL DEFAULT 1,
+  sort_order INT NOT NULL DEFAULT 0,
+  image MEDIUMBLOB NULL,
+  image_mime VARCHAR(20) NULL,
+  image_ver INT NOT NULL DEFAULT 0,
+  created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  KEY shop_items_cafe_idx (cafe_id, sort_order),
+  CONSTRAINT shop_items_price_check CHECK (price IS NULL OR (price >= 0 AND price < 1000000)),
+  CONSTRAINT shop_items_cafe_fk FOREIGN KEY (cafe_id) REFERENCES cafes(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 `;
 
 /** Var olan veritabanına sonradan eklenen sütunlar (tablo, sütun, tanım) */
 export const SCHEMA_COLUMNS: [table: string, column: string, ddl: string][] = [
+  ["site_products", "info_set", "ADD COLUMN info_set TINYINT(1) NOT NULL DEFAULT 0"],
   ["cafes", "qr_ordering", "ADD COLUMN qr_ordering TINYINT(1) NOT NULL DEFAULT 1"],
   ["cafes", "lat", "ADD COLUMN lat DECIMAL(9,6) NULL, ADD COLUMN lon DECIMAL(9,6) NULL, ADD COLUMN rain_warn_min INT NOT NULL DEFAULT 15"],
   [

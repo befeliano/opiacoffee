@@ -4,7 +4,7 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { DEMO_MODE } from "@/config";
-import { signIn, signOut } from "@/lib/data/server";
+import { changeOwnPassword, signIn, signOut } from "@/lib/data/server";
 import { DEMO_LOGINS, TEAM } from "@/lib/seed/team";
 import { toAppError } from "@/lib/errors";
 
@@ -67,4 +67,25 @@ export async function demoLoginAction(_prev: LoginState, formData: FormData): Pr
 export async function logoutAction() {
   await signOut();
   redirect("/giris");
+}
+
+const newPassword = z
+  .string()
+  .min(6)
+  .max(72)
+  .refine((v) => /[a-zA-ZçğıöşüÇĞİÖŞÜ]/.test(v) && /\d/.test(v));
+
+/** Hesap menüsünden: kendi şifreni değiştir */
+export async function changeOwnPasswordAction(current: string, next: string): Promise<{ ok: true } | { ok: false; error: string }> {
+  const parsed = newPassword.safeParse(next);
+  if (!parsed.success) return { ok: false, error: "Yeni şifre en az 6 karakter olmalı, harf ve rakam içermeli." };
+  if (typeof current !== "string" || !current || current.length > 128) return { ok: false, error: "Mevcut şifreni yaz." };
+  const h = await headers();
+  const clientKey = h.get("x-forwarded-for")?.split(",")[0]?.trim() || h.get("x-real-ip") || "local";
+  try {
+    await changeOwnPassword(current, parsed.data, clientKey);
+    return { ok: true };
+  } catch (error) {
+    return { ok: false, error: toAppError(error).message };
+  }
 }

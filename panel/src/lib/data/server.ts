@@ -256,3 +256,22 @@ export async function isLocalMode() {
 export async function isMysqlMode() {
   return dataBackend() === "mysql";
 }
+
+/** Giriş yapmış kişinin kendi şifresini değiştirmesi: önce mevcut şifre doğrulanır */
+export async function changeOwnPassword(current: string, next: string, clientKey: string): Promise<void> {
+  const me = await getSessionUser();
+  if (!me) throw new AppError("E_NOT_AUTHENTICATED");
+  checkRateLimit(`${clientKey}|sifre|${me.id}`);
+  if (dataBackend() === "supabase") {
+    const supabase = await getSupabase();
+    const { error: wrong } = await supabase.auth.signInWithPassword({ email: me.email, password: current });
+    if (wrong) throw new AppError("E_INVALID_LOGIN", "Mevcut şifre hatalı.");
+    const { error } = await supabase.auth.updateUser({ password: next });
+    if (error) throw /password/i.test(error.message) ? new AppError("E_WEAK_PASSWORD") : toAppError(error);
+    return;
+  }
+  const user = await findUser(me.email);
+  if (!user || !verifyPassword(current, user.encrypted_password)) throw new AppError("E_INVALID_LOGIN", "Mevcut şifre hatalı.");
+  attempts.delete(`${clientKey}|sifre|${me.id}`);
+  await setAuthUserPassword(me.id, next);
+}

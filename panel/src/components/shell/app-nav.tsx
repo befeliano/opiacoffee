@@ -17,10 +17,14 @@ import {
   TrendingUp,
   Trophy,
   Wallet,
+  KeyRound,
   Globe,
   type LucideIcon,
 } from "lucide-react";
-import { logoutAction } from "@/app/(panel)/giris/actions";
+import { changeOwnPasswordAction, logoutAction } from "@/app/(panel)/giris/actions";
+import { Button } from "@/components/ui/button";
+import { Field, Input } from "@/components/ui/field";
+import { useToast } from "@/components/ui/toast";
 import { LogoMark } from "@/components/brand/logo";
 import { DEMO_MODE } from "@/config";
 import { Sheet } from "@/components/ui/sheet";
@@ -206,6 +210,8 @@ export function AppNav({
           <ThemeToggle />
         </div>
 
+        <OwnPassword />
+
         <form action={logoutAction}>
           <button
             type="submit"
@@ -255,4 +261,57 @@ function BottomLink({ item, href, active }: { item: NavItem; href: string; activ
 function shortName(name: string) {
   const first = name.split(/\s+/)[0] ?? name;
   return first.length > 9 ? first.slice(0, 8) + "…" : first;
+}
+
+/** Hesap menüsü: kendi şifreni değiştir (mevcut şifre sorulur) */
+function OwnPassword() {
+  const toast = useToast();
+  const [open, setOpen] = useState(false);
+  const [current, setCurrent] = useState("");
+  const [next, setNext] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  if (!open) {
+    return (
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        className="mb-2 flex w-full items-center justify-center gap-2 rounded-xl border border-stone-200 py-3 text-[15px] font-semibold text-stone-700 hover:bg-stone-50"
+      >
+        <KeyRound className="size-5" />
+        Şifremi değiştir
+      </button>
+    );
+  }
+  const save = async () => {
+    setError(null);
+    setBusy(true);
+    const r = await changeOwnPasswordAction(current, next).catch(() => null);
+    setBusy(false);
+    if (!r) return setError("Bağlantı sorunu. Tekrar dene.");
+    if (!r.ok) return setError(r.error);
+    toast.show("Şifren değiştirildi");
+    setOpen(false);
+    setCurrent("");
+    setNext("");
+  };
+  return (
+    <div className="mb-3 flex flex-col gap-3 rounded-xl border border-stone-200 p-3">
+      <Field label="Mevcut şifre">
+        <Input type="password" value={current} onChange={(e) => setCurrent(e.target.value)} autoComplete="current-password" autoFocus />
+      </Field>
+      <Field label="Yeni şifre" hint="En az 6 karakter, harf ve rakam." error={error}>
+        <Input type="password" value={next} onChange={(e) => setNext(e.target.value)} autoComplete="new-password" />
+      </Field>
+      <div className="flex gap-2">
+        <Button variant="secondary" className="flex-1" onClick={() => setOpen(false)} disabled={busy}>
+          Vazgeç
+        </Button>
+        <Button className="flex-1" onClick={save} disabled={busy || !current || next.length < 6}>
+          Kaydet
+        </Button>
+      </div>
+    </div>
+  );
 }

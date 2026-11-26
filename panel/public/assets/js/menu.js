@@ -87,9 +87,10 @@
     if (p.soldout) tags.unshift(S.soldout); else if (p.seasonal) tags.unshift(S.seasonal);
     eb.setAttribute('lang', tags.length ? (EN ? 'en' : 'tr') : 'en');
     eb.textContent = tags.length ? tags.join(' / ') : 'Opia Coffee Co.';
-    var ttl = $('[data-pm-title]', dlg); ttl.textContent = p.name; ttl.setAttribute('lang', p.lang === 'en' ? 'en' : 'tr');
+    var ttl = $('[data-pm-title]', dlg); if (p.nameHtml) ttl.innerHTML = p.nameHtml; else ttl.textContent = p.name; ttl.setAttribute('lang', p.lang === 'en' ? 'en' : 'tr');
     $('[data-pm-desc]', dlg).textContent = p.description;
-    $('[data-pm-allergens]', dlg).innerHTML = p.allergens.length
+    var alEl = $('[data-pm-allergens]', dlg);
+    if (alEl) alEl.innerHTML = p.allergens.length
       ? p.allergens.map(function (a) { return '<li>' + esc(a) + '</li>'; }).join('')
       : '<li class="none">' + (p.allergenUnknown ? S.askAllergen : S.noAllergen) + '</li>';
     var sel = $('[data-pm-serving]', dlg), hasNutr = !!p.nutrition.basis;

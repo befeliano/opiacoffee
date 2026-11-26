@@ -10,7 +10,7 @@ const TXT = {
   tr: {
     eyebrow: "Opia Coffee Co. / Yenibağlar",
     h1: "Menü",
-    lead: "Kahve, matcha, sıcak çikolata ve tatlılar. Bir ürüne dokun; alerjen ve besin değerlerini, porsiyon seçerek gör.",
+    lead: "Kahve, matcha, sıcak çikolata ve tatlılar. Fotoğrafını ve ayrıntısını görmek için ürüne dokun.",
     tools: "Menü araçları",
     search: "Menüde ara",
     cats: "Kategoriler",
@@ -18,13 +18,13 @@ const TXT = {
     filterHelp: "Seçtiğin alerjenleri içeren ürünleri gizler.",
     clear: "Filtreyi temizle",
     empty: "Aramana uyan ürün bulunamadı. Filtreyi ya da aramayı temizlemeyi dene.",
-    noteH: "Alerji ve beslenme notu",
-    note: "Mutfağımızda gluten, süt, yumurta, yer fıstığı ve sert kabuklu yemişler birlikte kullanılır; çapraz bulaşma olabilir. Kalori ve besin değerleri tahminî olup tarif ve hazırlanışa göre değişebilir. Hassasiyetin varsa sipariş verirken bize söyle. Fiyatlara KDV dahildir.",
+    noteH: "Not",
+    note: "Alerjin ya da hassasiyetin varsa sipariş verirken bize söyle. Fiyatlara KDV dahildir.",
   },
   en: {
     eyebrow: "Opia Coffee Co. / Yenibağlar",
     h1: "Menu",
-    lead: "Coffee, matcha, hot chocolate and desserts. Tap an item to see allergens and nutrition for each serving.",
+    lead: "Coffee, matcha, hot chocolate and desserts. Tap an item for its photo and details.",
     tools: "Menu tools",
     search: "Search the menu",
     cats: "Categories",
@@ -32,8 +32,8 @@ const TXT = {
     filterHelp: "Hides items that contain the allergens you select.",
     clear: "Clear filter",
     empty: "No items match your search. Try clearing the filter or the search.",
-    noteH: "Allergy and nutrition note",
-    note: "Gluten, milk, egg, peanuts and tree nuts are all used in our kitchen, so cross-contamination is possible. Calories and nutrition values are estimates and may vary with the recipe and preparation. Please tell us about any allergy when you order. Prices are in Turkish lira and include VAT.",
+    noteH: "Note",
+    note: "Please tell us about any allergy when you order. Prices are in Turkish lira and include VAT.",
   },
 };
 
@@ -43,7 +43,6 @@ export default function MenuPage({ lang, menu }: { lang: Lang; menu: SiteMenu })
   const season = seasonal(menu);
   const cats = [...menu.categories].sort((a, b) => a.sort - b.sort);
   const regular = (id: string) => productsIn(menu, id).filter((p) => !p.seasonal);
-  const allergens = menu.allergens.filter((al) => menu.products.some((p) => p.allergens.includes(al.id)));
 
   return (
     <>
@@ -68,18 +67,6 @@ export default function MenuPage({ lang, menu }: { lang: Lang; menu: SiteMenu })
               <a key={c.id} href={`#${c.id}`} data-cat={c.id}>{L(cn(c, lang))}</a>
             ))}
           </nav>
-          <details className="afilter">
-            <summary>{x.filter} <span className="afilter__n" data-afilter-n hidden></span></summary>
-            <div className="afilter__panel">
-              <p className="afilter__help">{x.filterHelp}</p>
-              <ul className="afilter__list">
-                {allergens.map((al) => (
-                  <li key={al.id}><label><input type="checkbox" value={al.id} /><span>{lang === "en" ? al.name_en : al.name}</span></label></li>
-                ))}
-              </ul>
-              <button type="button" className="linkbtn" data-afilter-clear>{x.clear}</button>
-            </div>
-          </details>
         </div>
       </section>
 

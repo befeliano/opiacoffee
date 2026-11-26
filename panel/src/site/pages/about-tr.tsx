@@ -3,7 +3,7 @@
 // Metni değiştirmek için bu dosyayı düzenle; başlık ve açıklama aşağıdaki "page" nesnesinde.
 
 import type { StaticPage } from "../static-page";
-import { Icon } from "../ui";
+import { Icon, Img } from "../ui";
 
 export const page: StaticPage = {
   "path": "/hakkimizda",
@@ -45,7 +45,7 @@ export default function AboutTr() {
       </section>
       <section className="sec sec--tight">
         <div className="wrap split">
-          <figure className="split__fig"><img src="/assets/img/placeholders/hakkimizda-1.svg" alt="Opia Coffee Co. Yenibağlar Eskişehir iç mekân" width="1000" height="1250" loading="lazy" decoding="async" /></figure>
+          <figure className="split__fig"><Img slot="hakkimizda-1" alt="Opia Coffee Co. Yenibağlar Eskişehir iç mekân" w={1000} h={1250} /></figure>
           <div className="prose">
             <h2 className="h2">Bir kahve, <em>bir mola.</em></h2>
             <p><span lang="en">Opia</span> Coffee Co., 2019’dan beri Eskişehir’in Tepebaşı ilçesinde, Yenibağlar Mahallesi’nde Eti Caddesi üzerinde yer alan bir kahve dükkânı. Marka sloganımız “<span lang="en">Awaken the senses</span>”. Fikrimiz basit: şehrin hızında kaybolmadan, kendi hızında içilen bir fincan sunmak.</p>
@@ -60,14 +60,14 @@ export default function AboutTr() {
           <ol className="values">
             <li><span className="values__n">01</span><h3>Nitelikli çekirdek</h3><p>Özenle seçilmiş, taze kavrulmuş çekirdeklerle çalışırız. Günün filtre çekirdeği hakkında sorarsan hikâyesini anlatırız.</p></li>
             <li><span className="values__n">02</span><h3>Doğru demleme</h3><p>Su, öğütme, süre, sıcaklık. Her fincan ölçülür ve tadılır. Amacımız gösterişli değil, tutarlı bir fincan.</p></li>
-            <li><span className="values__n">03</span><h3>Şeffaflık</h3><p>Menümüzdeki her üründe alerjen ve besin değerlerini açıkça paylaşırız. Ne içtiğini bilmek hakkındır.</p></li>
+            <li><span className="values__n">03</span><h3>Şeffaflık</h3><p>Fiyatlarımız ve fincana giren her şey açık. Merak ettiğini barda sorabilirsin.</p></li>
             <li><span className="values__n">04</span><h3>Acelesiz masa</h3><p>Her gün sabah 09:00’dan gece yarısına kadar açığız. Ders arasında, yürüyüş sonrası ya da gece geç bir kahve için.</p></li>
           </ol>
         </div>
       </section>
       <section className="sec">
         <div className="wrap split split--rev">
-          <figure className="split__fig split__fig--wide"><img src="/assets/img/placeholders/hakkimizda-2.svg" alt="Opia Coffee Co. barda kahve hazırlığı" width="1200" height="900" loading="lazy" decoding="async" /></figure>
+          <figure className="split__fig split__fig--wide"><Img slot="hakkimizda-2" alt="Opia Coffee Co. barda kahve hazırlığı" w={1200} h={900} /></figure>
           <div className="prose">
             <h2 className="h2">Neredeyiz? <em>Yenibağlar.</em></h2>
             <p>Anadolu Üniversitesi Yunusemre Kampüsü’nün ve Vecihi Hürkuş Havacılık Parkı’nın (Hava Müzesi) bulunduğu hattın hemen yanındayız. Şehir merkezine, Eskişehir Garı’na ve Cassaba Modern’e kısa bir yolculukla ulaşabilirsin.</p>

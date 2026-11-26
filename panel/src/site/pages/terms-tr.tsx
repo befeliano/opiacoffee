@@ -39,7 +39,7 @@ export default function TermsTr() {
           <h2>1. Genel</h2>
           <p>Bu site <span lang="en">Opia</span> Coffee Co. tarafından işletilir. Koşulları gerektiğinde güncelleyebiliriz; güncel sürüm bu sayfadadır.</p>
           <h2>2. Menü, fiyat ve besin bilgileri</h2>
-          <p>Menü, fiyat, çalışma saati, kalori, besin değeri ve alerjen bilgileri bilgilendirme amaçlıdır ve haber verilmeksizin değişebilir. Besin değerleri tahminîdir. Mutfağımızda gluten, süt, yumurta, yer fıstığı ve sert kabuklu yemişler birlikte kullanıldığından çapraz bulaşma riski vardır; alerjin varsa sipariş öncesi personele danış. Fiyatlar Türk lirası cinsindendir ve KDV dahildir.</p>
+          <p>Menü, fiyat, çalışma saati, kalori ve besin değeri bilgileri bilgilendirme amaçlıdır ve haber verilmeksizin değişebilir. Besin değerleri tahminîdir. Mutfağımızda gluten, süt, yumurta, yer fıstığı ve sert kabuklu yemişler birlikte kullanıldığından çapraz bulaşma riski vardır; alerjin varsa sipariş öncesi personele danış. Fiyatlar Türk lirası cinsindendir ve KDV dahildir.</p>
           <h2>3. QR masa siparişi</h2>
           <ul>
             <li>QR sipariş, kafede oturduğun masadan sipariş vermen içindir; masa dışında ya da başkası adına kullanılmamalıdır.</li>

@@ -6,6 +6,7 @@ import "server-only";
 import content from "./content/menu.json";
 import { SITE, type Lang } from "./config";
 import { getSiteExtras } from "./site-data";
+import { looksEnglish } from "./en-words";
 
 export interface Nutrition {
   basis: string;
@@ -174,7 +175,7 @@ async function loadLive(): Promise<SiteMenu> {
       category: cat.id,
       name: p.name,
       name_en: o?.name_en || base?.name_en || "",
-      lang: base?.lang ?? "tr",
+      lang: base?.lang ?? (looksEnglish(p.name) ? "en" : "tr"),
       description: p.description || base?.description || "",
       description_en: o?.description_en || base?.description_en || "",
       price,

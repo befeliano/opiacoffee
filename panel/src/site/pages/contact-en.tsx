@@ -56,10 +56,10 @@ export const page: StaticPage = {
         },
         {
           "@type": "Question",
-          "name": "Do you list allergens?",
+          "name": "I have an allergy. How should I order?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Yes. Tap any item on the menu to see its allergens and nutrition values per serving."
+            "text": "Please tell our staff at the bar when you order; we will tell you about ingredients and preparation."
           }
         },
         {
@@ -141,8 +141,8 @@ export default function ContactEn() {
               <p>Yes. Scan the QR code on your table and the menu opens in order mode. Choose your options, send your order to the bar, call a waiter or ask for the bill. You pay at the counter or at your table.</p>
             </details>
             <details>
-              <summary>Do you list allergens?</summary>
-              <p>Yes. Tap any item on the menu to see its allergens and nutrition values per serving.</p>
+              <summary>I have an allergy. How should I order?</summary>
+              <p>Please tell our staff at the bar when you order; we will tell you about ingredients and preparation.</p>
             </details>
             <details>
               <summary>Do you speak English?</summary>

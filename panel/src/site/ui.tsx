@@ -4,6 +4,8 @@
 import { existsSync, statSync } from "node:fs";
 import path from "node:path";
 import { SITE, type Lang } from "./config";
+import { EN_WORDS } from "./en-words";
+import { slotVersions } from "./site-data";
 
 const ICONS: Record<string, string> = {
   pin: '<path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/>',
@@ -56,13 +58,17 @@ export const iconInner = (name: string) => ICONS[name];
 const IMG_DIR = path.join(process.cwd(), "public", "assets", "img");
 
 export function imgSrc(slot: string, w = 1200, h = 900) {
+  // Panelden yüklenen fotoğraf (Web sitesi › Fotoğraflar) dosyadakinin yerine geçer
+  const ver = slotVersions.get(slot);
+  if (ver) return { src: `/gorsel/alan/${slot}?v=${ver}`, w, h, real: true };
   for (const ext of ["webp", "jpg", "jpeg", "png", "avif"]) {
     const file = path.join(IMG_DIR, `${slot}.${ext}`);
     if (existsSync(file)) {
       return { src: `/assets/img/${slot}.${ext}?v=${Math.round(statSync(file).mtimeMs).toString(36)}`, w, h, real: true };
     }
   }
-  return { src: `/assets/img/placeholders/${slot}.svg`, w, h, real: false };
+  const ph = existsSync(path.join(IMG_DIR, "placeholders", `${slot}.svg`)) ? slot : "bos";
+  return { src: `/assets/img/placeholders/${ph}.svg`, w, h, real: false };
 }
 
 export function Img({ slot, alt, w = 1200, h = 900, eager, className }: { slot: string; alt: string; w?: number; h?: number; eager?: boolean; className?: string }) {
@@ -125,7 +131,7 @@ const reCache = new Map<Lang, RegExp>();
 function wordRe(lang: Lang) {
   let re = reCache.get(lang);
   if (!re) {
-    const words = [...(lang === "en" ? SITE.trWords : SITE.enWords)].sort((a, b) => b.length - a.length);
+    const words = [...(lang === "en" ? SITE.trWords : EN_WORDS)].sort((a, b) => b.length - a.length);
     re = new RegExp(`(?<![\\p{L}])(${words.map((w) => w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|")})(?![\\p{L}])`, "gu");
     reCache.set(lang, re);
   }

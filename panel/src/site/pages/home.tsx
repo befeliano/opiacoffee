@@ -2,7 +2,7 @@
 // Ana sayfa (Türkçe ve İngilizce). Sezon kartları adisyondaki menüden gelir.
 
 import { SITE, mapsDirUrl, type Lang } from "../config";
-import { POSTS } from "../content/posts";
+import type { Post } from "../content/posts";
 import { seasonTxt, seasonal, type SiteMenu } from "../menu-data";
 import { MenuEmbed, ProductCard } from "../products";
 import { Icon, Img, Lw } from "../ui";
@@ -84,14 +84,14 @@ const NEAR_EN: [string, string, string][] = [
   ["sun", "Tepebaşı", "The modern side of Eskişehir"],
 ];
 
-export default function Home({ lang, menu }: { lang: Lang; menu: SiteMenu }) {
+export default function Home({ lang, menu, posts: allPosts }: { lang: Lang; menu: SiteMenu; posts: Post[] }) {
   const x = TXT[lang];
   const en = lang === "en";
   const season = seasonal(menu);
   const a = SITE.address;
   const insta = `https://www.instagram.com/${SITE.instagram}/`;
   const L = (s: string) => <Lw lang={lang}>{s}</Lw>;
-  const posts = [...POSTS].sort((p, q) => q.date.localeCompare(p.date)).slice(0, 3);
+  const posts = allPosts.slice(0, 3);
 
   return (
     <>

@@ -21,6 +21,7 @@ import { Badge, Card, CardHeader, PageHeader, Segmented } from "@/components/ui/
 import { useToast } from "@/components/ui/toast";
 import { cn } from "@/lib/cn";
 import { tl, currencySymbol } from "@/lib/format";
+import { BlogTab, PhotosTab, type PanelPost, type PanelSlot } from "./site-content";
 import { contrast, THEME_PRESETS, type ButtonShape, type Radius, type SiteSettings, type SiteTheme } from "@/lib/site-settings";
 
 export interface SiteProductDefaults {
@@ -65,7 +66,7 @@ export interface SiteAdminData {
   shop: ShopRow[];
 }
 
-type Tab = "look" | "products" | "shop";
+type Tab = "look" | "products" | "photos" | "blog" | "shop";
 
 export function SiteView({
   cafeId,
@@ -74,10 +75,14 @@ export function SiteView({
   data,
   defaults,
   allergens,
+  slots,
+  posts,
 }: {
   cafeId: string;
   slug: string;
   siteUrl: string;
+  slots: PanelSlot[];
+  posts: PanelPost[];
   data: SiteAdminData;
   defaults: Record<string, SiteProductDefaults>;
   allergens: { id: string; name: string }[];
@@ -100,11 +105,15 @@ export function SiteView({
         options={[
           { value: "look", label: "Görünüm" },
           { value: "products", label: "Menü fotoğrafları" },
+          { value: "photos", label: "Fotoğraflar" },
+          { value: "blog", label: "Blog" },
           { value: "shop", label: "Mağaza" },
         ]}
       />
       {tab === "look" && <LookTab cafeId={cafeId} initial={data.settings} />}
       {tab === "products" && <ProductsTab cafeId={cafeId} slug={slug} products={data.products} defaults={defaults} allergens={allergens} />}
+      {tab === "photos" && <PhotosTab cafeId={cafeId} slug={slug} slots={slots} />}
+      {tab === "blog" && <BlogTab cafeId={cafeId} slug={slug} siteUrl={siteUrl} posts={posts} />}
       {tab === "shop" && <ShopTab cafeId={cafeId} slug={slug} items={data.shop} settings={data.settings} />}
       <p className="text-[13px] text-stone-500">Değişiklikler sitede en geç bir dakika içinde görünür.</p>
     </div>
@@ -308,7 +317,7 @@ function Preview({ theme }: { theme: SiteTheme }) {
 // ---------------------------------------------------------------------
 
 /** Fotoğrafı tarayıcıda en fazla 1000 px'e küçültüp WEBP'ye (olmazsa JPEG'e) çevirir */
-async function compressImage(file: File, max = 1000): Promise<Blob> {
+export async function compressImage(file: File, max = 1000): Promise<Blob> {
   const bitmap = await createImageBitmap(file);
   const scale = Math.min(1, max / Math.max(bitmap.width, bitmap.height));
   const canvas = document.createElement("canvas");
@@ -326,10 +335,10 @@ async function compressImage(file: File, max = 1000): Promise<Blob> {
   return jpeg;
 }
 
-async function uploadImage(slug: string, kind: "urun" | "magaza", id: string, file: File): Promise<string | null> {
+export async function uploadImage(slug: string, kind: "urun" | "magaza" | "alan", id: string, file: File, max = 1000): Promise<string | null> {
   let blob: Blob;
   try {
-    blob = await compressImage(file);
+    blob = await compressImage(file, max);
   } catch {
     return "Görsel okunamadı. JPG, PNG ya da WEBP dene.";
   }
@@ -343,7 +352,7 @@ async function uploadImage(slug: string, kind: "urun" | "magaza", id: string, fi
   return res.ok && json?.ok ? null : (json?.error ?? "Görsel yüklenemedi.");
 }
 
-function ImagePicker({ src, onPick, busy }: { src: string; onPick: (f: File) => void; busy: boolean }) {
+export function ImagePicker({ src, onPick, busy }: { src: string; onPick: (f: File) => void; busy: boolean }) {
   const input = useRef<HTMLInputElement>(null);
   return (
     <div className="flex items-center gap-3">
@@ -451,7 +460,7 @@ function ProductsTab({
                     <span className="min-w-0 flex-1">
                       <span className="block truncate text-[15px] font-semibold text-stone-900">{p.name}</span>
                       <span className="block truncate text-[13px] text-stone-500">
-                        {e.name_en || "İngilizce ad yok"} · {e.allergen_unknown && !e.allergens.length ? "alerjen bilinmiyor" : e.allergens.length ? `${e.allergens.length} alerjen` : "alerjen yok"}
+                        {e.name_en || "İngilizce ad yok"}
                       </span>
                     </span>
                     <span className="flex shrink-0 gap-1">
@@ -478,7 +487,6 @@ function ProductEditor({
   slug,
   product,
   defaults,
-  allergens,
   onClose,
 }: {
   cafeId: string;
@@ -493,8 +501,8 @@ function ProductEditor({
   const e = effective(product, defaults);
   const [nameEn, setNameEn] = useState(e.name_en);
   const [descEn, setDescEn] = useState(e.description_en);
-  const [list, setList] = useState<string[]>(e.allergens);
-  const [unknown, setUnknown] = useState(e.allergen_unknown);
+  const [list] = useState<string[]>(e.allergens);
+  const [unknown] = useState(e.allergen_unknown);
   const [featured, setFeatured] = useState(e.featured);
   const [seasonal, setSeasonal] = useState(e.seasonal);
   const [image, setImage] = useState(e.image);
@@ -536,11 +544,6 @@ function ProductEditor({
     toast.show("Kaydedildi");
     onClose();
   };
-  const toggle = (id: string) => {
-    setList((l) => (l.includes(id) ? l.filter((x) => x !== id) : [...l, id]));
-    setUnknown(false);
-  };
-
   return (
     <Sheet
       open
@@ -576,31 +579,6 @@ function ProductEditor({
         <Field label="İngilizce açıklama">
           <TextArea rows={2} value={descEn} maxLength={300} onChange={(ev) => setDescEn(ev.target.value)} />
         </Field>
-        <Field label="Alerjenler" hint="Sitede ürün penceresinde ve alerjen filtresinde kullanılır.">
-          <div className="flex flex-wrap gap-2">
-            {allergens.map((a) => (
-              <button
-                key={a.id}
-                type="button"
-                onClick={() => toggle(a.id)}
-                className={cn(
-                  "h-9 rounded-full border px-3 text-[13px] font-semibold",
-                  list.includes(a.id) ? "border-stone-900 bg-stone-900 text-white" : "border-stone-200 bg-white text-stone-700",
-                )}
-              >
-                {a.name}
-              </button>
-            ))}
-          </div>
-        </Field>
-        {list.length === 0 && (
-          <Toggle
-            checked={unknown}
-            onChange={setUnknown}
-            label="Alerjen bilgisi bilinmiyor"
-            description={unknown ? "Sitede “Alerjen bilgisi için personelimize sorun” yazar." : "Sitede “Bilinen alerjen içermez” yazar."}
-          />
-        )}
         <Toggle checked={featured} onChange={setFeatured} label="Öne çıkan" description="Ana sayfadaki “Sevilenler” bölümünde görünür (ilk 3)." />
         <Toggle checked={seasonal} onChange={setSeasonal} label="Sezonluk" description="Sezon başlığının altında, menünün en üstünde görünür." />
       </div>

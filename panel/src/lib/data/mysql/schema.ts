@@ -472,6 +472,37 @@ CREATE TABLE IF NOT EXISTS shop_items (
   CONSTRAINT shop_items_price_check CHECK (price IS NULL OR (price >= 0 AND price < 1000000)),
   CONSTRAINT shop_items_cafe_fk FOREIGN KEY (cafe_id) REFERENCES cafes(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+
+-- Sitenin fotoğraf yerleri (ana sayfa, galeri, blog kapakları...): panelden yüklenen, dosyadakinin yerine geçer
+CREATE TABLE IF NOT EXISTS site_images (
+  cafe_id VARCHAR(36) NOT NULL,
+  slot VARCHAR(100) NOT NULL,
+  image MEDIUMBLOB NOT NULL,
+  image_mime VARCHAR(20) NOT NULL,
+  ver INT NOT NULL DEFAULT 1,
+  updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  PRIMARY KEY (cafe_id, slot),
+  CONSTRAINT site_images_cafe_fk FOREIGN KEY (cafe_id) REFERENCES cafes(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+
+-- Panelden yazılan blog yazıları. Aynı adlı hazır yazının (src/site/content/posts.ts) yerine geçer;
+-- hidden = 1 hazır yazıyı sitede gizler. Metin basit biçimde (## başlık, - madde, **kalın**, [bağlantı](adres)).
+CREATE TABLE IF NOT EXISTS site_posts (
+  id VARCHAR(36) NOT NULL PRIMARY KEY,
+  cafe_id VARCHAR(36) NOT NULL,
+  slug VARCHAR(90) NOT NULL,
+  title VARCHAR(120) NOT NULL,
+  description VARCHAR(200) NOT NULL DEFAULT '',
+  lead VARCHAR(600) NOT NULL DEFAULT '',
+  body MEDIUMTEXT NOT NULL,
+  published TINYINT(1) NOT NULL DEFAULT 0,
+  hidden TINYINT(1) NOT NULL DEFAULT 0,
+  post_date DATE NOT NULL,
+  updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  UNIQUE KEY site_posts_slug (cafe_id, slug),
+  CONSTRAINT site_posts_cafe_fk FOREIGN KEY (cafe_id) REFERENCES cafes(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 `;
 
 /** Var olan veritabanına sonradan eklenen sütunlar (tablo, sütun, tanım) */

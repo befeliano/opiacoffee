@@ -125,6 +125,11 @@ const FUNCTIONS: Record<string, Fn> = {
   shop_save: site.shop_save,
   shop_delete: site.shop_delete,
   shop_image: site.shop_image,
+  site_images_list: site.site_images_list,
+  site_slot_image: site.site_slot_image,
+  site_posts_list: site.site_posts_list,
+  site_post_save: site.site_post_save,
+  site_post_delete: site.site_post_delete,
 };
 
 export const MYSQL_FUNCTIONS = Object.keys(FUNCTIONS);

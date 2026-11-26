@@ -18,8 +18,8 @@ export async function POST(request: Request, { params }: { params: Promise<{ caf
     const { cafe } = await params;
     const form = await request.formData();
     const file = form.get("file");
-    const kind = z.enum(["urun", "magaza"]).parse(form.get("tur"));
-    const target = z.uuid().parse(form.get("id"));
+    const kind = z.enum(["urun", "magaza", "alan"]).parse(form.get("tur"));
+    const target = kind === "alan" ? z.string().regex(/^[a-z0-9-]{1,100}$/).parse(form.get("id")) : z.uuid().parse(form.get("id"));
     if (!(file instanceof File)) return Response.json({ ok: false, error: "Görsel seçilmedi." }, { status: 400 });
     if (!MIMES.includes(file.type)) return Response.json({ ok: false, error: "Yalnızca JPG, PNG ya da WEBP yüklenebilir." }, { status: 400 });
     if (file.size > MAX_BYTES) return Response.json({ ok: false, error: "Görsel çok büyük (en fazla 1,5 MB)." }, { status: 400 });
@@ -28,7 +28,9 @@ export async function POST(request: Request, { params }: { params: Promise<{ caf
     const ver =
       kind === "urun"
         ? await rpc<number>("site_product_image", { p_cafe: cafeId, p_product: target, p_mime: file.type, p_data: data })
-        : await rpc<number>("shop_image", { p_cafe: cafeId, p_id: target, p_mime: file.type, p_data: data });
+        : kind === "alan"
+          ? await rpc<number>("site_slot_image", { p_cafe: cafeId, p_slot: target, p_mime: file.type, p_data: data })
+          : await rpc<number>("shop_image", { p_cafe: cafeId, p_id: target, p_mime: file.type, p_data: data });
     clearSiteExtrasCache();
     return Response.json({ ok: true, ver });
   } catch (error) {

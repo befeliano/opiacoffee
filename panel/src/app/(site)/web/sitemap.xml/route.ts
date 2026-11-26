@@ -2,12 +2,15 @@
 
 import { PAGE_PAIRS, url } from "@/site/config";
 import { LOCALS } from "@/site/content/locals";
-import { POSTS } from "@/site/content/posts";
+import { getPosts } from "@/site/posts-data";
 import { imgSrc } from "@/site/ui";
 
 const STARTED = "2026-10-28";
 
-export function GET() {
+export const dynamic = "force-dynamic";
+
+export async function GET() {
+  const POSTS = await getPosts();
   const entries: { path: string; lastmod: string; freq: string; prio: string; img?: string }[] = [];
   for (const [tr, en] of Object.entries(PAGE_PAIRS)) {
     const legal = /kvkk|gizlilik|cerez|kullanim/.test(tr);

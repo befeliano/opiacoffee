@@ -64,10 +64,10 @@ export const page: StaticPage = {
         },
         {
           "@type": "Question",
-          "name": "Menüde alerjen bilgisi var mı?",
+          "name": "Alerjim var, nasıl sipariş vermeliyim?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Evet. Menü sayfasında her ürüne dokunarak alerjenleri ve porsiyona göre besin değerlerini görebilirsin."
+            "text": "Sipariş verirken barda personelimize söyle; içerikler ve hazırlanış hakkında bilgi verelim."
           }
         }
       ]
@@ -145,8 +145,8 @@ export default function ContactTr() {
               <p>Evet. Masandaki QR kodu okuttuğunda menü sipariş modunda açılır; ürün seçeneklerini seçip siparişini bara gönderebilir, garson çağırabilir ya da hesap isteyebilirsin. Ödeme kasada ya da masada yapılır.</p>
             </details>
             <details>
-              <summary>Menüde alerjen bilgisi var mı?</summary>
-              <p>Evet. Menü sayfasında her ürüne dokunarak alerjenleri ve porsiyona göre besin değerlerini görebilirsin.</p>
+              <summary>Alerjim var, nasıl sipariş vermeliyim?</summary>
+              <p>Sipariş verirken barda personelimize söyle; içerikler ve hazırlanış hakkında bilgi verelim.</p>
             </details>
           </div>
         </div>

@@ -3,10 +3,10 @@
 
 import type { Lang } from "./config";
 import { LOCALS } from "./content/locals";
-import { POSTS } from "./content/posts";
 import { getSiteMenu } from "./menu-data";
 import { getSiteExtras } from "./site-data";
-import { BlogIndex, BlogPost, blogIndexSchema, postSchema, sortedPosts } from "./pages/blog";
+import { BlogIndex, BlogPost, blogIndexSchema, postSchema } from "./pages/blog";
+import { getPosts } from "./posts-data";
 import Home from "./pages/home";
 import { Local } from "./pages/local";
 import MenuPage from "./pages/menu";
@@ -35,18 +35,18 @@ const MENU: Record<Lang, PageMeta> = {
     path: "/menu",
     lang: "tr",
     title: "Menü | Opia Coffee Co. Yenibağlar Eskişehir",
-    description: "Opia Coffee Co. menüsü: espresso bazlı içecekler, filtre kahve, Matcha Bar, sıcak çikolata, kışa özel içecekler ve tatlılar. Alerjen ve kalori bilgili.",
+    description: "Opia Coffee Co. menüsü: espresso bazlı içecekler, filtre kahve, Matcha Bar, sıcak çikolata, kışa özel içecekler, tatlılar ve fiyatlar.",
   },
   en: {
     path: "/en/menu",
     lang: "en",
     title: "Menu | Opia Coffee Co. Eskişehir",
-    description: "Opia Coffee Co. menu: espresso drinks, filter coffee, Matcha Bar, hot chocolate, winter specials and desserts, with allergens and calories.",
+    description: "Opia Coffee Co. menu: espresso drinks, filter coffee, Matcha Bar, hot chocolate, winter specials, desserts and prices.",
   },
 };
 
 export const homeRoute = (lang: Lang) => async (request: Request) =>
-  renderPage(request, { meta: HOME[lang], business: true, menuJs: true, content: <Home lang={lang} menu={await getSiteMenu()} /> });
+  renderPage(request, { meta: HOME[lang], business: true, menuJs: true, content: <Home lang={lang} menu={await getSiteMenu()} posts={await getPosts()} /> });
 
 export const menuRoute = (lang: Lang) => async (request: Request) => {
   const menu = await getSiteMenu();
@@ -60,7 +60,8 @@ export const menuRoute = (lang: Lang) => async (request: Request) => {
   });
 };
 
-export function blogIndexRoute(request: Request) {
+export async function blogIndexRoute(request: Request) {
+  const posts = await getPosts();
   return renderPage(request, {
     meta: {
       path: "/blog",
@@ -70,13 +71,14 @@ export function blogIndexRoute(request: Request) {
       description: "Opia Coffee Co. blogu: flat white ve latte farkı, nitelikli kahve, matcha, salep ve Eskişehir Yenibağlar üzerine kısa ve faydalı yazılar.",
     },
     breadcrumb: [["Ana Sayfa", "/"], ["Blog", "/blog"]],
-    schema: [blogIndexSchema(sortedPosts())],
-    content: <BlogIndex />,
+    schema: [blogIndexSchema(posts)],
+    content: <BlogIndex posts={posts} />,
   });
 }
 
 export async function blogPostRoute(request: Request, slug: string) {
-  const p = POSTS.find((x) => x.slug === slug);
+  const posts = await getPosts();
+  const p = posts.find((x) => x.slug === slug);
   if (!p) return notFound(request);
   const path = `/blog/${p.slug}`;
   const schema: unknown[] = [postSchema(p)];
@@ -86,7 +88,7 @@ export async function blogPostRoute(request: Request, slug: string) {
     menuJs: p.products.length > 0,
     breadcrumb: [["Ana Sayfa", "/"], ["Blog", "/blog"], [p.h1, path]],
     schema,
-    content: <BlogPost p={p} menu={await getSiteMenu()} />,
+    content: <BlogPost p={p} menu={await getSiteMenu()} posts={posts} />,
   });
 }
 

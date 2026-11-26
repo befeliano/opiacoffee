@@ -26,10 +26,10 @@ export interface SiteSettings {
   shop: { intro: string; intro_en: string };
 }
 
-export const DEFAULT_THEME: SiteTheme = { ink: "#0a0a0a", paper: "#ffffff", tint: "#f2f2f0", mid: "#d6d6d3", radius: 0, button: "square" };
+export const DEFAULT_THEME: SiteTheme = { ink: "#0a0a0a", paper: "#ffffff", tint: "#f6f1e8", mid: "#e3dccf", radius: 0, button: "square" };
 
 export const THEME_PRESETS: { name: string; theme: SiteTheme }[] = [
-  { name: "Opia (siyah beyaz)", theme: DEFAULT_THEME },
+  { name: "Opia (siyah, beyaz, krem)", theme: DEFAULT_THEME },
   { name: "Kavrulmuş kahve", theme: { ink: "#2b1d14", paper: "#fbf8f4", tint: "#f1e9df", mid: "#dccdbd", radius: 10, button: "round" } },
   { name: "Krem ve yeşil", theme: { ink: "#1f3a2e", paper: "#fdfbf6", tint: "#eef1ea", mid: "#d3dbcf", radius: 10, button: "pill" } },
   { name: "Gece mavisi", theme: { ink: "#14213d", paper: "#ffffff", tint: "#eef1f6", mid: "#d3d9e4", radius: 4, button: "round" } },

@@ -203,3 +203,90 @@ export async function shop_image(ctx: Ctx, a: Row) {
   await ctx.run("UPDATE shop_items SET image = ?, image_mime = ?, image_ver = image_ver + 1 WHERE id = ?", [img?.data ?? null, img?.mime ?? null, id]);
   return Number(await ctx.val("SELECT image_ver FROM shop_items WHERE id = ?", [id]));
 }
+
+// ---------------------------------------------------------------------
+// Fotoğraf yerleri ve blog
+// ---------------------------------------------------------------------
+const SLOT = /^[a-z0-9-]{1,100}$/;
+
+export async function site_images_list(ctx: Ctx, a: Row) {
+  const cafe = uuid(a.p_cafe);
+  await requireRole(ctx, cafe, "owner");
+  const rows = await ctx.all("SELECT slot, ver FROM site_images WHERE cafe_id = ?", [cafe]);
+  return rows.map((r) => ({ slot: r.slot, ver: Number(r.ver) }));
+}
+
+/** Fotoğraf yeri: p_data verilirse yüklenir, verilmezse panelden yüklenen silinir (dosyadaki varsayılana döner) */
+export async function site_slot_image(ctx: Ctx, a: Row) {
+  const cafe = uuid(a.p_cafe);
+  const slot = String(a.p_slot ?? "");
+  await requireRole(ctx, cafe, "owner");
+  if (!SLOT.test(slot)) fail("E_INVALID_INPUT");
+  const img = imageBytes(a);
+  if (!img) {
+    await ctx.run("DELETE FROM site_images WHERE cafe_id = ? AND slot = ?", [cafe, slot]);
+    return 0;
+  }
+  await ctx.run(
+    `INSERT INTO site_images (cafe_id, slot, image, image_mime, ver, updated_at) VALUES (?, ?, ?, ?, 1, ?)
+     ON DUPLICATE KEY UPDATE image = VALUES(image), image_mime = VALUES(image_mime), ver = ver + 1, updated_at = VALUES(updated_at)`,
+    [cafe, slot, img.data, img.mime, ctx.now],
+  );
+  return Number(await ctx.val("SELECT ver FROM site_images WHERE cafe_id = ? AND slot = ?", [cafe, slot]));
+}
+
+export async function site_posts_list(ctx: Ctx, a: Row) {
+  const cafe = uuid(a.p_cafe);
+  await requireRole(ctx, cafe, "owner");
+  const rows = await ctx.all(
+    "SELECT id, slug, title, description, lead, body, published, hidden, post_date, updated_at FROM site_posts WHERE cafe_id = ? ORDER BY post_date DESC, created_at DESC",
+    [cafe],
+  );
+  return rows.map((r) => ({
+    id: r.id,
+    slug: r.slug,
+    title: r.title,
+    description: r.description,
+    lead: r.lead,
+    body: r.body,
+    published: bit(r.published),
+    hidden: bit(r.hidden),
+    date: String(r.post_date instanceof Date ? r.post_date.toISOString().slice(0, 10) : r.post_date).slice(0, 10),
+    updated_at: r.updated_at,
+  }));
+}
+
+export async function site_post_save(ctx: Ctx, a: Row) {
+  const cafe = uuid(a.p_cafe);
+  await requireRole(ctx, cafe, "owner");
+  const d = obj(a.p_post) ?? {};
+  const slug = String(d.slug ?? "");
+  if (!/^[a-z0-9](?:[a-z0-9-]{0,88}[a-z0-9])?$/.test(slug)) fail("E_INVALID_INPUT");
+  const title = cleanText(d.title, 120);
+  if (!title) fail("E_NAME_REQUIRED");
+  const body = typeof d.body === "string" ? d.body.replace(/\r\n?/g, "\n").slice(0, 60000) : "";
+  const date = typeof d.date === "string" && /^\d{4}-\d{2}-\d{2}$/.test(d.date) ? d.date : ctx.now.toISOString().slice(0, 10);
+  const values = [title, cleanText(d.description, 200), cleanText(d.lead, 600), body, flag(d.published), flag(d.hidden), date, ctx.now];
+  const existing = await ctx.val<string>("SELECT id FROM site_posts WHERE cafe_id = ? AND slug = ?", [cafe, slug]);
+  if (existing) {
+    await ctx.run("UPDATE site_posts SET title = ?, description = ?, lead = ?, body = ?, published = ?, hidden = ?, post_date = ?, updated_at = ? WHERE id = ?", [
+      ...values,
+      existing,
+    ]);
+    return existing;
+  }
+  const id = newId();
+  await ctx.run(
+    "INSERT INTO site_posts (title, description, lead, body, published, hidden, post_date, updated_at, id, cafe_id, slug, created_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
+    [...values, id, cafe, slug, ctx.now],
+  );
+  return id;
+}
+
+/** Panelde yazılan yazıyı siler (hazır yazıysa sitede eski hâline döner) */
+export async function site_post_delete(ctx: Ctx, a: Row) {
+  const cafe = uuid(a.p_cafe);
+  await requireRole(ctx, cafe, "owner");
+  await ctx.run("DELETE FROM site_posts WHERE cafe_id = ? AND slug = ?", [cafe, String(a.p_slug ?? "")]);
+  return null;
+}

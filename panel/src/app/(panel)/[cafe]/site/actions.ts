@@ -93,3 +93,42 @@ export async function removeShopImageAction(cafeId: string, itemId: string): Pro
     return fail(error);
   }
 }
+
+/** Fotoğraf yerini dosyadaki varsayılana döndürür */
+export async function resetSlotImageAction(cafeId: string, slot: string): Promise<ActionResult<void>> {
+  try {
+    await rpc("site_slot_image", { p_cafe: id.parse(cafeId), p_slot: z.string().regex(/^[a-z0-9-]{1,100}$/).parse(slot), p_data: null });
+    return done(undefined);
+  } catch (error) {
+    return fail(error);
+  }
+}
+
+const postSchema = z.object({
+  slug: z.string().regex(/^[a-z0-9](?:[a-z0-9-]{0,88}[a-z0-9])?$/),
+  title: z.string().trim().min(1).max(120),
+  description: z.string().trim().max(200),
+  lead: z.string().trim().max(600),
+  body: z.string().max(60000),
+  published: z.boolean(),
+  date: z.iso.date(),
+});
+
+export async function saveSitePostAction(cafeId: string, input: z.input<typeof postSchema>): Promise<ActionResult<void>> {
+  try {
+    await rpc("site_post_save", { p_cafe: id.parse(cafeId), p_post: { ...postSchema.parse(input), hidden: false } });
+    return done(undefined);
+  } catch (error) {
+    return fail(error);
+  }
+}
+
+/** Panelde yazılan yazıyı siler; hazır yazıysa ilk hâline döner */
+export async function deleteSitePostAction(cafeId: string, slug: string): Promise<ActionResult<void>> {
+  try {
+    await rpc("site_post_delete", { p_cafe: id.parse(cafeId), p_slug: z.string().max(90).parse(slug) });
+    return done(undefined);
+  } catch (error) {
+    return fail(error);
+  }
+}

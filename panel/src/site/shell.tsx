@@ -326,10 +326,6 @@ export function renderPage(request: Request, { meta, content, business, breadcru
             <p className="pm__desc" data-pm-desc></p>
             <p className="pm__price" data-pm-price></p>
             <div className="pm__order" data-pm-order hidden></div>
-            <div className="pm__blk">
-              <h3>{tx("allergens")}</h3>
-              <ul className="chips" data-pm-allergens></ul>
-            </div>
             <div className="pm__blk" data-pm-nutr-blk>
               <div className="pm__nutr-head">
                 <h3>{tx("nutrition")}</h3>

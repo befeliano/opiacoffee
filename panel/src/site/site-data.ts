@@ -33,14 +33,32 @@ export interface ShopItem {
   image: string;
 }
 
+export interface DbPost {
+  slug: string;
+  title: string;
+  description: string;
+  lead: string;
+  body: string;
+  published: boolean;
+  hidden: boolean;
+  date: string;
+  updated: string;
+}
+
 export interface SiteExtras {
   settings: SiteSettings;
   products: Map<string, ProductOverride>;
   shop: ShopItem[];
+  /** Panelden yüklenen fotoğraf yerleri: yer → sürüm */
+  images: Map<string, number>;
+  posts: DbPost[];
 }
 
+/** imgSrc (ui.tsx) eşzamanlı çalıştığı için son okunan fotoğraf yerleri burada tutulur */
+export const slotVersions = new Map<string, number>();
+
 const DEFAULT_SHOP: ShopItem[] = shopDefaults.items.map((i, n) => ({ ...i, id: `varsayilan-${n + 1}`, price: null }));
-const FALLBACK: SiteExtras = { settings: DEFAULT_SITE_SETTINGS, products: new Map(), shop: DEFAULT_SHOP };
+const FALLBACK: SiteExtras = { settings: DEFAULT_SITE_SETTINGS, products: new Map(), shop: DEFAULT_SHOP, images: new Map(), posts: [] };
 
 let cache: { at: number; value: SiteExtras } | null = null;
 const TTL_MS = 20_000;
@@ -56,6 +74,8 @@ export async function getSiteExtras(): Promise<SiteExtras> {
     console.error("[site ayarları] okunamadı, varsayılanlar kullanılıyor:", error);
   }
   cache = { at: Date.now(), value };
+  slotVersions.clear();
+  for (const [k, v] of value.images) slotVersions.set(k, v);
   return value;
 }
 
@@ -78,6 +98,11 @@ async function load(): Promise<SiteExtras> {
      FROM shop_items WHERE cafe_id = ? AND is_active = 1 ORDER BY sort_order, name`,
     [cafe.id],
   );
+  const imageRows = await q<{ slot: string; ver: number }>("SELECT slot, ver FROM site_images WHERE cafe_id = ?", [cafe.id]);
+  const postRows = await q<{ slug: string; title: string; description: string; lead: string; body: string; published: number; hidden: number; post_date: string; updated_at: Date }>(
+    "SELECT slug, title, description, lead, body, published, hidden, post_date, updated_at FROM site_posts WHERE cafe_id = ?",
+    [cafe.id],
+  );
   let settings = DEFAULT_SITE_SETTINGS;
   if (settingsRow) {
     try {
@@ -96,6 +121,18 @@ async function load(): Promise<SiteExtras> {
   };
   return {
     settings,
+    images: new Map(imageRows.map((r) => [r.slot, Number(r.ver)])),
+    posts: postRows.map((r) => ({
+      slug: r.slug,
+      title: r.title,
+      description: r.description,
+      lead: r.lead,
+      body: r.body,
+      published: !!r.published,
+      hidden: !!r.hidden,
+      date: String(r.post_date).slice(0, 10),
+      updated: new Date(r.updated_at).toISOString().slice(0, 10),
+    })),
     products: new Map(
       rows.map((r) => [
         r.product_id,

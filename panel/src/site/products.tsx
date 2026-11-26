@@ -4,7 +4,8 @@
 import { money, url, type Lang } from "./config";
 import { t } from "./i18n";
 import { allergenNames, cn, productImg, pd, pn, pnote, productsIn, ptags, servingLabel, type SiteMenu, type SiteProduct } from "./menu-data";
-import { Icon } from "./ui";
+import { Icon, Lw, langWrapHtml } from "./ui";
+import { esc } from "./jsx/jsx-runtime";
 
 function ProductImg({ p, lang }: { p: SiteProduct; lang: Lang }) {
   if (p.image) {
@@ -21,7 +22,8 @@ function ProductImg({ p, lang }: { p: SiteProduct; lang: Lang }) {
 function PName({ p, lang }: { p: SiteProduct; lang: Lang }) {
   const name = pn(p, lang);
   if (lang === "en") return p.lang === "tr" && !p.name_en ? <span lang="tr">{name}</span> : <>{name}</>;
-  return p.lang === "en" ? <span lang="en">{name}</span> : <>{name}</>;
+  // Türkçe adın içindeki İngilizce sözcükler (Brownie, San Sebastian) de lang="en" ile sarılır
+  return p.lang === "en" ? <span lang="en">{name}</span> : <Lw lang="tr">{name}</Lw>;
 }
 
 export function priceLabel(p: SiteProduct) {
@@ -30,35 +32,30 @@ export function priceLabel(p: SiteProduct) {
   return money(p.price);
 }
 
+/** Menü satırı (Fleabag düzeni): fotoğraf varsa küçük kare, ad ve kısa açıklama, noktalı çizgi, fiyat */
 export function ProductRow({ p, lang }: { p: SiteProduct; lang: Lang }) {
-  const tags = ptags(p, lang).slice(0, 3);
   const note = pnote(p, lang);
+  const desc = pd(p, lang);
   return (
-    <li className={`row${p.soldout ? " is-soldout" : ""}`} data-allergens={p.allergens.join(" ")}>
+    <li className={`row${p.soldout ? " is-soldout" : ""}${p.image ? " has-img" : ""}`}>
       <button type="button" className="prod" data-id={p.id} aria-haspopup="dialog">
+        {p.image && (
+          <span className="prod__thumb">
+            <ProductImg p={p} lang={lang} />
+          </span>
+        )}
         <span className="prod__txt">
           <span className="prod__name">
             <PName p={p} lang={lang} />
             {p.seasonal && <span className="badge">{t(lang, "seasonal")}</span>}
             {p.soldout && <span className="badge badge--out">{t(lang, "soldout")}</span>}
           </span>
-          <span className="prod__desc">{pd(p, lang)}</span>
-          {tags.length > 0 && (
-            <ul className="prod__tags">
-              {tags.map((tg) => (
-                <li key={tg}>{tg}</li>
-              ))}
-            </ul>
-          )}
+          {desc && <span className="prod__desc">{desc}</span>}
         </span>
-        <span className="prod__side">
-          <span className="prod__thumb">
-            <ProductImg p={p} lang={lang} />
-          </span>
-          <span className="prod__price">
-            {priceLabel(p)}
-            {note && <small>{note}</small>}
-          </span>
+        <span className="prod__dots" aria-hidden="true"></span>
+        <span className="prod__price">
+          {priceLabel(p)}
+          {note && <small>{note}</small>}
         </span>
       </button>
     </li>
@@ -95,6 +92,8 @@ export function MenuEmbed({ products, menu, lang }: { products: SiteProduct[]; m
       {
         id: p.id,
         name: pn(p, lang),
+        // Başlıkta büyük harf: Türkçe addaki İngilizce sözcükler lang="en" ile sarılı
+        nameHtml: p.lang === "en" || lang === "en" ? "" : langWrapHtml(esc(pn(p, lang)), "tr"),
         lang: lang === "en" ? (!p.name_en && p.lang === "tr" ? "tr" : "en") : p.lang,
         description: pd(p, lang),
         price: p.price,

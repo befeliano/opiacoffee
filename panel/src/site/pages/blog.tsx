@@ -2,14 +2,13 @@
 // Blog: liste (/blog) ve yazı (/blog/<slug>). Yazılar src/site/content/posts.ts içinde.
 
 import { SITE, url } from "../config";
-import { POSTS, type Post } from "../content/posts";
+import type { Post } from "../content/posts";
 import type { SiteMenu } from "../menu-data";
 import { MenuEmbed, ProductCard } from "../products";
 import { FaqList, Html, Icon, Img, Lw, imgSrc } from "../ui";
 
 const MONTHS = ["", "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"];
 
-export const sortedPosts = () => [...POSTS].sort((a, b) => b.date.localeCompare(a.date));
 
 const words = (p: Post) => p.body.replace(/<[^>]+>/g, " ").split(/[^\p{L}’]+/u).filter(Boolean).length;
 export const postMinutes = (p: Post) => Math.max(2, Math.ceil(words(p) / 200));
@@ -44,7 +43,7 @@ export function blogIndexSchema(posts: Post[]) {
   };
 }
 
-export function BlogIndex() {
+export function BlogIndex({ posts }: { posts: Post[] }) {
   return (
     <>
       <section className="phead">
@@ -57,7 +56,7 @@ export function BlogIndex() {
       <section className="sec sec--tight">
         <div className="wrap">
           <ul className="posts">
-            {sortedPosts().map((p) => <PostCard key={p.slug} p={p} />)}
+            {posts.map((p) => <PostCard key={p.slug} p={p} />)}
           </ul>
         </div>
       </section>
@@ -88,9 +87,9 @@ export function postSchema(p: Post) {
   };
 }
 
-export function BlogPost({ p, menu }: { p: Post; menu: SiteMenu }) {
+export function BlogPost({ p, menu, posts }: { p: Post; menu: SiteMenu; posts: Post[] }) {
   const prods = p.products.map((id) => menu.products.find((x) => x.id === id)).filter((x): x is NonNullable<typeof x> => !!x);
-  const others = sortedPosts().filter((o) => o.slug !== p.slug).slice(0, 4);
+  const others = posts.filter((o) => o.slug !== p.slug).slice(0, 4);
   return (
     <>
       <article className="post">

@@ -4,6 +4,7 @@
 import type { Lang } from "./config";
 import type { Html } from "./jsx/jsx-runtime";
 import { renderPage } from "./shell";
+import { getSiteExtras } from "./site-data";
 
 export interface StaticPage {
   path: string;
@@ -17,12 +18,14 @@ export interface StaticPage {
 
 /** Sayfa dosyasından (src/site/pages/*.tsx) GET işleyicisi üretir */
 export function staticRoute(page: StaticPage, Content: () => Html) {
-  return (request: Request) =>
-    renderPage(request, {
+  return async (request: Request) => {
+    await getSiteExtras(); // panelden yüklenen fotoğraflar
+    return renderPage(request, {
       meta: page,
       content: <Content />,
       business: page.business,
       breadcrumb: page.breadcrumb.length ? page.breadcrumb : undefined,
       schema: page.schema,
     });
+  };
 }

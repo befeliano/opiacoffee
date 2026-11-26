@@ -92,7 +92,7 @@ export const LOCALS: LocalPage[] = [
  {
   "slug": "tepebasi-kafe",
   "title": "Tepebaşı Eskişehir Kafe | Opia Coffee Co.",
-  "description": "Tepebaşı, Eskişehir’de kahve ve kafe: Opia Coffee Co. Yenibağlar’da nitelikli kahve ve tatlı. Alerjen ve kalori bilgili menü. Her gün 09:00 - 00:00.",
+  "description": "Tepebaşı, Eskişehir’de kahve ve kafe: Opia Coffee Co. Yenibağlar’da nitelikli kahve ve tatlı. Fotoğraflı menü. Her gün 09:00 - 00:00.",
   "h1": "Tepebaşı’nda kahve molası",
   "lead": "Eskişehir’in Tepebaşı ilçesinde, Yenibağlar’da; nitelikli kahve, günlük tatlılar ve sade bir ortam.",
   "icon": "sun",
@@ -117,8 +117,8 @@ export const LOCALS: LocalPage[] = [
     "Yenibağlar’da, Eti Caddesi’ndeki Opia Coffee Co. nitelikli kahve ve tatlı sunar. Her gün 09:00 - 00:00 açıktır."
    ],
    [
-    "Menüde alerjen bilgisi görebilir miyim?",
-    "Evet, menü sayfasında her ürüne dokunarak alerjenleri ve besin değerlerini görebilirsin."
+    "Alerjim var, nasıl sipariş vermeliyim?",
+    "Sipariş verirken barda personelimize söyle; içerikler ve hazırlanış hakkında bilgi verelim."
    ]
   ]
  },

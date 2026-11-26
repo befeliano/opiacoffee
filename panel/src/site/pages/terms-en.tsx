@@ -39,7 +39,7 @@ export default function TermsEn() {
           <h2>1. General</h2>
           <p>This website is operated by Opia Coffee Co.. We may update these terms when needed; the current version is on this page. The Turkish version prevails in case of any difference.</p>
           <h2>2. Menu, prices and nutrition</h2>
-          <p>Menu, prices, opening hours, calories, nutrition values and allergens are for information and may change without notice. Nutrition values are estimates. Gluten, milk, egg, peanuts and tree nuts are all used in our kitchen, so cross-contamination is possible; if you have an allergy, please ask our staff before ordering. Prices are in Turkish lira and include VAT.</p>
+          <p>Menu, prices, opening hours, calories and nutrition values are for information and may change without notice. Nutrition values are estimates. Gluten, milk, egg, peanuts and tree nuts are all used in our kitchen, so cross-contamination is possible; if you have an allergy, please ask our staff before ordering. Prices are in Turkish lira and include VAT.</p>
           <h2>3. QR table ordering</h2>
           <ul>
             <li>QR ordering is for ordering from the table you are sitting at in the café; please do not use it from elsewhere or on behalf of others.</li>

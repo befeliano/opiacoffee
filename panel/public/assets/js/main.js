@@ -17,6 +17,8 @@
     burger.addEventListener('click', function () { setDrawer(drawer.hidden); });
     drawer.addEventListener('click', function (e) { if (e.target.closest('a')) setDrawer(false); });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !drawer.hidden) { setDrawer(false); burger.focus(); } });
+    // Açılır menü sayfanın üstünde küçük bir panel: dışına dokununca kapanır
+    document.addEventListener('click', function (e) { if (!drawer.hidden && !drawer.contains(e.target) && !burger.contains(e.target)) setDrawer(false); });
     window.matchMedia('(min-width: 900px)').addEventListener('change', function (m) { if (m.matches) setDrawer(false); });
   }
 

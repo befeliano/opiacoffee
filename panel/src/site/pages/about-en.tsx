@@ -3,7 +3,7 @@
 // Metni değiştirmek için bu dosyayı düzenle; başlık ve açıklama aşağıdaki "page" nesnesinde.
 
 import type { StaticPage } from "../static-page";
-import { Icon } from "../ui";
+import { Icon, Img } from "../ui";
 
 export const page: StaticPage = {
   "path": "/en/about",
@@ -45,7 +45,7 @@ export default function AboutEn() {
       </section>
       <section className="sec sec--tight">
         <div className="wrap split">
-          <figure className="split__fig"><img src="/assets/img/placeholders/hakkimizda-1.svg" alt="Inside Opia Coffee Co. in Yenibağlar, Eskişehir" width="1000" height="1250" loading="lazy" decoding="async" /></figure>
+          <figure className="split__fig"><Img slot="hakkimizda-1" alt="Inside Opia Coffee Co. in Yenibağlar, Eskişehir" w={1000} h={1250} /></figure>
           <div className="prose">
             <h2 className="h2">A cup, <em>a pause.</em></h2>
             <p>Opia Coffee Co. has been on Eti Street in the <span lang="tr">Yenibağlar</span> neighbourhood of <span lang="tr">Tepebaşı</span>, <span lang="tr">Eskişehir</span> since 2019. Our motto is “Awaken the senses”, and the idea is simple: a cup you can drink at your own pace, away from the rush of the city.</p>
@@ -60,14 +60,14 @@ export default function AboutEn() {
           <ol className="values">
             <li><span className="values__n">01</span><h3>Specialty beans</h3><p>We work with carefully selected, freshly roasted beans. Ask about the filter coffee of the day and we will tell you its story.</p></li>
             <li><span className="values__n">02</span><h3>Careful brewing</h3><p>Water, grind, time and temperature are measured for every cup. We aim for a consistent cup, not a show.</p></li>
-            <li><span className="values__n">03</span><h3>Transparency</h3><p>Every item on our menu lists its allergens and nutrition values. You have the right to know what you drink.</p></li>
+            <li><span className="values__n">03</span><h3>Transparency</h3><p>Our prices and what goes into every cup are open. Ask us anything at the bar.</p></li>
             <li><span className="values__n">04</span><h3>No rush</h3><p>Open every day from 09:00 until midnight. For a coffee between classes, after a walk or late in the evening.</p></li>
           </ol>
         </div>
       </section>
       <section className="sec">
         <div className="wrap split split--rev">
-          <figure className="split__fig split__fig--wide"><img src="/assets/img/placeholders/hakkimizda-2.svg" alt="Making coffee at the Opia Coffee Co. bar" width="1200" height="900" loading="lazy" decoding="async" /></figure>
+          <figure className="split__fig split__fig--wide"><Img slot="hakkimizda-2" alt="Making coffee at the Opia Coffee Co. bar" w={1200} h={900} /></figure>
           <div className="prose">
             <h2 className="h2">Where are we? <em><span lang="tr">Yenibağlar</span>.</em></h2>
             <p>We are right next to Anadolu University’s <span lang="tr">Yunusemre</span> Campus and the <span lang="tr">Vecihi Hürkuş</span> Aviation Park (the Aviation Museum). The city centre, <span lang="tr">Eskişehir</span> Train Station and Cassaba Modern are a short ride away.</p>

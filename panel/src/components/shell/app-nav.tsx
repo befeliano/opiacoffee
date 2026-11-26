@@ -18,6 +18,8 @@ import {
   Trophy,
   Wallet,
   KeyRound,
+  Eye,
+  EyeOff,
   Globe,
   type LucideIcon,
 } from "lucide-react";
@@ -269,9 +271,19 @@ function OwnPassword() {
   const [open, setOpen] = useState(false);
   const [current, setCurrent] = useState("");
   const [next, setNext] = useState("");
+  const [again, setAgain] = useState("");
+  const [show, setShow] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const reset = () => {
+    setOpen(false);
+    setCurrent("");
+    setNext("");
+    setAgain("");
+    setShow(false);
+    setError(null);
+  };
   if (!open) {
     return (
       <button
@@ -284,31 +296,41 @@ function OwnPassword() {
       </button>
     );
   }
+  const mismatch = again.length > 0 && again !== next;
   const save = async () => {
     setError(null);
+    if (next !== again) return setError("Yeni şifreler aynı değil.");
     setBusy(true);
     const r = await changeOwnPasswordAction(current, next).catch(() => null);
     setBusy(false);
     if (!r) return setError("Bağlantı sorunu. Tekrar dene.");
     if (!r.ok) return setError(r.error);
-    toast.show("Şifren değiştirildi");
-    setOpen(false);
-    setCurrent("");
-    setNext("");
+    toast.show("Şifren değiştirildi. Bir dahaki girişte yeni şifreni kullan.");
+    reset();
   };
+  // Tarayıcının kendi ürettiği "güçlü şifre"yi yeni şifre alanına yazmaması için autoComplete="off";
+  // yazılanı görmek için göz düğmesi.
+  const type = show ? "text" : "password";
   return (
     <div className="mb-3 flex flex-col gap-3 rounded-xl border border-stone-200 p-3">
       <Field label="Mevcut şifre">
-        <Input type="password" value={current} onChange={(e) => setCurrent(e.target.value)} autoComplete="current-password" autoFocus />
+        <Input type={type} value={current} onChange={(e) => setCurrent(e.target.value)} autoComplete="current-password" autoCapitalize="none" autoCorrect="off" spellCheck={false} autoFocus />
       </Field>
-      <Field label="Yeni şifre" hint="En az 6 karakter, harf ve rakam." error={error}>
-        <Input type="password" value={next} onChange={(e) => setNext(e.target.value)} autoComplete="new-password" />
+      <Field label="Yeni şifre" hint="En az 6 karakter, harf ve rakam. Büyük/küçük harf fark eder.">
+        <Input type={type} value={next} onChange={(e) => setNext(e.target.value)} autoComplete="off" autoCapitalize="none" autoCorrect="off" spellCheck={false} />
       </Field>
+      <Field label="Yeni şifre (tekrar)" error={mismatch ? "Yeni şifreler aynı değil." : error}>
+        <Input type={type} value={again} onChange={(e) => setAgain(e.target.value)} autoComplete="off" autoCapitalize="none" autoCorrect="off" spellCheck={false} />
+      </Field>
+      <button type="button" onClick={() => setShow((v) => !v)} className="flex items-center gap-2 self-start text-[13px] font-semibold text-stone-600">
+        {show ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+        {show ? "Şifreleri gizle" : "Şifreleri göster"}
+      </button>
       <div className="flex gap-2">
-        <Button variant="secondary" className="flex-1" onClick={() => setOpen(false)} disabled={busy}>
+        <Button variant="secondary" className="flex-1" onClick={reset} disabled={busy}>
           Vazgeç
         </Button>
-        <Button className="flex-1" onClick={save} disabled={busy || !current || next.length < 6}>
+        <Button className="flex-1" onClick={save} disabled={busy || !current || next.length < 6 || next !== again}>
           Kaydet
         </Button>
       </div>
